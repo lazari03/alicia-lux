@@ -73,3 +73,11 @@ Deploy the backend to a persistent Node.js host (or Medusa Cloud), and the store
 - Editorial stock photo: https://images.unsplash.com/photo-1483985988355-763728e1935b (served from Unsplash images; replace with owned campaign photography before launch).
 - Boutique stock photo: https://images.unsplash.com/photo-1441986300917-64674bd600d8
 - Development product images: official Medusa sample catalog.
+
+## One-command server startup
+
+With Node.js 22+, Docker Compose, Git and Make installed, run `make up` from the repository root. This installs dependencies (repairing npm-version lockfile differences), preserves existing credentials, creates missing local configuration, starts PostgreSQL, runs migrations, seeds only when no region exists, synchronizes the publishable key, builds both apps and manages them with project-local PM2. Do not run development servers on ports 8000/9000 at the same time.
+
+Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
+
+For private access from your computer, run `ssh -N -L 8000:localhost:8000 -L 9000:localhost:9000 root@YOUR_SERVER_IP`, then open http://localhost:8000/de for the storefront or http://localhost:9000/app for Admin. Public domain/HTTPS configuration is separate. Keep application and database ports closed to public traffic.
