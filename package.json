@@ -1,0 +1,17 @@
+{
+  "name": "alicia-lux",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm --prefix apps/backend run dev",
+    "dev:storefront": "npm --prefix apps/storefront run dev",
+    "build:backend": "npm --prefix apps/backend run build",
+    "build:storefront": "npm --prefix apps/storefront run build",
+    "typecheck": "npm --prefix apps/storefront run typecheck",
+    "db:up": "docker compose up -d --wait",
+    "db:migrate": "npm --prefix apps/backend run db:migrate",
+    "db:seed": "npm --prefix apps/backend run seed"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
