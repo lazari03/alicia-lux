@@ -7,8 +7,8 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-16 bg-white border-b ">
+    <div className="w-full bg-lux-paper relative small:min-h-screen">
+      <div className="h-16 border-b border-lux-line bg-lux-paper">
         <nav className="flex h-full items-center content-container justify-between">
           <LocalizedClientLink
             href="/cart"
@@ -25,7 +25,7 @@ export default function CheckoutLayout({
           </LocalizedClientLink>
           <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="font-serif text-[1.35rem] font-medium uppercase tracking-[0.28em] text-lux-ink"
             data-testid="store-link"
           >
             Alicia Lux

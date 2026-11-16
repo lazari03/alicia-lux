@@ -21,6 +21,19 @@ module.exports = {
         padding: "padding-top padding-right padding-bottom padding-left",
       },
       colors: {
+        // Alicia Lux brand palette: ivory, espresso and muted gold.
+        lux: {
+          paper: "#faf7f2",
+          cream: "#f4eee5",
+          sand: "#ebe2d6",
+          line: "#e0d6c9",
+          taupe: "#b9a996",
+          muted: "#75665a",
+          gold: "#86693f",
+          "gold-soft": "#c9a875",
+          ink: "#2b1f18",
+          espresso: "#3a2a20",
+        },
         grey: {
           0: "#FFFFFF",
           5: "#F9FAFB",
@@ -43,6 +56,16 @@ module.exports = {
         large: "16px",
         circle: "9999px",
       },
+      boxShadow: {
+        "lux-soft": "0 1px 2px rgb(43 31 24 / 0.04), 0 12px 32px -12px rgb(43 31 24 / 0.14)",
+        "lux-float": "0 2px 6px rgb(43 31 24 / 0.05), 0 28px 60px -20px rgb(43 31 24 / 0.28)",
+      },
+      transitionTimingFunction: {
+        lux: "cubic-bezier(0.22, 1, 0.36, 1)",
+      },
+      letterSpacing: {
+        label: "0.18em",
+      },
       maxWidth: {
         "8xl": "100rem",
       },
@@ -59,8 +82,9 @@ module.exports = {
         "3xl": "2rem",
       },
       fontFamily: {
+        serif: ["var(--font-display)", "Georgia", "Times New Roman", "serif"],
         sans: [
-          "Inter",
+          "var(--font-text)",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -71,6 +95,10 @@ module.exports = {
         ],
       },
       keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
         ring: {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
@@ -142,6 +170,7 @@ module.exports = {
         },
       },
       animation: {
+        marquee: "marquee 38s linear infinite",
         ring: "ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
         "fade-in-right":
           "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",

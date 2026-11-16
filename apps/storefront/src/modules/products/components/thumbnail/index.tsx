@@ -1,4 +1,4 @@
-import { Container, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 import Image from "next/image"
 import React from "react"
 
@@ -6,10 +6,11 @@ import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
 type ThumbnailProps = {
   thumbnail?: string | null
-  // TODO: Fix image typings
-  images?: any[] | null
+  images?: { url?: string | null }[] | null
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
+  /** Describe the product; leave empty when a visible title sits next to it. */
+  alt?: string
   className?: string
   "data-testid"?: string
 }
@@ -19,19 +20,20 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   images,
   size = "small",
   isFeatured,
+  alt = "",
   className,
   "data-testid": dataTestid,
 }) => {
-  const initialImage = thumbnail || images?.[0]?.url
+  const initialImage = thumbnail || images?.[0]?.url || undefined
 
   return (
-    <Container
+    <div
       className={clx(
-        "relative w-full overflow-hidden p-4 bg-ui-bg-subtle shadow-elevation-card-rest rounded-large group-hover:shadow-elevation-card-hover transition-shadow ease-in-out duration-150",
+        "relative w-full overflow-hidden rounded-[8px] bg-lux-sand",
         className,
         {
           "aspect-[11/14]": isFeatured,
-          "aspect-[9/16]": !isFeatured && size !== "square",
+          "aspect-[4/5]": !isFeatured && size !== "square",
           "aspect-[1/1]": size === "square",
           "w-[180px]": size === "small",
           "w-[290px]": size === "medium",
@@ -41,28 +43,25 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
-    </Container>
-  )
-}
-
-const ImageOrPlaceholder = ({
-  image,
-  size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
-  return image ? (
-    <Image
-      src={image}
-      alt="Thumbnail"
-      className="absolute inset-0 object-cover object-center"
-      draggable={false}
-      quality={50}
-      sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
-      fill
-    />
-  ) : (
-    <div className="w-full h-full absolute inset-0 flex items-center justify-center">
-      <PlaceholderImage size={size === "small" ? 16 : 24} />
+      {initialImage ? (
+        <Image
+          src={initialImage}
+          alt={alt}
+          className="absolute inset-0 object-cover object-center"
+          draggable={false}
+          quality={60}
+          sizes={
+            size === "full"
+              ? "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, 50vw"
+              : "(max-width: 576px) 180px, 440px"
+          }
+          fill
+        />
+      ) : (
+        <div className="absolute inset-0 flex h-full w-full items-center justify-center text-lux-taupe">
+          <PlaceholderImage size={size === "small" ? 16 : 24} />
+        </div>
+      )}
     </div>
   )
 }

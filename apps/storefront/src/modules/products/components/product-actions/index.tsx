@@ -4,7 +4,6 @@ import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
-import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
@@ -135,53 +134,53 @@ export default function ProductActions({
     setIsAdding(false)
   }
 
+  const multipleVariants = (product.variants?.length ?? 0) > 1
+  const canAdd =
+    inStock && !!selectedVariant && !disabled && !isAdding && !!isValidVariant
+
+  // Ask for a choice before claiming anything about stock.
+  const label = !selectedVariant
+    ? multipleVariants
+      ? "Select options"
+      : "Unavailable"
+    : !inStock
+    ? "Out of stock"
+    : "Add to bag"
+
   return (
     <>
-      <div className="flex flex-col gap-y-2" ref={actionsRef}>
-        <div>
-          {(product.variants?.length ?? 0) > 1 && (
-            <div className="flex flex-col gap-y-4">
-              {(product.options || []).map((option) => {
-                return (
-                  <div key={option.id}>
-                    <OptionSelect
-                      option={option}
-                      current={options[option.id]}
-                      updateOption={setOptionValue}
-                      title={option.title ?? ""}
-                      data-testid="product-options"
-                      disabled={!!disabled || isAdding}
-                    />
-                  </div>
-                )
-              })}
-              <Divider />
-            </div>
-          )}
-        </div>
-
+      <div className="flex flex-col gap-y-7" ref={actionsRef}>
         <ProductPrice product={product} variant={selectedVariant} />
+
+        {multipleVariants && (
+          <div className="flex flex-col gap-y-6 border-t border-lux-line pt-7">
+            {(product.options || []).map((option) => {
+              return (
+                <OptionSelect
+                  key={option.id}
+                  option={option}
+                  current={options[option.id]}
+                  updateOption={setOptionValue}
+                  title={option.title ?? ""}
+                  data-testid="product-options"
+                  disabled={!!disabled || isAdding}
+                />
+              )
+            })}
+          </div>
+        )}
 
         <Button
           onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant
-          }
+          disabled={!canAdd}
           variant="primary"
-          className="w-full h-10"
+          className="!h-[3.25rem] w-full !rounded-full !text-[12px] !font-medium uppercase !tracking-[0.18em] !shadow-none"
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
+          {label}
         </Button>
+
         <MobileActions
           product={product}
           variant={selectedVariant}

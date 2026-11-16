@@ -32,3 +32,22 @@ No production hosting, domain, live payment provider, transactional email or rea
 - Browser layout and interaction checks remain unverified: the managed preview runner appends Vite-only `--host` / `--strictPort` options to the existing Next.js dev script and exits before serving. The application script was preserved.
 - Live backend credentials were not supplied. Purchases, inventory, payments and account operations were not exercised. Their existing data layer and routes are unchanged.
 - No new packages, backend changes, database migrations or seeded catalog changes.
+
+## Shopify-style storefront rebuild — 2026-11-16
+
+Run against PostgreSQL 16, the seeded Medusa 2.18 backend and Chrome (headless, Playwright).
+
+| Check | Result |
+| --- | --- |
+| `npm run typecheck` (storefront) | Passed |
+| `next lint` | No errors; three pre-existing `react-hooks/exhaustive-deps` warnings |
+| `next build` against the live seeded backend | Passed; 59 pages |
+| Home, store, product, cart, checkout address step, account sign-in at 1440 px | Rendered, no console errors |
+| Home, store, product and menu drawer at 390 px | Rendered, no horizontal overflow |
+| Select size → Add to bag → cart drawer opens with the item | Passed |
+| Drawer quantity + → quantity 2, subtotal €10 → €20 | Passed |
+| Drawer → View bag → cart page (drawer closes) → Checkout | Passed |
+| Mega menu on hover, product card image swap on hover | Passed |
+| `?page=abc`, `?page=-3&sortBy=zzz` on `/store` | HTTP 200, first page |
+
+Not verified: Safari and Firefox (scroll-driven animations and `::details-content` are progressive enhancements and fall back to static content there), keyboard-only and screen-reader passes, payment and order completion, real catalog imagery. Sample product images come from Medusa's public bucket.

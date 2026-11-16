@@ -5,8 +5,8 @@ import { listProducts } from "@lib/data/products"
 import Ritual from "@modules/home/components/ritual"
 import Hero from "@modules/home/components/hero"
 import CollectionEdit from "@modules/home/components/collection-edit"
-import ProductPreview from "@modules/products/components/product-preview"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import Boutique from "@modules/home/components/boutique"
+import ValueProps from "@modules/home/components/value-props"
 
 export const metadata: Metadata = {
   openGraph: {
@@ -27,16 +27,9 @@ export default async function Home({ params }: { params: Promise<{ countryCode: 
   return (
     <>
       <Hero />
+      <ValueProps />
       <CollectionEdit />
-      <section className="lux-catalog py-20 small:py-28" aria-labelledby="new-arrivals-heading">
-        <div className="content-container">
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
-            <div><p className="mb-3 text-[10px] uppercase tracking-[0.25em] text-[#8c795e]">Discover more</p><h2 id="new-arrivals-heading" className="font-serif text-4xl small:text-5xl">Available in the boutique.</h2></div>
-            <LocalizedClientLink href="/store" className="border-b border-[#292923] pb-2 text-xs uppercase tracking-widest">Shop all ↗</LocalizedClientLink>
-          </div>
-          {products.length ? <ul className="grid grid-cols-2 gap-x-5 gap-y-10 medium:grid-cols-4">{products.map(product => <li key={product.id}><ProductPreview product={product} region={region} /></li>)}</ul> : <p className="text-sm text-[#706e66]">The boutique is being prepared. Discover our signature finishes above.</p>}
-        </div>
-      </section>
+      <Boutique products={products} />
       <Ritual />
     </>
   )

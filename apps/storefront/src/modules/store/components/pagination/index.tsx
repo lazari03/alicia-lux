@@ -35,9 +35,12 @@ export function Pagination({
   ) => (
     <button
       key={p}
-      className={clx("txt-xlarge-plus text-ui-fg-muted", {
-        "text-ui-fg-base hover:text-ui-fg-subtle": isCurrent,
-      })}
+      className={clx(
+        "inline-flex h-11 min-w-11 items-center justify-center rounded-full px-3 text-sm tabular-nums transition-colors",
+        isCurrent ? "bg-lux-ink text-lux-paper" : "text-lux-muted hover:bg-lux-sand hover:text-lux-ink"
+      )}
+      aria-label={`Page ${label}`}
+      aria-current={isCurrent ? "page" : undefined}
       disabled={isCurrent}
       onClick={() => handlePageChange(p)}
     >
@@ -49,9 +52,10 @@ export function Pagination({
   const renderEllipsis = (key: string) => (
     <span
       key={key}
-      className="txt-xlarge-plus text-ui-fg-muted items-center cursor-default"
+      className="inline-flex h-11 w-6 cursor-default items-center justify-center text-lux-muted"
+      aria-hidden="true"
     >
-      ...
+      …
     </span>
   )
 
@@ -107,8 +111,8 @@ export function Pagination({
 
   // Render the component
   return (
-    <div className="flex justify-center w-full mt-12">
-      <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
-    </div>
+    <nav aria-label="Pagination" className="mt-14 flex w-full justify-center border-t border-lux-line pt-8">
+      <div className="flex items-center gap-1" data-testid={dataTestid}>{renderPageButtons()}</div>
+    </nav>
   )
 }

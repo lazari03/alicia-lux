@@ -47,8 +47,8 @@ const Item: React.FC<AccordionItemProps> = ({
     <AccordionPrimitive.Item
       {...props}
       className={clx(
-        "border-grey-20 group border-t last:mb-0 last:border-b",
-        "py-3",
+        "border-lux-line group border-t last:mb-0 last:border-b",
+        "py-4",
         className
       )}
     >
@@ -56,9 +56,9 @@ const Item: React.FC<AccordionItemProps> = ({
         <div className="flex flex-col">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-4">
-              <Text className="text-ui-fg-subtle text-sm">{title}</Text>
+              <Text className="text-[12px] font-medium uppercase tracking-[0.18em] text-lux-ink">{title}</Text>
             </div>
-            <AccordionPrimitive.Trigger>
+            <AccordionPrimitive.Trigger aria-label={`Toggle ${title}`}>
               {customTrigger || <MorphingTrigger />}
             </AccordionPrimitive.Trigger>
           </div>

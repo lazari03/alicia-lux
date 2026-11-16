@@ -1,6 +1,6 @@
 # Alicia Lux
 
-A Medusa v2 webshop with a Next.js App Router storefront, React, strict TypeScript and Tailwind CSS. The storefront uses an ivory, espresso and muted-gold editorial design with original Alicia Lux jewelry-box imagery.
+A Medusa v2 webshop with a Next.js App Router storefront, React, strict TypeScript and Tailwind CSS. The storefront uses an ivory, espresso and muted-gold editorial design with original Alicia Lux jewelry-box imagery. Layout follows the conventions of a modern hosted store theme: announcement bar, sticky header with mega menu, slide-in cart drawer, collection toolbar and a two-column product page. Design tokens live in `apps/storefront/tailwind.config.js`; `src/styles/globals.css` holds the component layer. See [docs/audit.md](docs/audit.md) for the latest audit.
 
 ## Requirements
 

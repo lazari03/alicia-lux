@@ -1,6 +1,6 @@
 "use client"
 
-import FilterRadioGroup from "@modules/common/components/filter-radio-group"
+import { useId } from "react"
 
 export type SortOptions = "price_asc" | "price_desc" | "created_at"
 
@@ -10,38 +10,36 @@ type SortProductsProps = {
   "data-testid"?: string
 }
 
-const sortOptions = [
-  {
-    value: "created_at",
-    label: "Latest Arrivals",
-  },
-  {
-    value: "price_asc",
-    label: "Price: Low -> High",
-  },
-  {
-    value: "price_desc",
-    label: "Price: High -> Low",
-  },
+const sortOptions: { value: SortOptions; label: string }[] = [
+  { value: "created_at", label: "Latest arrivals" },
+  { value: "price_asc", label: "Price, low to high" },
+  { value: "price_desc", label: "Price, high to low" },
 ]
 
-const SortProducts = ({
-  "data-testid": dataTestId,
-  sortBy,
-  setQueryParams,
-}: SortProductsProps) => {
-  const handleChange = (value: SortOptions) => {
-    setQueryParams("sortBy", value)
-  }
+const SortProducts = ({ "data-testid": dataTestId, sortBy, setQueryParams }: SortProductsProps) => {
+  const id = useId()
 
   return (
-    <FilterRadioGroup
-      title="Sort by"
-      items={sortOptions}
-      value={sortBy}
-      handleChange={handleChange}
-      data-testid={dataTestId}
-    />
+    <div className="flex items-center gap-3">
+      <label htmlFor={id} className="hidden text-[11px] uppercase tracking-label text-lux-muted xsmall:block">
+        Sort by
+      </label>
+      <span className="lux-select min-w-[11.5rem]">
+        <select
+          id={id}
+          value={sortBy}
+          aria-label="Sort products"
+          data-testid={dataTestId}
+          onChange={(event) => setQueryParams("sortBy", event.target.value as SortOptions)}
+        >
+          {sortOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </span>
+    </div>
   )
 }
 

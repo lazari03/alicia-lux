@@ -1,29 +1,23 @@
-import { Text, clx } from "@medusajs/ui"
 import { VariantPrice } from "types/global"
 
-export default async function PreviewPrice({ price }: { price: VariantPrice }) {
+export default function PreviewPrice({ price }: { price: VariantPrice }) {
   if (!price) {
     return null
   }
 
+  const onSale = price.price_type === "sale"
+
   return (
     <>
-      {price.price_type === "sale" && (
-        <Text
-          className="line-through text-ui-fg-muted"
-          data-testid="original-price"
-        >
+      {onSale && (
+        <s className="text-lux-muted" data-testid="original-price">
+          <span className="sr-only">Original price </span>
           {price.original_price}
-        </Text>
+        </s>
       )}
-      <Text
-        className={clx("text-ui-fg-muted", {
-          "text-ui-fg-interactive": price.price_type === "sale",
-        })}
-        data-testid="price"
-      >
+      <span className={onSale ? "text-lux-gold" : "text-lux-muted"} data-testid="price">
         {price.calculated_price}
-      </Text>
+      </span>
     </>
   )
 }
