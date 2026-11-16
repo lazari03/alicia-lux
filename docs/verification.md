@@ -22,3 +22,13 @@ The checkout smoke test used Medusa's manual development payment provider. No ca
 Browser visual, keyboard and responsive interaction checks were not run: this managed environment does not expose the required `cua_repl.js` preview browser tool. The production storefront build validates compilation and API-backed static page generation, not complete browser behavior. Home, cart, account and checkout browser interactions still need visual/end-to-end review before launch.
 
 No production hosting, domain, live payment provider, transactional email or real catalog has been configured. The provided editorial assets are stock examples and the product catalog uses Medusa sample images.
+
+## Luxury storefront redesign — 2026-11-16
+
+- `npm run typecheck` in `apps/storefront`: passed.
+- `next build`: passed against an isolated empty-catalog Medusa API fixture (regions, locales, collections, categories, products). This verifies compilation, types and route generation, not live commerce.
+- `git diff --check`: passed.
+- Original Coffee Brown, Champagne and Noir images visually inspected before conversion; WebP dimensions and file sizes verified.
+- Browser layout and interaction checks remain unverified: the managed preview runner appends Vite-only `--host` / `--strictPort` options to the existing Next.js dev script and exits before serving. The application script was preserved.
+- Live backend credentials were not supplied. Purchases, inventory, payments and account operations were not exercised. Their existing data layer and routes are unchanged.
+- No new packages, backend changes, database migrations or seeded catalog changes.

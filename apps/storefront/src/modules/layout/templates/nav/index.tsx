@@ -17,20 +17,20 @@ export default async function Nav() {
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
-      <div className="bg-[#292923] px-4 py-2 text-center text-[10px] uppercase tracking-[0.22em] text-white">The Alicia Lux edit · A considered wardrobe</div>
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
+      <div className="bg-[#35271f] px-4 py-2 text-center text-[10px] uppercase tracking-[0.22em] text-white">A beautiful home for the things you treasure</div>
+      <header className="lux-header relative h-20 mx-auto border-b duration-200">
         <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
           <div className="flex-1 basis-0 h-full flex items-center gap-8">
             <div className="h-full">
               <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
             </div>
-            <LocalizedClientLink href="/store" className="hidden small:block text-[11px] uppercase tracking-widest hover:text-ui-fg-base">Shop the edit</LocalizedClientLink>
+            <LocalizedClientLink href="/store" className="hidden small:block text-[11px] uppercase tracking-widest hover:text-ui-fg-base">The collection</LocalizedClientLink>
           </div>
 
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
-              className="font-serif text-xl tracking-[0.2em] hover:text-ui-fg-base uppercase"
+              className="lux-wordmark font-serif text-xl tracking-[0.2em] hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
               ALICIA LUX
