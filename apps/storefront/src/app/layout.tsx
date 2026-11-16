@@ -4,7 +4,7 @@ import "styles/globals.css"
 
 export const metadata: Metadata = {
   title: { default: "Alicia Lux", template: "%s | Alicia Lux" },
-  description: "A considered edit of contemporary essentials and timeless pieces.",
+  description: "Jewelry and beauty organizers for the things you treasure. Discover the signature Alicia Lux collection.",
   metadataBase: new URL(getBaseURL()),
 }
 

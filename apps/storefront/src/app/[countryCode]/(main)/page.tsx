@@ -2,14 +2,20 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getRegion } from "@lib/data/regions"
 import { listProducts } from "@lib/data/products"
+import Ritual from "@modules/home/components/ritual"
 import Hero from "@modules/home/components/hero"
 import CollectionEdit from "@modules/home/components/collection-edit"
 import ProductPreview from "@modules/products/components/product-preview"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 export const metadata: Metadata = {
-  title: "Alicia Lux | Considered style, everyday",
-  description: "Discover the Alicia Lux edit. Contemporary essentials and timeless pieces, thoughtfully brought together.",
+  openGraph: {
+    title: "Alicia Lux — For all that you treasure",
+    description: "Jewelry, beauty, and the art of your everyday.",
+    images: [{ url: "/images/signature-coffee.webp", width: 1254, height: 1254, alt: "Alicia Lux Coffee Brown jewelry organizer" }],
+  },
+  title: "Jewelry boxes & everyday rituals",
+  description: "Discover Alicia Lux jewelry and beauty organizers. Explore Coffee Brown, Champagne and Noir — a beautiful home for the things you treasure.",
 }
 
 export default async function Home({ params }: { params: Promise<{ countryCode: string }> }) {
@@ -22,21 +28,16 @@ export default async function Home({ params }: { params: Promise<{ countryCode: 
     <>
       <Hero />
       <CollectionEdit />
-      <section className="bg-[#f5f3ed] py-20 small:py-28" aria-labelledby="new-arrivals-heading">
+      <section className="lux-catalog py-20 small:py-28" aria-labelledby="new-arrivals-heading">
         <div className="content-container">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
-            <div><p className="mb-3 text-[10px] uppercase tracking-[0.25em] text-[#8c795e]">Fresh perspectives</p><h2 id="new-arrivals-heading" className="font-serif text-4xl small:text-5xl">The latest edit.</h2></div>
+            <div><p className="mb-3 text-[10px] uppercase tracking-[0.25em] text-[#8c795e]">Discover more</p><h2 id="new-arrivals-heading" className="font-serif text-4xl small:text-5xl">Available in the boutique.</h2></div>
             <LocalizedClientLink href="/store" className="border-b border-[#292923] pb-2 text-xs uppercase tracking-widest">Shop all ↗</LocalizedClientLink>
           </div>
-          {products.length ? <ul className="grid grid-cols-2 gap-x-5 gap-y-10 medium:grid-cols-4">{products.map(product => <li key={product.id}><ProductPreview product={product} region={region} /></li>)}</ul> : <p className="text-sm text-[#706e66]">Our next collection is on its way. Come back soon.</p>}
+          {products.length ? <ul className="grid grid-cols-2 gap-x-5 gap-y-10 medium:grid-cols-4">{products.map(product => <li key={product.id}><ProductPreview product={product} region={region} /></li>)}</ul> : <p className="text-sm text-[#706e66]">The boutique is being prepared. Discover our signature finishes above.</p>}
         </div>
       </section>
-      <section className="content-container py-24 text-center small:py-32" aria-labelledby="brand-heading">
-        <p className="mb-6 text-[10px] uppercase tracking-[0.25em] text-[#8c795e]">The Alicia Lux point of view</p>
-        <h2 id="brand-heading" className="mx-auto max-w-3xl font-serif text-4xl leading-tight small:text-6xl">Style is personal.<br /><span className="italic">Make it yours.</span></h2>
-        <p className="mx-auto mt-7 max-w-lg text-sm leading-7 text-[#706e66]">We believe the best wardrobes are built with intention. Pieces you reach for again and again. Details that make the everyday feel special.</p>
-        <LocalizedClientLink href="/store" className="mt-8 inline-block border-b border-[#292923] pb-2 text-xs uppercase tracking-widest">Find your favourites ↗</LocalizedClientLink>
-      </section>
+      <Ritual />
     </>
   )
 }

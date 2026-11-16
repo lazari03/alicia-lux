@@ -1,6 +1,6 @@
 # Alicia Lux
 
-A Medusa v2 webshop with a Next.js App Router storefront, React, strict TypeScript and Tailwind CSS. The visual direction takes inspiration from Dugaja's editorial boutique layout, using original Alicia Lux copy and separate stock imagery.
+A Medusa v2 webshop with a Next.js App Router storefront, React, strict TypeScript and Tailwind CSS. The storefront uses an ivory, espresso and muted-gold editorial design with original Alicia Lux jewelry-box imagery.
 
 ## Requirements
 
@@ -70,8 +70,7 @@ Deploy the backend to a persistent Node.js host (or Medusa Cloud), and the store
 
 - Backend: https://github.com/medusajs/medusa-starter-default (MIT)
 - Storefront: https://github.com/medusajs/nextjs-starter-medusa (MIT)
-- Editorial stock photo: https://images.unsplash.com/photo-1483985988355-763728e1935b (served from Unsplash images; replace with owned campaign photography before launch).
-- Boutique stock photo: https://images.unsplash.com/photo-1441986300917-64674bd600d8
+- Storefront campaign images: user-supplied Alicia Lux generated renders in Coffee Brown, Champagne and Noir; optimized local WebP assets. See [image provenance](docs/storefront-images.md).
 - Development product images: official Medusa sample catalog.
 
 ## One-command server startup

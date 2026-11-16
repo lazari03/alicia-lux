@@ -120,3 +120,79 @@
     html { scroll-behavior: auto; }
   }
 }
+
+/* Editorial storefront. Commerce components retain the Medusa design system. */
+:root { --lux-ink: #35271f; --lux-muted: #746557; --lux-paper: #faf7f2; --lux-line: #ded5ca; }
+body { color: var(--lux-ink); background: var(--lux-paper); }
+.lux-header { background: #faf7f2; border-color: var(--lux-line); }
+.lux-wordmark { white-space: nowrap; color: var(--lux-ink); }
+.lux-eyebrow { font-size: 10px; font-weight: 500; line-height: 1.8; letter-spacing: .23em; text-transform: uppercase; color: #806749; margin-bottom: 24px; }
+.lux-hero { display: grid; grid-template-columns: 44% 56%; background: #f0e9df; }
+.lux-hero-copy { padding: clamp(36px, 6vw, 100px) clamp(24px, 5vw, 80px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.lux-hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(48px, 5.5vw, 88px); font-weight: 400; letter-spacing: -.055em; line-height: 1.04; }
+.lux-hero h1 em, .lux-section h2 em, .lux-ritual h2 em, .lux-brand-note h2 em { font-weight: 400; color: #806749; }
+.lux-description { color: var(--lux-muted); font-size: 14px; line-height: 1.9; max-width: 340px; margin: 28px 0 32px; }
+.lux-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; padding: 20px 25px; background: var(--lux-ink); color: #fffaf3; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; transition: background .2s; min-height: 48px; }
+.lux-button:hover { background: #614832; }
+.lux-text-link { display: inline-flex; align-items: center; gap: 20px; font-size: 10px; line-height: 1.7; text-transform: uppercase; letter-spacing: .15em; border-bottom: 1px solid #9a8772; padding: 12px 0; min-height: 44px; }
+.lux-text-link:hover { color: #806749; }
+.lux-hero-copy > .lux-text-link { margin-top: 15px; }
+.lux-hero-footnote { display: flex; flex-direction: column; gap: 7px; margin-top: 55px; font-size: 9px; line-height: 1.7; letter-spacing: .12em; color: var(--lux-muted); }
+.lux-hero-footnote span:first-child { letter-spacing: .3em; }
+.lux-hero-art { position: relative; min-height: 620px; }
+.lux-image-label { position: absolute; bottom: 22px; right: 24px; padding: 9px 13px; background: #faf7f2e8; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+.lux-section { padding-top: 100px; padding-bottom: 100px; scroll-margin-top: 135px; }
+.lux-section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 25px; margin-bottom: 42px; }
+.lux-section h2, .lux-ritual h2, .lux-brand-note h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(38px, 4vw, 60px); font-weight: 400; line-height: 1.14; letter-spacing: -.04em; }
+.lux-section-heading .lux-eyebrow { margin-bottom: 15px; }
+.lux-finishes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.lux-finish-image { aspect-ratio: 1; position: relative; overflow: hidden; background: #e5d7c8; }
+.lux-finish-image img { transition: transform .6s; }
+.lux-finish:hover img { transform: scale(1.025); }
+.lux-finish-number { position: absolute; left: 15px; top: 15px; background: #faf7f2dc; padding: 5px 9px; font-size: 10px; }
+.lux-finish-title { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 22px; }
+.lux-finish h3 { font: 400 27px/1.2 Georgia, serif; letter-spacing: -.02em; }
+.lux-color { width: 14px; height: 14px; border-radius: 50%; outline: 1px solid var(--lux-line); outline-offset: 4px; margin-right: 5px; }
+.lux-finish p { font-size: 12px; line-height: 1.8; margin-top: 9px; color: var(--lux-muted); }
+.lux-catalog { border-top: 1px solid var(--lux-line); background: #f2ece3; }
+.lux-ritual { display: grid; grid-template-columns: 1fr 1fr; scroll-margin-top: 120px; background: #ece3d7; }
+.lux-ritual-image { position: relative; min-height: 700px; }
+.lux-ritual-copy { padding: clamp(35px,6vw,90px); }
+.lux-details { border-top: 1px solid #cdbfae; margin-bottom: 20px; }
+.lux-details > div { padding: 20px 0; border-bottom: 1px solid #cdbfae; }
+.lux-details dt { font: 400 20px/1.4 Georgia, serif; }
+.lux-details dt span { font: 10px/1.4 Arial, sans-serif; color: #806749; margin-right: 14px; }
+.lux-details dd { margin: 8px 0 0 28px; font-size: 12px; line-height: 1.8; color: #746557; }
+.lux-brand-note { padding-top: 110px; padding-bottom: 110px; text-align: center; }
+.lux-brand-note > p:last-child { font-size: 13px; line-height: 2; color: var(--lux-muted); max-width: 530px; margin: 28px auto 0; }
+.lux-footer { background: #35271f; color: #faf7f2; border-color: #65564b; }
+@media (min-width: 1024px) { .content-container { padding-left: 56px; padding-right: 56px; } }
+@media (min-width: 1600px) { .lux-hero { max-width: 1800px; margin-inline: auto; } }
+@media (max-width: 1023px) {
+ .lux-hero { grid-template-columns: 1fr 1fr; }
+ .lux-hero-copy { padding: 45px 24px; }
+ .lux-hero-art { min-height: 530px; }
+ .lux-hero h1 { font-size: 52px; }
+ .lux-hero-footnote { margin-top: 30px; }
+ .lux-ritual { grid-template-columns: 1fr; }
+ .lux-ritual-image { min-height: 0; aspect-ratio: 1; }
+ .lux-ritual-copy { padding: 50px 32px; }
+ .lux-ritual-copy .lux-description { max-width: 500px; }
+}
+@media (max-width: 767px) {
+ .lux-hero { grid-template-columns: 1fr; }
+ .lux-hero-copy { padding: 44px 24px 36px; }
+ .lux-hero h1 { font-size: clamp(48px, 12vw, 72px); }
+ .lux-hero-art { min-height: 0; aspect-ratio: 1; }
+ .lux-hero-footnote { display: none; }
+ .lux-eyebrow { margin-bottom: 18px; }
+ .lux-description { margin: 22px 0 26px; max-width: 400px; }
+ .lux-section { padding-top: 60px; padding-bottom: 60px; }
+ .lux-section-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+ .lux-finishes { grid-template-columns: 1fr; gap: 36px; }
+ .lux-finish-title { margin-top: 18px; }
+ .lux-brand-note { padding-top: 65px; padding-bottom: 65px; }
+ .lux-header .content-container { padding-inline: 16px; }
+ .lux-wordmark { font-size: 18px; letter-spacing: .14em; }
+}
+@media (prefers-reduced-motion: reduce) { .lux-finish-image img, .lux-button { transition: none; } .lux-finish:hover img { transform: none; } }
