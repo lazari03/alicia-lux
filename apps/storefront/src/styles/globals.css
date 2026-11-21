@@ -135,8 +135,7 @@ body { color: var(--lux-ink); background: var(--lux-paper); }
 .lux-hero {
   position: relative;
   isolation: isolate;
-  max-width: 1536px;
-  margin-inline: auto;
+  width: 100%;
   background: #24170f;
   color: #fffaf2;
   text-align: center;
@@ -214,10 +213,10 @@ body { color: var(--lux-ink); background: var(--lux-paper); }
  .lux-ritual-copy .lux-description { max-width: 500px; }
 }
 @media (max-width: 767px) {
- .lux-hero-copy { position: relative; inset: auto; padding: 28px 18px 0; }
+ .lux-hero-copy { inset: 26px 16px auto; }
  .lux-hero h1 { font-size: clamp(36px, 7.4vw, 55px); }
- .lux-hero-art { margin-top: -12vw; }
- .lux-hero-art::after { background: linear-gradient(180deg, #24170f, transparent 32%); }
+ .lux-hero-art { --hero-wall-extension: clamp(95px, calc(195px - 20vw), 135px); padding-top: var(--hero-wall-extension); }
+ .lux-hero-art::after { top: var(--hero-wall-extension); background: linear-gradient(180deg, #24170f, transparent 32%); }
  .lux-eyebrow { margin-bottom: 18px; }
  .lux-description { margin: 22px 0 26px; max-width: 400px; }
  .lux-section { padding-top: 60px; padding-bottom: 60px; }

@@ -19,7 +19,7 @@ export default function Hero() {
           width={1536}
           height={1024}
           priority
-          sizes="(min-width: 1536px) 1536px, 100vw"
+          sizes="100vw"
         />
       </div>
     </section>
