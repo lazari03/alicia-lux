@@ -1,11 +1,16 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := up
-.PHONY: deploy up db-check db-repair catalog-import stop status logs
-deploy:
+.PHONY: deploy deploy-storefront pull-main up db-check db-repair catalog-import stop status logs
+deploy: pull-main
+	$(MAKE) up
+
+deploy-storefront: pull-main
+	bash scripts/deploy-storefront.sh
+
+pull-main:
 	@test "$$(git branch --show-current)" = main || { echo "Switch to main before deploying." >&2; exit 1; }
 	git pull --ff-only origin main
 	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse FETCH_HEAD)" || { echo "Local main has commits that are absent from origin/main." >&2; exit 1; }
-	$(MAKE) up
 
 up:
 	bash scripts/up.sh

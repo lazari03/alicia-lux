@@ -84,6 +84,10 @@ make deploy
 
 On subsequent releases, run `make deploy`. The catalog setup configures Swedish delivery and SEK pricing before the storefront build. It fast-forwards the checkout to GitHub's `main` and runs `make up`. The startup script installs dependencies, preserves existing credentials, creates missing local configuration, starts PostgreSQL with Docker Compose, runs migrations, seeds if there are no regions, synchronizes the publishable key, builds both apps, and restarts them with PM2. It checks both apps before reporting success. Run `make up` directly to start the current checkout without pulling. Keep ports 8000 and 9000 available for PM2.
 
+For storefront-only changes on the existing Caddy server, run `make deploy-storefront` as the user who manages Caddy and PM2. The first time, pull `main` to get the target. It builds a separate copy of Next.js, checks the home and shop pages, then reloads Caddy. It leaves the previous storefront running and restores the previous routing if the cutover check fails. Reserve loopback ports 8001 and 8002 for these releases. The Caddyfile must contain one direct storefront upstream on port 8000, 8001, or 8002.
+
+Backend, pricing, or database changes still need `make deploy`. If Caddy already points to port 8001 or 8002, follow a full deploy with `make deploy-storefront` to publish its new storefront build.
+
 If database authentication fails, run `make db-check` to test the same host login that Medusa uses. For the existing local Compose database, run `make db-repair` to rotate the password and update both local environment files, then run `make deploy`. Repair requires the PostgreSQL container to be running. If it is stopped, run `docker compose start postgres` first. The repair keeps the existing database volume and skips rotation when the configured login already works.
 
 Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
