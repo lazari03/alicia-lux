@@ -2,6 +2,7 @@
 
 import { Button, Heading } from "@medusajs/ui"
 
+import { getCheckoutStep } from "@lib/util/checkout-step"
 import CartTotals from "@modules/common/components/cart-totals"
 import Divider from "@modules/common/components/divider"
 import DiscountCode from "@modules/checkout/components/discount-code"
@@ -14,17 +15,7 @@ type SummaryProps = {
   }
 }
 
-function getCheckoutStep(cart: HttpTypes.StoreCart) {
-  if (!cart?.shipping_address?.address_1 || !cart.email) {
-    return "address"
-  } else if (cart?.shipping_methods?.length === 0) {
-    return "delivery"
-  } else {
-    return "payment"
-  }
-}
-
-const Summary = ({ cart }: SummaryProps) => {
+const Summary = ({ cart, guest }: SummaryProps & { guest: boolean }) => {
   const step = getCheckoutStep(cart)
 
   return (
@@ -39,7 +30,7 @@ const Summary = ({ cart }: SummaryProps) => {
         href={"/checkout?step=" + step}
         data-testid="checkout-button"
       >
-        <Button className="w-full h-10">Go to checkout</Button>
+        <Button className="w-full h-10">{guest ? "Checkout as guest" : "Go to checkout"}</Button>
       </LocalizedClientLink>
     </div>
   )

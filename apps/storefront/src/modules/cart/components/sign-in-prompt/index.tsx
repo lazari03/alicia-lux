@@ -9,7 +9,7 @@ const SignInPrompt = () => {
           Already have an account?
         </Heading>
         <Text className="txt-medium text-ui-fg-subtle mt-2">
-          Sign in for a better experience.
+          Sign in to use saved details, or continue to checkout as a guest.
         </Text>
       </div>
       <div>

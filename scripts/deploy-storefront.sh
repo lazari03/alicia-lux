@@ -77,6 +77,17 @@ cp -p "$config" "$original_config"
 if [[ "$mode" == --with-backend ]]; then
   export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$repo/.cache/config}"
   node scripts/configure.mjs backend
+  node --env-file=apps/backend/.env --env-file=apps/storefront/.env.local --input-type=module <<'NODE'
+const stripeKey = process.env.STRIPE_API_KEY
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+if (stripeKey || webhookSecret) {
+  const mode = stripeKey?.match(/^(?:sk|rk)_(test|live)_/)?.[1]
+  if (!mode || !webhookSecret?.startsWith('whsec_') || !process.env.NEXT_PUBLIC_STRIPE_KEY?.startsWith(`pk_${mode}_`)) {
+    console.error('Stripe requires a server API key, webhook secret, and matching test or live storefront public key.')
+    process.exit(1)
+  }
+}
+NODE
   node scripts/database.mjs check
   backend_candidate="$(mktemp -d "$releases/backend-build.XXXXXXXX")"
   git archive "$revision" apps/backend | tar -xf - -C "$backend_candidate"

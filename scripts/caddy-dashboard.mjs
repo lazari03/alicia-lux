@@ -10,7 +10,7 @@ const block = [
   '  # BEGIN ALICIA DASHBOARD',
   '  @aliciaLocalizedDashboard path_regexp alicia_dashboard ^/[a-z]{2}(/app(?:/.*)?)$',
   '  redir @aliciaLocalizedDashboard {re.alicia_dashboard.1} 302',
-  '  @aliciaDashboard path /app /app/*',
+  '  @aliciaDashboard path /app /app/* /hooks/payment/stripe_stripe',
   '  handle @aliciaDashboard {',
   `    reverse_proxy http://127.0.0.1:${port}`,
   '  }',

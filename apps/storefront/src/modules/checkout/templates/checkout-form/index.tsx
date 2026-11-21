@@ -9,30 +9,35 @@ import Shipping from "@modules/checkout/components/shipping"
 export default async function CheckoutForm({
   cart,
   customer,
+  step,
 }: {
   cart: HttpTypes.StoreCart | null
   customer: HttpTypes.StoreCustomer | null
+  step: "address" | "delivery" | "payment" | "review"
 }) {
   if (!cart) {
     return null
   }
 
   const [shippingMethods, paymentMethods] = await Promise.all([
-    listCartShippingMethods(cart.id),
-    listCartPaymentMethods(cart.region?.id ?? ""),
+    step === "delivery" ? listCartShippingMethods(cart.id) : [],
+    step === "payment" && cart.region_id ? listCartPaymentMethods(cart.region_id) : [],
   ])
-
-  if (!shippingMethods || !paymentMethods) {
-    return null
-  }
 
   return (
     <div className="w-full grid grid-cols-1 gap-y-8">
+      {!customer && <p className="text-sm text-ui-fg-subtle">Guest checkout. No account required.</p>}
       <Addresses cart={cart} customer={customer} />
 
-      <Shipping cart={cart} availableShippingMethods={shippingMethods} />
+      {step === "delivery" && !shippingMethods?.length && (
+        <p role="alert">Delivery options are unavailable for this address. Check your shipping address and try again.</p>
+      )}
+      <Shipping cart={cart} availableShippingMethods={shippingMethods ?? []} />
 
-      <Payment cart={cart} availablePaymentMethods={paymentMethods} />
+      {step === "payment" && !paymentMethods?.length && (
+        <p role="alert">Payment options are unavailable. Refresh the page to try again.</p>
+      )}
+      <Payment cart={cart} availablePaymentMethods={paymentMethods ?? []} />
 
       <Review cart={cart} />
     </div>

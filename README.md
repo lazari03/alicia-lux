@@ -95,3 +95,9 @@ If database authentication fails, run `make db-check` to test the same host logi
 Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
 
 For private access from your computer, run `ssh -N -L 8000:localhost:8000 -L 9000:localhost:9000 root@YOUR_SERVER_IP`, then open http://localhost:8000/se for the storefront or http://localhost:9000/app for Admin. Public domain/HTTPS configuration is separate. Keep application and database ports closed to public traffic.
+
+### Stripe checkout
+
+Set `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET` in `apps/backend/.env` and the matching `NEXT_PUBLIC_STRIPE_KEY` in `apps/storefront/.env.local`. Create the Stripe webhook endpoint at `https://shopalicialux.se/hooks/payment/stripe_stripe` and subscribe to PaymentIntent events. Start with credentials in Stripe test mode. Keep the backend keys in server configuration.
+
+Run `make deploy` to register Stripe, enable it for Sweden, and replace the manual test payment option in that market. Verify a test guest order before switching to live-mode credentials. Stripe will capture card payments when they are confirmed.

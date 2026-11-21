@@ -137,6 +137,7 @@ export default function ProductActions({
     })
 
     setIsAdding(false)
+    router.refresh()
   }
 
   return (

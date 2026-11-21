@@ -42,9 +42,12 @@ const Payment = ({
     setError(null)
     setSelectedPaymentMethod(method)
     if (isStripeLike(method)) {
-      await initiatePaymentSession(cart, {
-        provider_id: method,
-      })
+      try {
+        await initiatePaymentSession(cart, { provider_id: method })
+      } catch (error) {
+        setSelectedPaymentMethod(activeSession?.provider_id ?? "")
+        setError(error instanceof Error ? error.message : "Could not start a card payment. Try again.")
+      }
     }
   }
 

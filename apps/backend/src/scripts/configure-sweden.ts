@@ -94,6 +94,30 @@ export default async function configureSweden({ container }: ExecArgs) {
     })
   }
 
+  if (process.env.STRIPE_API_KEY && process.env.STRIPE_WEBHOOK_SECRET) {
+    const { data: [market] } = await query.graph({
+      entity: "region",
+      fields: ["id", "payment_providers.id"],
+      filters: { id: sweden.id },
+    })
+    const providerIds = (market?.payment_providers ?? [])
+      .flatMap((provider) => provider?.id ? [provider.id] : [])
+    const stripeProvider = "pp_stripe_stripe"
+    if (!providerIds.includes(stripeProvider) || providerIds.includes("pp_system_default")) {
+      await updateRegionsWorkflow(container).run({
+        input: {
+          selector: { id: sweden.id },
+          update: {
+            payment_providers: [...new Set([
+              ...providerIds.filter((id) => id !== "pp_system_default"),
+              stripeProvider,
+            ])],
+          },
+        },
+      })
+    }
+  }
+
   for (const store of stores) {
     if (store.supported_currencies?.some(({ currency_code, is_default }) => currency_code === "sek" && is_default)) continue
     const supportedCurrencies = (store.supported_currencies ?? [])
