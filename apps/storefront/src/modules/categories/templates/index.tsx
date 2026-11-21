@@ -38,12 +38,11 @@ export default function CategoryTemplate({
 
   return (
     <div
-      className="flex flex-col small:flex-row small:items-start py-6 content-container"
+      className="content-container lux-catalog-page"
       data-testid="category-container"
     >
-      <RefinementList sortBy={sort} data-testid="sort-by-container" />
       <div className="w-full">
-        <div className="flex flex-row mb-8 text-2xl-semi gap-4">
+        <div className="flex flex-wrap items-baseline mb-8 font-serif text-3xl gap-4">
           {parents &&
             parents.map((parent) => (
               <span key={parent.id} className="text-ui-fg-subtle">
@@ -77,6 +76,9 @@ export default function CategoryTemplate({
             </ul>
           </div>
         )}
+        <div className="lux-catalog-heading lux-sort-row">
+          <RefinementList sortBy={sort} data-testid="sort-by-container" />
+        </div>
         <Suspense
           fallback={
             <SkeletonProductGrid

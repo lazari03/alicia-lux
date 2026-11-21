@@ -29,15 +29,16 @@ export default async function ProductPreview({
   })
 
   return (
-    <LocalizedClientLink href={`/products/${product.handle}`} className="group">
+    <LocalizedClientLink href={`/products/${product.handle}`} className="group lux-product-card block">
       <div data-testid="product-wrapper">
         <Thumbnail
           thumbnail={product.thumbnail}
           images={product.images}
           size="full"
           isFeatured={isFeatured}
+          className={isFeatured ? undefined : "lux-catalog-thumbnail"}
         />
-        <div className="flex txt-compact-medium mt-4 justify-between">
+        <div className="flex flex-wrap txt-compact-medium mt-3 justify-between gap-x-3 gap-y-1">
           <Text className="text-ui-fg-subtle" data-testid="product-title">
             {product.title}
           </Text>

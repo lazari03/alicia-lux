@@ -2,20 +2,25 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 
 export default function Footer() {
   return (
-    <footer className="lux-footer border-t">
-      <div className="content-container grid gap-12 py-20 small:grid-cols-3">
-        <div className="small:col-span-2">
-          <LocalizedClientLink href="/" className="font-serif text-3xl tracking-[0.16em]">ALICIA LUX</LocalizedClientLink>
-          <p className="mt-5 max-w-sm text-sm leading-7 text-[#c9bcb0]">A beautiful home for the things you treasure.<br />Jewelry, beauty, and the art of your everyday.</p>
+    <footer className="lux-footer">
+      <div className="content-container">
+        <div className="lux-footer-main">
+          <div>
+            <LocalizedClientLink href="/" className="lux-footer-brand">Alicia Lux</LocalizedClientLink>
+            <p>A beautiful home for the things you treasure.</p>
+          </div>
+          <nav aria-label="Footer">
+            <ul>
+              <li><LocalizedClientLink href="/store">The collection <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" /></LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/account">Your account <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" /></LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/cart">Shopping bag <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" /></LocalizedClientLink></li>
+            </ul>
+          </nav>
         </div>
-        <nav aria-label="Footer" className="grid gap-4 text-xs uppercase tracking-[0.12em]">
-          <LocalizedClientLink href="/store">The collection ↗</LocalizedClientLink>
-          <LocalizedClientLink href="/account">Your account ↗</LocalizedClientLink>
-          <LocalizedClientLink href="/cart">Shopping bag ↗</LocalizedClientLink>
-        </nav>
-      </div>
-      <div className="content-container flex flex-wrap justify-between gap-4 border-t border-[#65564b] py-7 text-[10px] uppercase tracking-widest text-[#c9bcb0]">
-        <p>© {new Date().getFullYear()} Alicia Lux</p><p>Objects for the everyday extraordinary.</p>
+        <div className="lux-footer-bottom">
+          <p>© {new Date().getFullYear()} Alicia Lux</p>
+          <a href="#top">Back to top <span className="lux-arrow lux-arrow-up" aria-hidden="true" /></a>
+        </div>
       </div>
     </footer>
   )

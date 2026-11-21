@@ -3,66 +3,44 @@ import { Suspense } from "react"
 import { listRegions } from "@lib/data/regions"
 import { listLocales } from "@lib/data/locales"
 import { getLocale } from "@lib/data/locale-actions"
-import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 
 export default async function Nav() {
   const [regions, locales, currentLocale] = await Promise.all([
-    listRegions().then((regions: StoreRegion[]) => regions),
+    listRegions(),
     listLocales(),
     getLocale(),
   ])
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <div className="bg-[#35271f] px-4 py-2 text-center text-[10px] uppercase tracking-[0.22em] text-white">A beautiful home for the things you treasure</div>
-      <header className="lux-header relative h-20 mx-auto border-b duration-200">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
-          <div className="flex-1 basis-0 h-full flex items-center gap-8">
-            <div className="h-full">
-              <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
-            </div>
-            <LocalizedClientLink href="/store" className="hidden small:block text-[11px] uppercase tracking-widest hover:text-ui-fg-base">The collection</LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="lux-wordmark font-serif text-xl tracking-[0.2em] hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              ALICIA LUX
-            </LocalizedClientLink>
-          </div>
-
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
+    <header className="lux-header">
+      <nav aria-label="Store navigation" className="content-container lux-nav">
+        <div className="flex items-center gap-6">
+          <SideMenu regions={regions} locales={locales} currentLocale={currentLocale} />
+          <LocalizedClientLink className="lux-nav-action hidden medium:inline-flex" href="/store">
+            The collection
+          </LocalizedClientLink>
+        </div>
+        <LocalizedClientLink href="/" className="lux-wordmark uppercase" data-testid="nav-store-link">
+          Alicia Lux
+        </LocalizedClientLink>
+        <div className="lux-nav-shopping">
+          <LocalizedClientLink className="lux-nav-action hidden small:inline-flex" href="/account" data-testid="nav-account-link">
+            Account
+          </LocalizedClientLink>
+          <Suspense
+            fallback={
+              <LocalizedClientLink className="lux-nav-action" href="/cart" data-testid="nav-cart-link">
+                Bag
               </LocalizedClientLink>
-            </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
-            >
-              <CartButton />
-            </Suspense>
-          </div>
-        </nav>
-      </header>
-    </div>
+            }
+          >
+            <CartButton />
+          </Suspense>
+        </div>
+      </nav>
+    </header>
   )
 }

@@ -20,14 +20,16 @@ const StoreTemplate = ({
 
   return (
     <div
-      className="flex flex-col small:flex-row small:items-start py-12 small:py-20 content-container"
+      className="content-container lux-catalog-page"
       data-testid="category-container"
     >
-      <RefinementList sortBy={sort} />
       <div className="w-full">
-        <div className="mb-12">
-          <p className="lux-eyebrow">The Alicia Lux boutique</p>
-          <h1 className="font-serif text-4xl small:text-6xl" data-testid="store-page-title">The collection.</h1>
+        <div className="lux-catalog-heading">
+          <div>
+            <p className="lux-eyebrow">Alicia Lux</p>
+            <h1 className="font-serif text-4xl small:text-6xl" data-testid="store-page-title">The collection</h1>
+          </div>
+          <RefinementList sortBy={sort} />
         </div>
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts

@@ -1,22 +1,20 @@
 "use client"
 
-import { Popover, PopoverPanel, Transition } from "@headlessui/react"
-import { ArrowRightMini, XMark } from "@medusajs/icons"
-import { Text, clx, useToggleState } from "@medusajs/ui"
-import { Fragment } from "react"
-
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react"
+import { useState } from "react"
+import type { HttpTypes } from "@medusajs/types"
+import type { Locale } from "@lib/data/locales"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
-import { HttpTypes } from "@medusajs/types"
-import { Locale } from "@lib/data/locales"
 
-const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
-}
+const menuItems = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "store", label: "The collection", href: "/store" },
+  { id: "account", label: "Your account", href: "/account" },
+  { id: "cart", label: "Shopping bag", href: "/cart" },
+]
 
 type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null
@@ -24,121 +22,60 @@ type SideMenuProps = {
   currentLocale: string | null
 }
 
-const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
-  const countryToggleState = useToggleState()
-  const languageToggleState = useToggleState()
+export default function SideMenu({ regions, locales, currentLocale }: SideMenuProps) {
+  const [open, setOpen] = useState(false)
+  const close = () => setOpen(false)
 
   return (
-    <div className="h-full">
-      <div className="flex items-center h-full">
-        <Popover className="h-full flex">
-          {({ open, close }) => (
-            <>
-              <div className="relative flex h-full">
-                <Popover.Button
-                  data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 hover:text-ui-fg-base"
-                >
-                  Menu
-                </Popover.Button>
-              </div>
+    <>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label="Open menu"
+        data-testid="nav-menu-button"
+        className="lux-nav-action"
+        onClick={() => setOpen(true)}
+      >
+        <span className="lux-hamburger" aria-hidden="true"><span /><span /></span>
+        <span className="hidden small:inline">Menu</span>
+      </button>
 
-              {open && (
-                <div
-                  className="fixed inset-0 z-[50] bg-black/0 pointer-events-auto"
-                  onClick={close}
-                  data-testid="side-menu-backdrop"
-                />
-              )}
+      <Dialog open={open} onClose={close} className="fixed inset-0 z-[70]">
+        <DialogBackdrop transition className="lux-menu-backdrop" data-testid="side-menu-backdrop" />
+        <DialogPanel transition className="lux-menu" data-testid="nav-menu-popup">
+          <div className="lux-menu-header">
+            <DialogTitle className="lux-wordmark uppercase">Alicia Lux</DialogTitle>
+            <button
+              type="button"
+              data-autofocus
+              aria-label="Close menu"
+              className="lux-nav-action"
+              data-testid="close-menu-button"
+              onClick={close}
+            >
+              <span className="lux-hamburger lux-hamburger-close" aria-hidden="true"><span /><span /></span>
+            </button>
+          </div>
 
-              <Transition
-                show={open}
-                as={Fragment}
-                enter="transition ease-out duration-150"
-                enterFrom="opacity-0"
-                enterTo="opacity-100 backdrop-blur-2xl"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 backdrop-blur-2xl"
-                leaveTo="opacity-0"
-              >
-                <PopoverPanel className="flex flex-col fixed top-0 w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100dvh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
-                  <div
-                    data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[#35271f] justify-between p-6"
-                  >
-                    <div className="flex justify-end" id="xmark">
-                      <button aria-label="Close menu" className="p-3" data-testid="close-menu-button" onClick={close}>
-                        <XMark />
-                      </button>
-                    </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="font-serif text-3xl leading-10 hover:text-ui-fg-disabled"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <div className="flex flex-col gap-y-6">
-                      {!!locales?.length && (
-                        <div
-                          className="flex justify-between"
-                          onMouseEnter={languageToggleState.open}
-                          onMouseLeave={languageToggleState.close}
-                        >
-                          <LanguageSelect
-                            toggleState={languageToggleState}
-                            locales={locales}
-                            currentLocale={currentLocale}
-                          />
-                          <ArrowRightMini
-                            className={clx(
-                              "transition-transform duration-150",
-                              languageToggleState.state ? "-rotate-90" : ""
-                            )}
-                          />
-                        </div>
-                      )}
-                      <div
-                        className="flex justify-between"
-                        onMouseEnter={countryToggleState.open}
-                        onMouseLeave={countryToggleState.close}
-                      >
-                        {regions && (
-                          <CountrySelect
-                            toggleState={countryToggleState}
-                            regions={regions}
-                          />
-                        )}
-                        <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            countryToggleState.state ? "-rotate-90" : ""
-                          )}
-                        />
-                      </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Alicia Lux. All rights
-                        reserved.
-                      </Text>
-                    </div>
-                  </div>
-                </PopoverPanel>
-              </Transition>
-            </>
-          )}
-        </Popover>
-      </div>
-    </div>
+          <nav aria-label="Main menu" className="lux-menu-links">
+            <ul>
+              {menuItems.map(({ id, label, href }) => (
+                <li key={id}>
+                  <LocalizedClientLink href={href} onClick={close} data-testid={id + "-link"}>
+                    {label}<span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" />
+                  </LocalizedClientLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="lux-menu-settings">
+            {regions?.length ? <CountrySelect regions={regions} /> : null}
+            {locales?.length ? <LanguageSelect locales={locales} currentLocale={currentLocale} /> : null}
+          </div>
+        </DialogPanel>
+      </Dialog>
+    </>
   )
 }
-
-export default SideMenu

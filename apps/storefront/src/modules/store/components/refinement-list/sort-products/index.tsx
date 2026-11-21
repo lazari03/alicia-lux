@@ -1,48 +1,36 @@
 "use client"
 
-import FilterRadioGroup from "@modules/common/components/filter-radio-group"
-
-export type SortOptions = "price_asc" | "price_desc" | "created_at"
-
-type SortProductsProps = {
-  sortBy: SortOptions
-  setQueryParams: (name: string, value: SortOptions) => void
-  "data-testid"?: string
+const sortOptions = {
+  created_at: "Newest arrivals",
+  price_asc: "Price — low to high",
+  price_desc: "Price — high to low",
 }
 
-const sortOptions = [
-  {
-    value: "created_at",
-    label: "Latest Arrivals",
-  },
-  {
-    value: "price_asc",
-    label: "Price: Low -> High",
-  },
-  {
-    value: "price_desc",
-    label: "Price: High -> Low",
-  },
-]
+export type SortOptions = keyof typeof sortOptions
 
-const SortProducts = ({
-  "data-testid": dataTestId,
+export default function SortProducts({
   sortBy,
-  setQueryParams,
-}: SortProductsProps) => {
-  const handleChange = (value: SortOptions) => {
-    setQueryParams("sortBy", value)
-  }
-
+  onChange,
+  pending,
+  "data-testid": dataTestId,
+}: {
+  sortBy: SortOptions
+  onChange: (value: SortOptions) => void
+  pending: boolean
+  "data-testid"?: string
+}) {
   return (
-    <FilterRadioGroup
-      title="Sort by"
-      items={sortOptions}
-      value={sortBy}
-      handleChange={handleChange}
-      data-testid={dataTestId}
-    />
+    <label className="lux-select lux-sort" data-testid={dataTestId}>
+      <span>Sort by</span>
+      <select
+        value={Object.prototype.hasOwnProperty.call(sortOptions, sortBy) ? sortBy : "created_at"}
+        onChange={(event) => onChange(event.target.value as SortOptions)}
+        aria-busy={pending}
+      >
+        {Object.entries(sortOptions).map(([value, label]) => (
+          <option key={value} value={value}>{label}</option>
+        ))}
+      </select>
+    </label>
   )
 }
-
-export default SortProducts

@@ -1,11 +1,6 @@
 "use client"
 
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@headlessui/react"
+import { Transition } from "@headlessui/react"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -70,8 +65,9 @@ const CartDropdown = ({
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen()
     }
+    itemRef.current = totalItems
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalItems, itemRef.current])
+  }, [totalItems, pathname])
 
   return (
     <div
@@ -79,26 +75,24 @@ const CartDropdown = ({
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
-      <Popover className="relative h-full">
-        <PopoverButton className="h-full">
-          <LocalizedClientLink
-            className="hover:text-ui-fg-base"
-            href="/cart"
-            data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
-        </PopoverButton>
+      <div className="relative h-full">
+        <LocalizedClientLink
+          className="lux-nav-action h-full"
+          href="/cart"
+          aria-label={`Shopping bag (${totalItems})`}
+          data-testid="nav-cart-link"
+        >{`Bag (${totalItems})`}</LocalizedClientLink>
         <Transition
           show={cartDropdownOpen}
           as={Fragment}
-          enter="transition ease-out duration-200"
+          enter="transition ease-out duration-200 motion-reduce:transition-none"
           enterFrom="opacity-0 translate-y-1"
           enterTo="opacity-100 translate-y-0"
-          leave="transition ease-in duration-150"
+          leave="transition ease-in duration-150 motion-reduce:transition-none"
           leaveFrom="opacity-100 translate-y-0"
           leaveTo="opacity-0 translate-y-1"
         >
-          <PopoverPanel
-            static
+          <div
             className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
             data-testid="nav-cart-dropdown"
           >
@@ -220,9 +214,9 @@ const CartDropdown = ({
                 </div>
               </div>
             )}
-          </PopoverPanel>
+          </div>
         </Transition>
-      </Popover>
+      </div>
     </div>
   )
 }
