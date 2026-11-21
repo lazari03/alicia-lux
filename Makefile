@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := up
-.PHONY: deploy deploy-storefront fix-admin pull-main up db-check db-repair catalog-import stop status logs
+.PHONY: deploy deploy-storefront fix-admin pull-main up db-check db-repair stock-status catalog-import stop status logs
 deploy: pull-main
 	bash scripts/deploy-storefront.sh --with-backend
 
@@ -21,6 +21,8 @@ db-check:
 	node scripts/database.mjs check
 db-repair:
 	node scripts/database.mjs repair
+stock-status:
+	bash scripts/stock-status.sh
 catalog-import:
 	cd apps/backend && ./node_modules/.bin/medusa exec ./src/scripts/import-catalog.ts
 	cd apps/backend && ./node_modules/.bin/medusa exec ./src/scripts/configure-sweden.ts
