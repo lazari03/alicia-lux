@@ -1,6 +1,12 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := up
-.PHONY: up stop status logs
+.PHONY: deploy up stop status logs
+deploy:
+	@test "$$(git branch --show-current)" = main || { echo "Switch to main before deploying." >&2; exit 1; }
+	git pull --ff-only origin main
+	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse FETCH_HEAD)" || { echo "Local main has commits that are absent from origin/main." >&2; exit 1; }
+	$(MAKE) up
+
 up:
 	bash scripts/up.sh
 stop:

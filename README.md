@@ -75,7 +75,14 @@ Deploy the backend to a persistent Node.js host (or Medusa Cloud), and the store
 
 ## One-command server startup
 
-With Node.js 22+, Docker Compose, Git and Make installed, run `make up` from the repository root. This installs dependencies (repairing npm-version lockfile differences), preserves existing credentials, creates missing local configuration, starts PostgreSQL, runs migrations, seeds only when no region exists, synchronizes the publishable key, builds both apps and manages them with project-local PM2. Do not run development servers on ports 8000/9000 at the same time.
+With Node.js 22+, Docker Compose, Git and Make installed, run these commands from the server checkout on `main`:
+
+```sh
+git pull --ff-only origin main  # First time only, to get the deploy target
+make deploy
+```
+
+On subsequent releases, run `make deploy`. It fast-forwards the checkout to GitHub's `main` and runs `make up`. The startup script installs dependencies, preserves existing credentials, creates missing local configuration, starts PostgreSQL with Docker Compose, runs migrations, seeds if there are no regions, synchronizes the publishable key, builds both apps, and restarts them with PM2. It checks both apps before reporting success. Run `make up` directly to start the current checkout without pulling. Keep ports 8000 and 9000 available for PM2.
 
 Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
 
