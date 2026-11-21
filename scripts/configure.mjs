@@ -30,7 +30,7 @@ if (process.argv[2] === 'backend') {
   const key=execFileSync('docker',['compose','exec','-T','postgres','psql','-U','medusa','-d','alicia_lux','-Atc',"SELECT token FROM api_key WHERE type='publishable' AND deleted_at IS NULL LIMIT 1;"],{encoding:'utf8'}).trim()
   if (!key.startsWith('pk_')) throw new Error('No publishable API key exists. Check the Medusa seed output.')
   const current=parse(read('apps/storefront/.env.local'))
-  const defaults={MEDUSA_BACKEND_URL:'http://localhost:9000',NEXT_PUBLIC_BASE_URL:'http://localhost:8000',NEXT_PUBLIC_DEFAULT_REGION:'de',REVALIDATE_SECRET:secret()}
+  const defaults={MEDUSA_BACKEND_URL:'http://localhost:9000',NEXT_PUBLIC_BASE_URL:'http://localhost:8000',REVALIDATE_SECRET:secret()}
   const missing=Object.fromEntries(Object.entries(defaults).filter(([k])=>!current[k]))
-  write('apps/storefront/.env.local',{...missing,NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY:key})
+  write('apps/storefront/.env.local',{...missing,NEXT_PUBLIC_DEFAULT_REGION:'se',NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY:key})
 }

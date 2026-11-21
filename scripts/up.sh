@@ -42,8 +42,8 @@ node scripts/wait.mjs http://localhost:9000/health
 rm -rf apps/storefront/.next/cache/fetch-cache
 npm run build:storefront
 start_app alicia-storefront storefront
-node scripts/wait.mjs http://localhost:8000/de
+node scripts/wait.mjs http://localhost:8000/se
 "$PM2" save
 "$PM2" status
-printf '\nShop ready on http://localhost:8000/de\nAdmin: http://localhost:9000/app\nRun make logs to inspect logs.\n'
+printf '\nShop ready on http://localhost:8000/se\nAdmin: http://localhost:9000/app\nRun make logs to inspect logs.\n'
 printf 'For reboot persistence, run: ./node_modules/.bin/pm2 startup\n'

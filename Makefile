@@ -15,6 +15,7 @@ db-repair:
 	node scripts/database.mjs repair
 catalog-import:
 	cd apps/backend && ./node_modules/.bin/medusa exec ./src/scripts/import-catalog.ts
+	cd apps/backend && ./node_modules/.bin/medusa exec ./src/scripts/configure-sweden.ts
 stop:
 	./node_modules/.bin/pm2 stop alicia-backend alicia-storefront
 status:
