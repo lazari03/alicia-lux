@@ -18,6 +18,7 @@ REGIONS="$(docker compose exec -T postgres psql -U medusa -d alicia_lux -Atc 'SE
 if [ "$REGIONS" = 0 ]; then
   npm run db:seed
 fi
+make catalog-import
 node scripts/configure.mjs storefront
 PM2="$PWD/node_modules/.bin/pm2"
 # Stop only these apps before replacing their build outputs.
@@ -37,6 +38,8 @@ start_app() {
 }
 start_app alicia-backend backend
 node scripts/wait.mjs http://localhost:9000/health
+# Next.js persists its data cache across builds in the same checkout.
+rm -rf apps/storefront/.next/cache/fetch-cache
 npm run build:storefront
 start_app alicia-storefront storefront
 node scripts/wait.mjs http://localhost:8000/de

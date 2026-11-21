@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := up
-.PHONY: deploy up db-check db-repair stop status logs
+.PHONY: deploy up db-check db-repair catalog-import stop status logs
 deploy:
 	@test "$$(git branch --show-current)" = main || { echo "Switch to main before deploying." >&2; exit 1; }
 	git pull --ff-only origin main
@@ -13,6 +13,8 @@ db-check:
 	node scripts/database.mjs check
 db-repair:
 	node scripts/database.mjs repair
+catalog-import:
+	cd apps/backend && ./node_modules/.bin/medusa exec ./src/scripts/import-catalog.ts
 stop:
 	./node_modules/.bin/pm2 stop alicia-backend alicia-storefront
 status:

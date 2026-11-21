@@ -1,6 +1,6 @@
 # Storefront campaign imagery
 
-The user selected previously created Alicia Lux renders for the storefront. These campaign images are separate from Medusa product records and do not override product thumbnails, prices, variants, stock or checkout data.
+The user selected previously created Alicia Lux renders for the storefront. The catalog import uses these campaign images as the thumbnails and gallery images for the matching organizer listings.
 
 | Local asset | Original image |
 | --- | --- |
@@ -10,4 +10,4 @@ The user selected previously created Alicia Lux renders for the storefront. Thes
 
 Each original is 1254 × 1254 pixels. WebP derivatives preserve the full composition, with quality 87, no crop and no upscale. The three assets total approximately 474 KiB. Next Image supplies responsive sizes; the hero is prioritized and below-the-fold images are lazy loaded.
 
-Finish cards present the campaign palette, not purchasable variants. Collection links use the existing localized `/store` route. Manage actual catalog products, variant images and availability in Medusa Admin; do not associate these images with unrelated starter products. No product dimensions, material certifications, delivery promises, reviews or prices were invented for this redesign.
+The deployment runs `make catalog-import` after migrations. This creates any missing organizer listings and moves matching demo apparel to draft. Set retail prices and inventory in Medusa Admin before making the organizers purchasable. Re-running the import preserves existing organizer records and their settings.

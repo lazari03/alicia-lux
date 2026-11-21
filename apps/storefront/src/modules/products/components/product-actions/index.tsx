@@ -94,6 +94,10 @@ export default function ProductActions({
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {
+    if (selectedVariant?.calculated_price?.calculated_amount == null) {
+      return false
+    }
+
     // If we don't manage inventory, we can always add to cart
     if (selectedVariant && !selectedVariant.manage_inventory) {
       return true
