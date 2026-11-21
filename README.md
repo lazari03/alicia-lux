@@ -84,6 +84,8 @@ make deploy
 
 On subsequent releases, run `make deploy`. It fast-forwards the checkout to GitHub's `main` and runs `make up`. The startup script installs dependencies, preserves existing credentials, creates missing local configuration, starts PostgreSQL with Docker Compose, runs migrations, seeds if there are no regions, synchronizes the publishable key, builds both apps, and restarts them with PM2. It checks both apps before reporting success. Run `make up` directly to start the current checkout without pulling. Keep ports 8000 and 9000 available for PM2.
 
+If database authentication fails, run `make db-check` to test the same host login that Medusa uses. For the existing local Compose database, run `make db-repair` to rotate the password and update both local environment files, then run `make deploy`. Repair requires the PostgreSQL container to be running. If it is stopped, run `docker compose start postgres` first. The repair keeps the existing database volume and skips rotation when the configured login already works.
+
 Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
 
 For private access from your computer, run `ssh -N -L 8000:localhost:8000 -L 9000:localhost:9000 root@YOUR_SERVER_IP`, then open http://localhost:8000/de for the storefront or http://localhost:9000/app for Admin. Public domain/HTTPS configuration is separate. Keep application and database ports closed to public traffic.

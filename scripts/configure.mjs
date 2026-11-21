@@ -17,7 +17,7 @@ if (process.argv[2] === 'backend') {
   if (!root.POSTGRES_PASSWORD && !backend.DATABASE_URL) {
     // Existing volumes must retain their original password; never guess or reset it.
     const volumes = execFileSync('docker',['volume','ls','--filter','label=com.docker.compose.project=alicia-lux','-q'],{encoding:'utf8'}).trim()
-    if (volumes) throw new Error('Existing PostgreSQL volume found without credentials. Restore .env or apps/backend/.env before continuing.')
+    if (volumes) throw new Error('Existing PostgreSQL volume found without credentials. Restore .env or apps/backend/.env, or run make db-repair if the local postgres service is running.')
     root.POSTGRES_PASSWORD=secret();write('.env',{POSTGRES_PASSWORD:root.POSTGRES_PASSWORD})
   }
   if (!root.POSTGRES_PASSWORD && backend.DATABASE_URL) {

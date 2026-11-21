@@ -12,6 +12,7 @@ npm --prefix apps/storefront install --no-audit --no-fund
 npm install --no-audit --no-fund
 node scripts/configure.mjs backend
 docker compose up -d --wait
+node scripts/database.mjs check
 npm run db:migrate
 REGIONS="$(docker compose exec -T postgres psql -U medusa -d alicia_lux -Atc 'SELECT count(*) FROM region WHERE deleted_at IS NULL;')"
 if [ "$REGIONS" = 0 ]; then
