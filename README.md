@@ -75,18 +75,18 @@ Deploy the backend to a persistent Node.js host (or Medusa Cloud), and the store
 
 ## One-command server startup
 
-With Node.js 22+, Docker Compose, Git and Make installed, run these commands from the server checkout on `main`:
+Use `make up` for initial setup with Node.js 22+, Docker Compose, Git and Make. It provisions the local database, runs migrations and starts the legacy PM2 listeners on ports 8000 and 9000.
+
+On the existing Caddy server, deploy from the server checkout on `main`:
 
 ```sh
-git pull --ff-only origin main  # First time only, to get the deploy target
+git pull --ff-only origin main  # First time only, to get the updated targets
 make deploy
 ```
 
-On subsequent releases, run `make deploy`. The catalog setup configures Swedish delivery and SEK pricing before the storefront build. It fast-forwards the checkout to GitHub's `main` and runs `make up`. The startup script installs dependencies, preserves existing credentials, creates missing local configuration, starts PostgreSQL with Docker Compose, runs migrations, seeds if there are no regions, synchronizes the publishable key, builds both apps, and restarts them with PM2. It checks both apps before reporting success. Run `make up` directly to start the current checkout without pulling. Keep ports 8000 and 9000 available for PM2.
+`make deploy` stages Medusa and Next.js in separate release directories, checks both, then switches their Caddy upstreams together. It uses the running PostgreSQL service. Database migrations run before cutover and must remain compatible with the live release. A Caddy rollback restores traffic to the previous processes and does not reverse database migrations. Reserve loopback ports 8001/8002 and 9001/9002 for the staged apps. The Caddyfile must contain one direct storefront upstream and one direct Medusa upstream for `shopalicialux.se`.
 
-For storefront-only changes on the existing Caddy server, run `make deploy-storefront` as the user who manages Caddy and PM2. The first time, pull `main` to get the target. It builds a separate copy of Next.js, checks the home and shop pages, then reloads Caddy. It leaves the previous storefront running and restores the previous routing if the cutover check fails. Reserve loopback ports 8001 and 8002 for these releases. The Caddyfile must contain one direct storefront upstream on port 8000, 8001, or 8002.
-
-Backend, pricing, or database changes still need `make deploy`. If Caddy already points to port 8001 or 8002, follow a full deploy with `make deploy-storefront` to publish its new storefront build.
+Use `make deploy-storefront` for theme-only changes. It stages Next.js against the active Medusa upstream. To repair the public admin route without a build, use `make fix-admin` and open https://shopalicialux.se/app.
 
 If database authentication fails, run `make db-check` to test the same host login that Medusa uses. For the existing local Compose database, run `make db-repair` to rotate the password and update both local environment files, then run `make deploy`. Repair requires the PostgreSQL container to be running. If it is stopped, run `docker compose start postgres` first. The repair keeps the existing database volume and skips rotation when the configured login already works.
 
