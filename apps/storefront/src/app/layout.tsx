@@ -5,6 +5,10 @@ import "styles/globals.css"
 export const metadata: Metadata = {
   title: { default: "Alicia Lux", template: "%s | Alicia Lux" },
   description: "Jewelry and beauty organizers for the things you treasure. Discover the signature Alicia Lux collection.",
+  icons: {
+    icon: "/favicon.ico?v=alicia-lux",
+    apple: "/images/alicia-lux-touch.png",
+  },
   metadataBase: new URL(getBaseURL()),
 }
 

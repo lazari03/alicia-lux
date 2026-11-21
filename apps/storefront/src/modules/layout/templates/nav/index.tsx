@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Suspense } from "react"
 
 import { listLocales } from "@lib/data/locales"
@@ -21,7 +22,8 @@ export default async function Nav() {
             The collection
           </LocalizedClientLink>
         </div>
-        <LocalizedClientLink href="/" className="lux-wordmark uppercase" data-testid="nav-store-link">
+        <LocalizedClientLink href="/" className="lux-wordmark lux-nav-brand uppercase" data-testid="nav-store-link">
+          <Image src="/images/alicia-lux-mark.png" alt="" width={44} height={44} />
           Alicia Lux
         </LocalizedClientLink>
         <div className="lux-nav-shopping">

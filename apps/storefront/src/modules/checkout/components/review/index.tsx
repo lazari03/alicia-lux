@@ -3,6 +3,7 @@
 import { HttpTypes } from "@medusajs/types"
 import { Heading, Text, clx } from "@medusajs/ui"
 
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
 
@@ -41,6 +42,11 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
                 Review your items, delivery details and total before placing your order.
               </Text>
             </div>
+          </div>
+          <div className="mb-4 flex flex-wrap gap-x-4 gap-y-2 text-sm underline underline-offset-4">
+            <LocalizedClientLink href="/policies/terms" target="_blank" rel="noopener">Terms &amp; conditions</LocalizedClientLink>
+            <LocalizedClientLink href="/policies/privacy" target="_blank" rel="noopener">Privacy policy</LocalizedClientLink>
+            <LocalizedClientLink href="/policies/returns" target="_blank" rel="noopener">Returns &amp; refunds</LocalizedClientLink>
           </div>
           <PaymentButton cart={cart} data-testid="submit-order-button" />
         </>

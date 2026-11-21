@@ -86,6 +86,8 @@ make deploy
 
 `make deploy` stages Medusa and Next.js in separate release directories, checks both, then switches their Caddy upstreams together. It uses the running PostgreSQL service. Database migrations run before cutover and must remain compatible with the live release. A Caddy rollback restores traffic to the previous processes and does not reverse database migrations. Reserve loopback ports 8001/8002 and 9001/9002 for the staged apps. The Caddyfile must contain one direct storefront upstream and one direct Medusa upstream for `shopalicialux.se`.
 
+Set `STORE_LEGAL_NAME`, `STORE_ORGANISATION_NUMBER`, `STORE_BUSINESS_ADDRESS`, and `STORE_SUPPORT_EMAIL` in `apps/storefront/.env.local` so the policy pages identify the seller and provide a direct contact before accepting orders.
+
 Use `make deploy-storefront` for theme-only changes. It stages Next.js against the active Medusa upstream. To repair the public admin route without a build, use `make fix-admin` and open https://shopalicialux.se/app.
 
 If database authentication fails, run `make db-check` to test the same host login that Medusa uses. For the existing local Compose database, run `make db-repair` to rotate the password and update both local environment files, then run `make deploy`. Repair requires the PostgreSQL container to be running. If it is stopped, run `docker compose start postgres` first. The repair keeps the existing database volume and skips rotation when the configured login already works.

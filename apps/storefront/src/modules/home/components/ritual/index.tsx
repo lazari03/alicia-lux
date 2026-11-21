@@ -15,7 +15,18 @@ export default function Ritual() {
           <LocalizedClientLink href="/store" className="lux-text-link">Discover Alicia Lux <span aria-hidden="true">↗</span></LocalizedClientLink>
         </div>
       </section>
-      <section className="lux-brand-note content-container" aria-labelledby="brand-heading"><p className="lux-eyebrow">The Alicia Lux philosophy</p><h2 id="brand-heading">Luxury is a feeling.<br /><em>Make room for it.</em></h2><p>We believe the things you treasure deserve a beautiful home.<br className="hidden small:block" /> Thoughtful organization. Understated beauty. A ritual that is entirely yours.</p></section>
+      <section className="lux-brand-note content-container" aria-labelledby="brand-heading">
+        <Image
+          src="/images/signature-closed.webp"
+          alt="Closed Champagne Alicia Lux organizer with the embossed AL monogram and pull tab"
+          width={1440}
+          height={960}
+          sizes="(min-width: 840px) 760px, 95vw"
+          className="lux-brand-note-image"
+        />
+        <h2 id="brand-heading">Luxury is a feeling.<br /><em>Make room for it.</em></h2>
+        <p>A beautiful home for the things you treasure, down to the details you see when it’s closed.</p>
+      </section>
     </>
   )
 }
