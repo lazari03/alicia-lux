@@ -28,11 +28,12 @@ npm run build:backend
 cp apps/backend/.env apps/backend/.medusa/server/.env
 chmod 600 apps/backend/.medusa/server/.env
 start_app() {
+  # Restarting an existing PM2 entry retains its original working directory
+  # and can also retain environment variables from an older deployment.
   if "$PM2" describe "$1" >/dev/null 2>&1; then
-    "$PM2" restart "$1" --update-env
-  else
-    "$PM2" start npm --name "$1" --cwd "$PWD/apps/$2" -- start
+    "$PM2" delete "$1"
   fi
+  "$PM2" start npm --name "$1" --cwd "$PWD/apps/$2" -- start
 }
 start_app alicia-backend backend
 node scripts/wait.mjs http://localhost:9000/health
