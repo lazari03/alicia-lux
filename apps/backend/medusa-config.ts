@@ -10,10 +10,13 @@ function required(name: string): string {
   return value
 }
 
+const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
+  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync(".env.stripe-hosted"))
+
 const stripeKey = process.env.STRIPE_API_KEY
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
-if (Boolean(stripeKey) !== Boolean(stripeWebhookSecret)) {
+if (!hostedCheckout && Boolean(stripeKey) !== Boolean(stripeWebhookSecret)) {
   throw new Error("Set both STRIPE_API_KEY and STRIPE_WEBHOOK_SECRET to enable Stripe.")
 }
 
@@ -25,8 +28,7 @@ if (stripeKey && stripeWebhookSecret) {
     options: { apiKey: stripeKey, webhookSecret: stripeWebhookSecret, capture: true },
   })
 }
-if (process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
-    (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync(".env.stripe-hosted"))) {
+if (hostedCheckout) {
   const secrets = parseEnv(readFileSync(".env.stripe-hosted", "utf8"))
   const apiKey = secrets.STRIPE_API_KEY
   const webhookSecret = secrets.STRIPE_WEBHOOK_SECRET
