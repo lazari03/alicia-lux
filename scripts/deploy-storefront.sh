@@ -153,11 +153,23 @@ const response = await fetch(new URL('/store/regions', base), {
 }).catch(() => null)
 if (!response?.ok) process.exit(1)
 const { regions } = await response.json()
-const markets = regions.flatMap(region => region.countries.map(country => [country.iso_2, region.currency_code]))
-if (markets.length !== 1 || markets[0][0] !== 'se' || markets[0][1] !== 'sek') process.exit(1)
+const markets = regions.flatMap(region => region.countries.map(country => ({ region, country })))
+if (markets.length !== 1 || markets[0].country.iso_2 !== 'se' || markets[0].region.currency_code !== 'sek') process.exit(1)
+const methodsUrl = new URL('/store/payment-providers', base)
+methodsUrl.searchParams.set('region_id', markets[0].region.id)
+const methodsResponse = await fetch(methodsUrl, {
+  headers: { 'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ?? '' },
+  signal: AbortSignal.timeout(5000),
+}).catch(() => null)
+if (!methodsResponse?.ok) process.exit(1)
+const { payment_providers } = await methodsResponse.json()
+if (payment_providers.length !== 1 || payment_providers[0].id !== 'pp_stripe-hosted_stripe-hosted') {
+  console.error('Stripe Checkout must be the only payment provider for the Sweden region. Check apps/backend/.env.stripe-hosted and run make deploy.')
+  process.exit(1)
+}
 NODE
 then
-  echo 'Could not verify the Sweden/SEK market on Medusa. Run make deploy once if the market setup is still pending.' >&2
+  echo 'Could not verify the Sweden/SEK market and Stripe Checkout on Medusa. Run make deploy once if the market setup is still pending.' >&2
   exit 1
 fi
 

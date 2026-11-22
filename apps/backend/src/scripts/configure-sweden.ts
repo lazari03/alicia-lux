@@ -106,16 +106,16 @@ export default async function configureSweden({ container }: ExecArgs) {
     const providerIds = (market?.payment_providers ?? [])
       .flatMap((provider) => provider?.id ? [provider.id] : [])
     const stripeProvider = hostedCheckout ? "pp_stripe-hosted_stripe-hosted" : "pp_stripe_stripe"
-    const replacedProviders = ["pp_system_default", hostedCheckout ? "pp_stripe_stripe" : "pp_stripe-hosted_stripe-hosted"]
-    if (!providerIds.includes(stripeProvider) || providerIds.some((id) => replacedProviders.includes(id))) {
+    const replacedProviders = ["pp_system_default", "pp_stripe-hosted_stripe-hosted"]
+    const nextProviders = hostedCheckout
+      ? [stripeProvider]
+      : [...new Set([...providerIds.filter((id) => !replacedProviders.includes(id)), stripeProvider])]
+    if (providerIds.length !== nextProviders.length || nextProviders.some((id) => !providerIds.includes(id))) {
       await updateRegionsWorkflow(container).run({
         input: {
           selector: { id: sweden.id },
           update: {
-            payment_providers: [...new Set([
-              ...providerIds.filter((id) => !replacedProviders.includes(id)),
-              stripeProvider,
-            ])],
+            payment_providers: nextProviders,
           },
         },
       })

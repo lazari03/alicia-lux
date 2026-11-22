@@ -9,11 +9,11 @@ const SignInPrompt = () => {
           Already have an account?
         </Heading>
         <Text className="txt-medium text-ui-fg-subtle mt-2">
-          Sign in to use saved details, or continue to checkout as a guest.
+          Sign in to view your account, or continue to Stripe as a guest.
         </Text>
       </div>
       <div>
-        <LocalizedClientLink href="/checkout?step=address&signIn=1">
+        <LocalizedClientLink href="/account">
           <Button variant="secondary" className="h-10" data-testid="sign-in-button">
             Sign in
           </Button>

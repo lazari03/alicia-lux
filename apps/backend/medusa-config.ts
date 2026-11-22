@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from "node:fs"
-import { parseEnv } from "node:util"
+import { existsSync } from "node:fs"
+import { readHostedSecrets } from "./src/modules/stripe-hosted/service"
 import { loadEnv, defineConfig, Modules } from "@medusajs/framework/utils"
 
 loadEnv(process.env.NODE_ENV || "development", process.cwd())
@@ -29,13 +29,7 @@ if (stripeKey && stripeWebhookSecret) {
   })
 }
 if (hostedCheckout) {
-  const secrets = parseEnv(readFileSync(".env.stripe-hosted", "utf8"))
-  const apiKey = secrets.STRIPE_API_KEY
-  const webhookSecret = secrets.STRIPE_WEBHOOK_SECRET
-  if (!apiKey?.match(/^(sk|rk)_(live|test)_[A-Za-z0-9_-]+$/) ||
-      !webhookSecret?.match(/^whsec_[A-Za-z0-9_-]+$/)) {
-    throw new Error("Set the Stripe API key and webhook signing secret in .env.stripe-hosted.")
-  }
+  const { STRIPE_API_KEY: apiKey, STRIPE_WEBHOOK_SECRET: webhookSecret } = readHostedSecrets()
   const url = new URL(process.env.STRIPE_CHECKOUT_RETURN_ORIGIN || "https://shopalicialux.se")
   if (url.protocol !== "https:" &&
       !(apiKey.includes("_test_") && url.protocol === "http:" && url.hostname === "localhost")) {

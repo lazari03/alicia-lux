@@ -17,8 +17,9 @@ Intents. Grant write access to Refunds if refunds will be issued from Medusa.
 
 Run `make deploy` from `/root/alicia-lux`. The full deployment installs the
 provider, updates the Swedish region, and routes the webhook through Caddy.
-Guests enter their contact, billing and Swedish delivery details before
-heading to Stripe. Stripe shows the Medusa total in SEK, including delivery,
+Guests select Checkout with Stripe in the cart. Stripe collects their
+contact, billing and Swedish delivery details. The cart uses the lowest-cost
+available flat-rate delivery option for Sweden. Stripe shows the Medusa total in SEK, including delivery,
 taxes and discounts. Medusa verifies the authorized payment against the
 cart, reserves inventory and captures the payment when completing the order.
 

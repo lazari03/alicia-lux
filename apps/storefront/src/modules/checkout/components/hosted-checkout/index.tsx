@@ -21,7 +21,7 @@ export default function HostedCheckout({ sessionId }: { sessionId?: string }) {
   return (
     <form ref={form} action={action} className="space-y-3">
       <SubmitButton className="w-full">
-        {sessionId ? "Confirm order" : "Continue to secure payment"}
+        {sessionId ? "Confirm order" : "Checkout with Stripe"}
       </SubmitButton>
       {message && <p role="alert" className="text-sm text-ui-fg-error">{message}</p>}
     </form>

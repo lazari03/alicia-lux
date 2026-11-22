@@ -28,7 +28,7 @@ const CartTemplate = ({
             </div>
             {cart.region && (
               <div className="lux-checkout-summary">
-                <Summary cart={cart as any} guest={!customer} />
+                <Summary cart={cart as any} />
               </div>
             )}
           </div>

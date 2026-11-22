@@ -1,12 +1,9 @@
-"use client"
+import { Heading } from "@medusajs/ui"
 
-import { Button, Heading } from "@medusajs/ui"
-
-import { getCheckoutStep } from "@lib/util/checkout-step"
+import HostedCheckout from "@modules/checkout/components/hosted-checkout"
 import CartTotals from "@modules/common/components/cart-totals"
 import Divider from "@modules/common/components/divider"
 import DiscountCode from "@modules/checkout/components/discount-code"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 
 type SummaryProps = {
@@ -15,9 +12,7 @@ type SummaryProps = {
   }
 }
 
-const Summary = ({ cart, guest }: SummaryProps & { guest: boolean }) => {
-  const step = getCheckoutStep(cart)
-
+const Summary = ({ cart }: SummaryProps) => {
   return (
     <div className="flex flex-col gap-y-4">
       <Heading level="h2" className="text-[2rem] leading-[2.75rem]">
@@ -26,12 +21,8 @@ const Summary = ({ cart, guest }: SummaryProps & { guest: boolean }) => {
       <DiscountCode cart={cart} />
       <Divider />
       <CartTotals totals={cart} />
-      <LocalizedClientLink
-        href={"/checkout?step=" + step}
-        data-testid="checkout-button"
-      >
-        <Button className="w-full h-10">{guest ? "Checkout as guest" : "Go to checkout"}</Button>
-      </LocalizedClientLink>
+      <HostedCheckout />
+      <p className="text-sm text-ui-fg-subtle">Enter your delivery and billing details securely on Stripe. Delivery is available within Sweden.</p>
     </div>
   )
 }

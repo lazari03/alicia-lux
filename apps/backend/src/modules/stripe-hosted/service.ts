@@ -7,10 +7,21 @@ import type {
 } from "@medusajs/framework/types"
 import { AbstractPaymentProvider, MathBN, MedusaError, PaymentActions, PaymentSessionStatus } from "@medusajs/framework/utils"
 import Stripe from "stripe"
+import { readFileSync } from "node:fs"
+import { parseEnv } from "node:util"
 
 type Options = { apiKey: string; webhookSecret: string; origin: string }
 
 export const hostedProviderId = "pp_stripe-hosted_stripe-hosted"
+
+export function readHostedSecrets() {
+  const { STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET } = parseEnv(readFileSync(".env.stripe-hosted", "utf8"))
+  if (!STRIPE_API_KEY?.match(/^(sk|rk)_(live|test)_[A-Za-z0-9_-]+$/) ||
+      !STRIPE_WEBHOOK_SECRET?.match(/^whsec_[A-Za-z0-9_-]+$/)) {
+    throw new Error("Set the Stripe API key and webhook signing secret in .env.stripe-hosted.")
+  }
+  return { STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET }
+}
 
 export function sekMinorUnits(amount: InitiatePaymentInput["amount"]) {
   return MathBN.convert(MathBN.mult(amount, 100)).integerValue().toNumber()
@@ -37,6 +48,8 @@ export default class StripeHostedProvider extends AbstractPaymentProvider<Option
       ui_mode: "hosted",
       payment_method_types: ["card"],
       billing_address_collection: "required",
+      shipping_address_collection: { allowed_countries: ["SE"] },
+      phone_number_collection: { enabled: true },
       customer_email: context?.customer?.email,
       allow_promotion_codes: false,
       automatic_tax: { enabled: false },
@@ -49,10 +62,10 @@ export default class StripeHostedProvider extends AbstractPaymentProvider<Option
         },
       }],
       client_reference_id: paymentSessionId,
-      metadata: { medusa_payment_session_id: paymentSessionId },
+      metadata: { medusa_payment_session_id: paymentSessionId, direct_checkout: "true" },
       payment_intent_data: { capture_method: "manual", metadata: { medusa_payment_session_id: paymentSessionId } },
       success_url: `${this.options.origin}/se/checkout/stripe-return?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${this.options.origin}/se/checkout?step=payment&stripe=cancelled`,
+      cancel_url: `${this.options.origin}/se/cart?stripe=cancelled`,
     }, { idempotencyKey: paymentSessionId })
 
     if (!session.url) throw new MedusaError(MedusaError.Types.UNEXPECTED_STATE, "Stripe Checkout did not return a payment link.")
@@ -61,6 +74,7 @@ export default class StripeHostedProvider extends AbstractPaymentProvider<Option
       status: PaymentSessionStatus.PENDING,
       data: {
         stripe_checkout_id: session.id,
+        direct_checkout: true,
         checkout_url: session.url,
         medusa_payment_session_id: paymentSessionId,
         amount_minor: total,
@@ -171,7 +185,7 @@ export default class StripeHostedProvider extends AbstractPaymentProvider<Option
 
     const checkout = event.data.object
     const session_id = checkout.metadata?.medusa_payment_session_id
-    if (!session_id || checkout.status !== "complete" || checkout.currency !== "sek" || !checkout.amount_total) {
+    if (checkout.metadata?.direct_checkout === "true" || !session_id || checkout.status !== "complete" || checkout.currency !== "sek" || !checkout.amount_total) {
       return { action: PaymentActions.NOT_SUPPORTED }
     }
 

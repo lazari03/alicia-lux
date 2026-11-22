@@ -1,6 +1,7 @@
 "use server"
 
-import { getCheckoutStep, hostedStripeProvider } from "@lib/util/checkout-step"
+import { hostedStripeProvider } from "@lib/util/checkout-step"
+import { listCartShippingMethods } from "./fulfillment"
 import { listCartPaymentMethods } from "./payment"
 import { unstable_rethrow } from "next/navigation"
 import { sdk } from "@lib/config"
@@ -255,10 +256,9 @@ export async function initiatePaymentSession(
 
 export async function startHostedCheckout() {
   try {
-    const cart = await retrieveCart()
-    if (!cart?.items?.length || !cart.region_id || getCheckoutStep(cart, "payment") !== "payment" ||
-        cart.shipping_address?.country_code !== "se" || cart.currency_code !== "sek") {
-      return "Check your contact, billing and Swedish delivery details before continuing."
+    let cart = await retrieveCart()
+    if (!cart?.items?.length || !cart.region_id || cart.currency_code !== "sek") {
+      return "Stripe checkout requires a cart in Swedish kronor."
     }
 
     const methods = await listCartPaymentMethods(cart.region_id)
@@ -266,10 +266,25 @@ export async function startHostedCheckout() {
       return "Stripe Checkout is currently unavailable."
     }
 
+    if (cart.shipping_address?.country_code !== "se") {
+      cart = await updateCart({ shipping_address: { country_code: "se" } })
+    }
+    const options = (await listCartShippingMethods(cart.id)) ?? []
+    const delivery = options.filter(({ price_type, amount }) => price_type === "flat" && typeof amount === "number")
+      .sort((a, b) => a.amount - b.amount || a.id.localeCompare(b.id))[0]
+    if (!delivery) return "Standard delivery within Sweden is currently unavailable."
+
+    if (cart.shipping_methods?.length !== 1 || cart.shipping_methods[0].shipping_option_id !== delivery.id) {
+      await setShippingMethod({ cartId: cart.id, shippingMethodId: delivery.id })
+      cart = await retrieveCart()
+      if (!cart) return "Your cart could not be loaded. Please try again."
+    }
+
     const existing = cart.payment_collection?.payment_sessions?.find(
       ({ provider_id, status }) => provider_id === hostedStripeProvider && status === "pending"
     )
     const reusable = existing?.data &&
+      existing.data.direct_checkout === true &&
       existing.data.amount_minor === Math.round(cart.total * 100) &&
       Number(existing.data.expires_at) > Date.now() / 1000
     const payment = reusable ? existing : (await initiatePaymentSession(
@@ -290,10 +305,18 @@ export async function startHostedCheckout() {
 export async function finishHostedCheckout(sessionId: string) {
   try {
     const cart = await retrieveCart()
-    if (!cart?.payment_collection?.payment_sessions?.some(({ provider_id, data }) =>
+    const payment = cart?.payment_collection?.payment_sessions?.find(({ provider_id, data }) =>
       provider_id === hostedStripeProvider && data?.stripe_checkout_id === sessionId
-    )) {
+    )
+    if (!cart || !payment) {
       return "This payment link does not match your current cart."
+    }
+    if (payment.data?.direct_checkout === true) {
+      await sdk.client.fetch(`/store/carts/${cart.id}/stripe-confirm`, {
+        method: "POST",
+        headers: await getAuthHeaders(),
+        body: { session_id: sessionId },
+      })
     }
     await placeOrder()
   } catch (error) {
