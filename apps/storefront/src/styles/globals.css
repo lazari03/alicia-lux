@@ -612,3 +612,39 @@ body { color: var(--lux-ink); background: var(--lux-paper); }
 .lux-policy h2 { font: 400 clamp(24px, 3vw, 33px)/1.15 Georgia, serif; }
 .lux-policy p { margin-top: 12px; color: var(--lux-muted); line-height: 1.75; }
 .lux-policy a { color: var(--lux-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.lux-checkout-title {
+  font: 400 clamp(34px, 5vw, 56px)/1.08 Georgia, serif;
+  letter-spacing: -.04em;
+}
+
+.lux-checkout-grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(22px, 4vw, 64px);
+  max-width: 1220px;
+  padding-block: clamp(28px, 5vw, 72px);
+}
+
+.lux-checkout-form, .lux-checkout-summary, .lux-account-card {
+  border: 1px solid var(--lux-line);
+  border-radius: 5px;
+  background: #fff;
+  padding: clamp(16px, 3vw, 38px);
+}
+
+.lux-checkout-form { display: grid; gap: 26px; }
+.lux-guest-panel { background: var(--lux-paper); padding: 16px; }
+.lux-guest-panel summary { min-height: 44px; padding-block: 10px; }
+.lux-account-entry { display: grid; justify-items: center; padding-block: clamp(36px, 8vw, 100px); }
+.lux-account-card { width: min(100%, 480px); }
+.lux-sign-in-form { display: grid; gap: 12px; margin-top: 20px; }
+.lux-sign-in-form input, .lux-checkout-form input, .lux-checkout-form select { font-size: 16px; }
+
+@media (min-width: 960px) {
+  .lux-checkout-grid { grid-template-columns: minmax(0, 1fr) minmax(290px, .64fr); }
+  .lux-checkout-summary { position: sticky; top: 24px; }
+}
+
+.lux-cart-grid { padding-block: 0; }
+.lux-cart-items { overflow-x: auto; }

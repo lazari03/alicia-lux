@@ -1,64 +1,26 @@
-import { login } from "@lib/data/customer"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
-import ErrorMessage from "@modules/checkout/components/error-message"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
-import Input from "@modules/common/components/input"
-import { useActionState } from "react"
+import SignInForm from "@modules/account/components/sign-in-form"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
 }
 
-const Login = ({ setCurrentView }: Props) => {
-  const [message, formAction] = useActionState(login, null)
-
+export default function Login({ setCurrentView }: Props) {
   return (
-    <div
-      className="max-w-sm w-full flex flex-col items-center"
-      data-testid="login-page"
-    >
-      <h1 className="text-large-semi uppercase mb-6">Welcome back</h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-8">
-        Sign in to access an enhanced shopping experience.
-      </p>
-      <form className="w-full" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            title="Enter a valid email address."
-            autoComplete="email"
-            required
-            data-testid="email-input"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            data-testid="password-input"
-          />
-        </div>
-        <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
-          Sign in
-        </SubmitButton>
-      </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Not a member?{" "}
+    <div className="w-full" data-testid="login-page">
+      <h1 className="lux-checkout-title">Welcome back</h1>
+      <p className="mt-3 text-sm text-ui-fg-subtle">Sign in to see your orders and use saved details.</p>
+      <SignInForm />
+      <p className="mt-5 text-sm">
+        New to Alicia Lux?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.REGISTER)}
-          className="underline"
+          className="min-h-[44px] underline underline-offset-4"
           data-testid="register-button"
         >
-          Join us
+          Create an account
         </button>
-        .
-      </span>
+      </p>
     </div>
   )
 }
-
-export default Login

@@ -78,9 +78,12 @@ if [[ "$mode" == --with-backend ]]; then
   export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$repo/.cache/config}"
   node scripts/configure.mjs backend
   node --env-file=apps/backend/.env --env-file=apps/storefront/.env.local --input-type=module <<'NODE'
+import { existsSync } from 'node:fs'
+const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
+  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync('apps/backend/.env.stripe-hosted'))
 const stripeKey = process.env.STRIPE_API_KEY
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-if (stripeKey || webhookSecret) {
+if (!hostedCheckout && (stripeKey || webhookSecret)) {
   const mode = stripeKey?.match(/^(?:sk|rk)_(test|live)_/)?.[1]
   if (!mode || !webhookSecret?.startsWith('whsec_') || !process.env.NEXT_PUBLIC_STRIPE_KEY?.startsWith(`pk_${mode}_`)) {
     console.error('Stripe requires a server API key, webhook secret, and matching test or live storefront public key.')
@@ -93,6 +96,9 @@ NODE
   git archive "$revision" apps/backend | tar -xf - -C "$backend_candidate"
   backend="$backend_candidate/apps/backend"
   install -m 600 apps/backend/.env "$backend/.env"
+  if [[ -f "apps/backend/.env.stripe-hosted" ]]; then
+    install -m 600 "apps/backend/.env.stripe-hosted" "$backend/.env.stripe-hosted"
+  fi
   npm --prefix "$backend" ci --no-audit --no-fund
   npm --prefix "$backend" run build
 
@@ -104,6 +110,9 @@ NODE
     ./node_modules/.bin/medusa exec ./src/scripts/configure-sweden.ts
   )
   install -m 600 "$backend/.env" "$backend/.medusa/server/.env"
+  if [[ -f "$backend/.env.stripe-hosted" ]]; then
+    install -m 600 "$backend/.env.stripe-hosted" "$backend/.medusa/server/.env.stripe-hosted"
+  fi
   node scripts/configure.mjs storefront
 
   # Share the default local upload directory across backend releases.

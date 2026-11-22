@@ -16,9 +16,9 @@ export default async function Checkout({
   searchParams,
 }: {
   params: Promise<{ countryCode: string }>
-  searchParams: Promise<{ step?: string }>
+  searchParams: Promise<{ step?: string; signIn?: string }>
 }) {
-  const [cart, { countryCode }, { step }] = await Promise.all([
+  const [cart, { countryCode }, { step, signIn }] = await Promise.all([
     retrieveCart(),
     params,
     searchParams,
@@ -30,16 +30,19 @@ export default async function Checkout({
 
   const checkoutStep = getCheckoutStep(cart, step)
   if (checkoutStep !== step) {
-    redirect(`/${countryCode}/checkout?step=${checkoutStep}`)
+    redirect(`/${countryCode}/checkout?step=${checkoutStep}${signIn === "1" ? "&signIn=1" : ""}`)
   }
 
   const customer = await retrieveCustomer()
 
   return (
-    <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-40 py-12">
-      <PaymentWrapper cart={cart}>
-        <CheckoutForm cart={cart} customer={customer} step={checkoutStep} />
-      </PaymentWrapper>
+    <div className="content-container lux-checkout-grid">
+      <div className="min-w-0">
+        <h1 className="lux-checkout-title mb-5">Checkout</h1>
+        <PaymentWrapper cart={cart}>
+          <CheckoutForm cart={cart} customer={customer} step={checkoutStep} showSignIn={signIn === "1"} />
+        </PaymentWrapper>
+      </div>
       <CheckoutSummary cart={cart} />
     </div>
   )

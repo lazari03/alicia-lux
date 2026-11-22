@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs"
 import type { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import {
@@ -94,7 +95,9 @@ export default async function configureSweden({ container }: ExecArgs) {
     })
   }
 
-  if (process.env.STRIPE_API_KEY && process.env.STRIPE_WEBHOOK_SECRET) {
+  const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
+    (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync(".env.stripe-hosted"))
+  if (hostedCheckout || (process.env.STRIPE_API_KEY && process.env.STRIPE_WEBHOOK_SECRET)) {
     const { data: [market] } = await query.graph({
       entity: "region",
       fields: ["id", "payment_providers.id"],
@@ -102,14 +105,15 @@ export default async function configureSweden({ container }: ExecArgs) {
     })
     const providerIds = (market?.payment_providers ?? [])
       .flatMap((provider) => provider?.id ? [provider.id] : [])
-    const stripeProvider = "pp_stripe_stripe"
-    if (!providerIds.includes(stripeProvider) || providerIds.includes("pp_system_default")) {
+    const stripeProvider = hostedCheckout ? "pp_stripe-hosted_stripe-hosted" : "pp_stripe_stripe"
+    const replacedProviders = ["pp_system_default", hostedCheckout ? "pp_stripe_stripe" : "pp_stripe-hosted_stripe-hosted"]
+    if (!providerIds.includes(stripeProvider) || providerIds.some((id) => replacedProviders.includes(id))) {
       await updateRegionsWorkflow(container).run({
         input: {
           selector: { id: sweden.id },
           update: {
             payment_providers: [...new Set([
-              ...providerIds.filter((id) => id !== "pp_system_default"),
+              ...providerIds.filter((id) => !replacedProviders.includes(id)),
               stripeProvider,
             ])],
           },

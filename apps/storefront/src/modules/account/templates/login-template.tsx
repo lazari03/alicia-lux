@@ -1,5 +1,6 @@
 "use client"
 
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { useState } from "react"
 
 import Register from "@modules/account/components/register"
@@ -11,15 +12,16 @@ export enum LOGIN_VIEW {
 }
 
 const LoginTemplate = () => {
-  const [currentView, setCurrentView] = useState("sign-in")
+  const [currentView, setCurrentView] = useState(LOGIN_VIEW.SIGN_IN)
 
   return (
-    <div className="w-full flex justify-start px-8 py-8">
+    <div className="lux-account-card">
       {currentView === "sign-in" ? (
         <Login setCurrentView={setCurrentView} />
       ) : (
         <Register setCurrentView={setCurrentView} />
       )}
+      <LocalizedClientLink href="/cart" className="lux-text-link mt-3">Continue as guest</LocalizedClientLink>
     </div>
   )
 }

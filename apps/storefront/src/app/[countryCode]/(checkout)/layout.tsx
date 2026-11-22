@@ -1,3 +1,4 @@
+import Image from "next/image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import ChevronDown from "@modules/common/icons/chevron-down"
 
@@ -7,8 +8,8 @@ export default function CheckoutLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="w-full bg-white relative small:min-h-screen">
-      <div className="h-16 bg-white border-b ">
+    <div className="w-full relative min-h-screen">
+      <div className="lux-header h-16 ">
         <nav className="flex h-full items-center content-container justify-between">
           <LocalizedClientLink
             href="/cart"
@@ -25,9 +26,10 @@ export default function CheckoutLayout({
           </LocalizedClientLink>
           <LocalizedClientLink
             href="/"
-            className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
+            className="lux-wordmark lux-nav-brand uppercase"
             data-testid="store-link"
           >
+            <Image src="/images/alicia-lux-mark.png" alt="" width={44} height={44} />
             Alicia Lux
           </LocalizedClientLink>
           <div className="flex-1 basis-0" />

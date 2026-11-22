@@ -1,5 +1,8 @@
 "use server"
 
+import { getCheckoutStep, hostedStripeProvider } from "@lib/util/checkout-step"
+import { listCartPaymentMethods } from "./payment"
+import { unstable_rethrow } from "next/navigation"
 import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
@@ -250,6 +253,55 @@ export async function initiatePaymentSession(
     .catch(medusaError)
 }
 
+export async function startHostedCheckout() {
+  try {
+    const cart = await retrieveCart()
+    if (!cart?.items?.length || !cart.region_id || getCheckoutStep(cart, "payment") !== "payment" ||
+        cart.shipping_address?.country_code !== "se" || cart.currency_code !== "sek") {
+      return "Check your contact, billing and Swedish delivery details before continuing."
+    }
+
+    const methods = await listCartPaymentMethods(cart.region_id)
+    if (!methods?.some(({ id }) => id === hostedStripeProvider)) {
+      return "Stripe Checkout is currently unavailable."
+    }
+
+    const existing = cart.payment_collection?.payment_sessions?.find(
+      ({ provider_id, status }) => provider_id === hostedStripeProvider && status === "pending"
+    )
+    const reusable = existing?.data &&
+      existing.data.amount_minor === Math.round(cart.total * 100) &&
+      Number(existing.data.expires_at) > Date.now() / 1000
+    const payment = reusable ? existing : (await initiatePaymentSession(
+      cart, { provider_id: hostedStripeProvider }
+    )).payment_collection.payment_sessions?.find(({ provider_id }) => provider_id === hostedStripeProvider)
+
+    const url = new URL(String(payment?.data?.checkout_url))
+    if (url.origin !== "https://checkout.stripe.com") {
+      return "The payment link could not be verified. Please try again."
+    }
+    redirect(url.href)
+  } catch (error) {
+    unstable_rethrow(error)
+    return "Stripe Checkout could not start. Please try again."
+  }
+}
+
+export async function finishHostedCheckout(sessionId: string) {
+  try {
+    const cart = await retrieveCart()
+    if (!cart?.payment_collection?.payment_sessions?.some(({ provider_id, data }) =>
+      provider_id === hostedStripeProvider && data?.stripe_checkout_id === sessionId
+    )) {
+      return "This payment link does not match your current cart."
+    }
+    await placeOrder()
+  } catch (error) {
+    unstable_rethrow(error)
+    return "Your order could not be confirmed yet. Retry confirmation before starting another payment."
+  }
+}
+
 export async function applyPromotions(codes: string[]) {
   const cartId = await getCartId()
 
@@ -339,38 +391,37 @@ export async function setAddresses(currentState: unknown, formData: FormData) {
       throw new Error("No existing cart found when setting addresses")
     }
 
-    const data = {
-      shipping_address: {
-        first_name: formData.get("shipping_address.first_name"),
-        last_name: formData.get("shipping_address.last_name"),
-        address_1: formData.get("shipping_address.address_1"),
+    const readAddress = (type: "shipping" | "billing") => {
+      const value = (field: string) => String(formData.get(`${type}_address.${field}`) ?? "").trim()
+      const address = {
+        first_name: value("first_name"),
+        last_name: value("last_name"),
+        address_1: value("address_1"),
         address_2: "",
-        company: formData.get("shipping_address.company"),
-        postal_code: formData.get("shipping_address.postal_code"),
-        city: formData.get("shipping_address.city"),
-        country_code: formData.get("shipping_address.country_code"),
-        province: formData.get("shipping_address.province"),
-        phone: formData.get("shipping_address.phone"),
-      },
-      email: formData.get("email"),
-    } as any
-
-    const sameAsBilling = formData.get("same_as_billing")
-    if (sameAsBilling === "on") data.billing_address = data.shipping_address
-
-    if (sameAsBilling !== "on")
-      data.billing_address = {
-        first_name: formData.get("billing_address.first_name"),
-        last_name: formData.get("billing_address.last_name"),
-        address_1: formData.get("billing_address.address_1"),
-        address_2: "",
-        company: formData.get("billing_address.company"),
-        postal_code: formData.get("billing_address.postal_code"),
-        city: formData.get("billing_address.city"),
-        country_code: formData.get("billing_address.country_code"),
-        province: formData.get("billing_address.province"),
-        phone: formData.get("billing_address.phone"),
+        company: value("company"),
+        postal_code: value("postal_code"),
+        city: value("city"),
+        country_code: value("country_code").toLowerCase(),
+        province: value("province"),
+        phone: value("phone"),
       }
+
+      if (!address.first_name || !address.last_name || !address.address_1 ||
+        !address.postal_code || !address.city || !address.country_code) {
+        throw new Error(`Complete the ${type} address to continue.`)
+      }
+
+      return address
+    }
+
+    const email = String(formData.get("email") ?? "").trim()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new Error("Enter a valid email address to continue.")
+    }
+
+    const shippingAddress = readAddress("shipping")
+    const billingAddress = formData.get("same_as_billing") === "on" ? shippingAddress : readAddress("billing")
+    const data = { email, shipping_address: shippingAddress, billing_address: billingAddress }
     await updateCart(data)
   } catch (e: any) {
     return e.message

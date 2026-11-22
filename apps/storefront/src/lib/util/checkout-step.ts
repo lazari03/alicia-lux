@@ -1,5 +1,7 @@
 import type { HttpTypes } from "@medusajs/types"
 
+export const hostedStripeProvider = "pp_stripe-hosted_stripe-hosted"
+
 const steps = ["address", "delivery", "payment", "review"] as const
 
 export function getCheckoutStep(cart: HttpTypes.StoreCart, requested?: string) {
@@ -7,7 +9,7 @@ export function getCheckoutStep(cart: HttpTypes.StoreCart, requested?: string) {
     ? 0
     : !cart.shipping_methods?.length
       ? 1
-      : !cart.payment_collection?.payment_sessions?.some(({ status }) => status === "pending")
+      : !cart.payment_collection?.payment_sessions?.some(({ status, provider_id }) => status === "pending" && provider_id !== hostedStripeProvider)
         ? 2
         : 3
 
