@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react"
 import { browserClient } from "@/lib/supabase/browser"
 import { Notice } from "@/components/ui/notice"
+import { optOutThisDevice } from "@/lib/analytics/track"
 
 function LoginForm() {
   const router = useRouter()
@@ -28,6 +29,7 @@ function LoginForm() {
       setBusy(false)
       return
     }
+    optOutThisDevice() // don't count the shop owner's own visits
     router.replace("/admin")
     router.refresh()
   }

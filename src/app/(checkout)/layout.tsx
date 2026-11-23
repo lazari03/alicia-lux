@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowLeft, Lock } from "lucide-react"
 import { Logo } from "@/components/ui/logo"
+import { Pageviews } from "@/components/analytics/pageviews"
 
 /** Distraction-free checkout: no shop nav, no footer, no cart drawer. */
 export default function CheckoutLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export default function CheckoutLayout({ children }: { children: React.ReactNode
         </div>
       </header>
       <main>{children}</main>
+      <Pageviews />
     </div>
   )
 }

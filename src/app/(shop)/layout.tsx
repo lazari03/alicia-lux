@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import { CartDrawer } from "@/components/shop/cart-drawer"
+import { Pageviews } from "@/components/analytics/pageviews"
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
       <main id="main">{children}</main>
       <Footer />
       <CartDrawer />
+      <Pageviews />
     </div>
   )
 }

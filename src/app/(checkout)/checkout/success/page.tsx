@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { CheckCircle2, Clock } from "lucide-react"
 import { ClearCart } from "@/components/checkout/clear-cart"
+import { TrackOnMount } from "@/components/analytics/pageviews"
 import { formatPrice } from "@/lib/money"
 import { stripe } from "@/lib/stripe"
 import { serviceClient } from "@/lib/supabase/admin"
@@ -43,6 +44,7 @@ export default async function SuccessPage({ searchParams }: Props) {
   return (
     <div className="container-lux max-w-3xl py-[clamp(44px,8vw,104px)]">
       {paid && <ClearCart />}
+      {paid && <TrackOnMount event="purchase" valueOre={order.total_ore} />}
       <div className="text-center">
         {paid ? (
           <CheckCircle2 className="mx-auto mb-5 size-12 text-gold" strokeWidth={1} />

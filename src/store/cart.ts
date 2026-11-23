@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
+import { track } from "@/lib/analytics/track"
 
 export type CartLine = {
   productId: string
@@ -36,7 +37,8 @@ export const useCart = create<CartState>()(
       lines: [],
       open: false,
       setOpen: (open) => set({ open }),
-      add: (line, quantity = 1) =>
+      add: (line, quantity = 1) => {
+        track("add_to_cart", { productId: line.productId, valueOre: line.priceOre * quantity })
         set((state) => {
           const existing = state.lines.find((l) => l.productId === line.productId)
           const lines = existing
@@ -47,7 +49,8 @@ export const useCart = create<CartState>()(
               )
             : [...state.lines, { ...line, quantity: clamp(quantity, line.maxQuantity) }]
           return { lines, open: true }
-        }),
+        })
+      },
       setQuantity: (productId, quantity) =>
         set((state) => ({
           lines: state.lines.map((l) => (l.productId === productId ? { ...l, quantity: clamp(quantity, l.maxQuantity) } : l)),

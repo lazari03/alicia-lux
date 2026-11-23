@@ -11,6 +11,7 @@ import type { StoreSettings } from "@/lib/types"
 import { useHydrated } from "@/lib/use-hydrated"
 import { cn } from "@/lib/utils"
 import { cartSubtotal, useCart, type CartLine } from "@/store/cart"
+import { track } from "@/lib/analytics/track"
 import { Notice } from "@/components/ui/notice"
 import { PaymentForm } from "./payment-form"
 
@@ -99,6 +100,8 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
 
   const onContinue = async (e: React.FormEvent) => {
     e.preventDefault()
+    // Counts as "started checkout" as soon as the shopper submits their details.
+    if (step === "details" && !prepared) track("begin_checkout", { valueOre: subtotal + shipping })
     if (await prepare()) {
       setStep("payment")
       requestAnimationFrame(() => paymentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }))

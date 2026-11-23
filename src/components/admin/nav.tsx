@@ -3,12 +3,13 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Boxes, ExternalLink, LayoutDashboard, LogOut, Receipt, Settings } from "lucide-react"
+import { Boxes, ChartColumn, ExternalLink, LayoutDashboard, LogOut, Receipt, Settings } from "lucide-react"
 import { signOut } from "@/app/admin/actions"
 import { cn } from "@/lib/utils"
 
 const items = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "Analytics", icon: ChartColumn },
   { href: "/admin/orders", label: "Orders", icon: Receipt },
   { href: "/admin/products", label: "Products", icon: Boxes },
   { href: "/admin/settings", label: "Settings", icon: Settings },

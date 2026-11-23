@@ -62,6 +62,7 @@ const content: Record<Slug, () => React.ReactNode> = {
       </Section>
       <Section title="Cookies, storage and sharing">
         <p>Your shopping bag is saved in your browser’s local storage so it is still there when you return. Stripe may set cookies during payment to prevent fraud. You can clear this data in your browser at any time.</p>
+        <p>We collect anonymous visit statistics (pages viewed, country, device and browser type, and where the visit came from) to improve the store. We do not use cookies for this, do not store your IP address, and cannot identify you or follow you across days.</p>
         <p>We share the information needed for the service with our hosting, database, payment and delivery providers. We keep personal data for as long as needed for the purposes above and for any longer period required by law or to handle a dispute.</p>
       </Section>
       <Section title="Your privacy rights">

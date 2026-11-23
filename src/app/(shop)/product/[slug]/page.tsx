@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { RotateCcw, ShieldCheck, Truck } from "lucide-react"
 import { AddToCart } from "@/components/shop/add-to-cart"
+import { TrackOnMount } from "@/components/analytics/pageviews"
 import { ProductCard } from "@/components/shop/product-card"
 import { ProductGallery } from "@/components/shop/product-gallery"
 import { Reveal } from "@/components/ui/reveal"
@@ -51,6 +52,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
+      <TrackOnMount event="product_view" productId={product.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="container-lux py-6 sm:py-10">
         <nav aria-label="Breadcrumb" className="mb-6 text-[13px] text-muted">
