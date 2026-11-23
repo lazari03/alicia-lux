@@ -68,7 +68,11 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
           customer,
         }),
       })
-      const data = (await res.json()) as CheckoutResponse
+      // A proxy (e.g. Cloudflare) can replace error bodies with HTML.
+      const data = (await res.json().catch(() => ({
+        ok: false,
+        error: `Checkout is temporarily unavailable (error ${res.status}). Please try again in a moment.`,
+      }))) as CheckoutResponse
       if (!data.ok) {
         setErrors(data.fieldErrors ?? {})
         setFormError(data.error)

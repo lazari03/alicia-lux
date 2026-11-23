@@ -130,9 +130,15 @@ export async function POST(request: Request) {
 
     return NextResponse.json<CheckoutResponse>({ ok: true, orderId: order.id, clientSecret: intent.client_secret!, totals })
   } catch (e) {
-    console.error("checkout", e)
+    // Log the real cause (e.g. invalid Stripe key) — visible with `make logs`.
+    console.error("checkout failed:", e instanceof Error ? e.message : e)
     // Don't leave an orphan order behind if Stripe failed before the intent existed.
     if (createdOrderId) await db.from("orders").delete().eq("id", createdOrderId).is("stripe_payment_intent_id", null)
-    return fail(502, { error: "Payment could not be initialised. Please try again in a moment." })
+    const stripeAuth = (e as { type?: string })?.type === "StripeAuthenticationError"
+    return fail(500, {
+      error: stripeAuth
+        ? "Payments are not set up yet. Please try again later."
+        : "Payment could not be initialised. Please try again in a moment.",
+    })
   }
 }
