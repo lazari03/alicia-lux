@@ -1,103 +1,79 @@
 # Alicia Lux
 
-A Medusa v2 webshop with a Next.js App Router storefront, React, strict TypeScript and Tailwind CSS. The storefront uses an ivory, espresso and muted-gold editorial design with original Alicia Lux jewelry-box imagery.
+Webshop for the Alicia Lux Signature Organizer.
+Next.js 15 (App Router) · React 19 · Tailwind CSS v4 · Motion · Supabase · Stripe · Docker on Hetzner.
 
-## Requirements
+- **Shop**: home, shop with sorting, product pages, cart drawer, guest checkout (Stripe Payment Element: cards, Apple Pay, Google Pay, Klarna…)
+- **Admin** (`/admin`): sales overview and chart, orders (ship, cancel, refund), products (create, edit, images, stock), delivery pricing
 
-Node.js 22+, npm, Docker Compose (or a separately provisioned PostgreSQL 17 database).
+## 1. Supabase
 
-## Local setup
+Create a project at supabase.com (region **eu-north-1 Stockholm**), then:
 
-```sh
-npm --prefix apps/backend ci
-npm --prefix apps/storefront ci
-cp apps/backend/.env.example apps/backend/.env
-cp apps/storefront/.env.template apps/storefront/.env.local
+```bash
+cp .env.example .env.local   # fill in Supabase + Stripe values
+./scripts/supabase-setup.sh
 ```
 
-Generate two independent random secrets for `JWT_SECRET` and `COOKIE_SECRET` in the backend environment file, for example with `openssl rand -hex 32`. Set a random `REVALIDATE_SECRET` in the storefront environment file. Never commit environment files.
+The script creates the tables, security policies and image bucket, seeds the three products and creates your admin login.
+It's safe to re-run. It needs `psql` (`sudo apt install -y postgresql-client`, or `brew install libpq` on macOS).
 
-```sh
-npm run db:up
-npm run db:migrate
-npm run db:seed
+## 2. Stripe
+
+1. Copy the API keys (Developers → API keys) into `.env.local`.
+2. Add a webhook endpoint `https://YOUR-DOMAIN/api/stripe/webhook` with the events
+   `payment_intent.succeeded` and `charge.refunded`. Put its signing secret in `STRIPE_WEBHOOK_SECRET`.
+3. Turn on the payment methods you want (Settings → Payment methods). For Apple Pay, register your domain.
+4. Optional: enable "Successful payments" emails (Settings → Customer emails) so customers get a receipt.
+
+For local testing, forward webhooks with the Stripe CLI:
+`stripe listen --forward-to localhost:3000/api/stripe/webhook`
+
+## 3. Develop
+
+```bash
+npm install
+npm run dev               # http://localhost:3000, admin at /admin
 ```
 
-Run the seed **once on a fresh development database**. It creates example products, stock, a EUR region covering Germany and several European countries, manual test payments and example shipping rates. It is not an idempotent production import. Retrieve the publishable API key in Medusa Admin and set `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` in `apps/storefront/.env.local`. Its sales channel must match the products' sales channel.
+Local Supabase (optional, needs Docker): `npx supabase start`, then run the setup script against its `DB_URL`.
 
-Create your local admin user:
+## 4. Deploy on Hetzner
 
-```sh
-cd apps/backend
-npx medusa user -e your-email@example.com -p '<choose-a-strong-password>'
+On a fresh Ubuntu server with Docker installed:
+
+```bash
+git clone https://github.com/lazari03/alicia-lux.git && cd alicia-lux
+cp .env.example .env.production    # fill in live values, NEXT_PUBLIC_SITE_URL=https://shopalicialux.se
+WITH_CADDY=1 ./deploy/deploy.sh    # builds the app + Caddy with automatic HTTPS
 ```
 
-In separate terminals from the repository root:
+Point your domain's A record at the server first. If Caddy already runs on the host, leave out `WITH_CADDY=1` and proxy
+`shopalicialux.se` to `127.0.0.1:3000`. To redeploy later, run `./deploy/deploy.sh`.
 
-```sh
-npm run dev:backend
-npm run dev:storefront
+## How orders work
+
+1. The cart lives in the browser. At checkout, `/api/checkout` re-reads every price and the stock from Supabase,
+   creates a `pending` order and a Stripe PaymentIntent for the exact total.
+2. The customer pays on-site. Stripe's `payment_intent.succeeded` webhook (or the success page, whichever comes first)
+   calls `complete_order()`, which marks the order paid and decrements stock in a single transaction.
+   Repeated calls are ignored.
+3. In `/admin/orders` you mark orders as shipped (with an optional tracking number), cancel or refund them.
+
+Prices are stored as integer öre, including 25 % VAT.
+
+## Project layout
+
+```
+src/app/(shop)        storefront pages
+src/app/(checkout)    checkout + confirmation (minimal layout)
+src/app/admin         dashboard (Supabase Auth, admin_users table)
+src/app/api           checkout + Stripe webhook
+src/components        UI (shop, checkout, admin, layout)
+src/lib               Supabase clients, Stripe, catalog queries, money
+supabase/             schema migration + seed
+scripts/              supabase-setup.sh, generate-icons.mjs
+deploy/               Caddyfile + deploy.sh
 ```
 
-- Storefront: http://localhost:8000/de
-- Medusa Admin: http://localhost:9000/app
-- API health: http://localhost:9000/health
-
-## Validation
-
-```sh
-cd apps/storefront && npx tsc --noEmit && npm run build
-cd ../backend && npm run build
-```
-
-Build the storefront while Medusa is running and after setting its publishable key: static product pages query the API during the build.
-
-## Architecture
-
-See [docs/architecture.md](docs/architecture.md). Lockfiles are committed separately for the two independently deployable apps; use `npm ci` in each. Product, account, cart, shipping and checkout behavior come from the official Medusa starters rather than a parallel custom commerce implementation.
-
-## Run the compiled backend locally
-
-After `npm run build:backend`, copy `apps/backend/.env` to `apps/backend/.medusa/server/.env` and run `npm --prefix apps/backend start`. Production hosts should inject environment variables directly into the process.
-
-## Before production
-
-Replace the demo catalog, imagery, stock and shipping rules. Confirm supported countries, currency, tax settings, contact details and policies with the store owner. Configure a live payment provider and test it end to end; the included manual payment provider does not charge a card. Add transactional email, production asset storage, managed PostgreSQL, HTTPS origins, backups and monitoring. For multiple backend instances, configure shared Redis-backed event, cache and workflow infrastructure as documented by Medusa. The local in-memory defaults are for development.
-
-Deploy the backend to a persistent Node.js host (or Medusa Cloud), and the storefront to a Next.js host. Medusa cannot run as a static site or a Cloudflare Worker. Production deployment and domain setup have not been performed.
-
-## Sources and licenses
-
-- Backend: https://github.com/medusajs/medusa-starter-default (MIT)
-- Storefront: https://github.com/medusajs/nextjs-starter-medusa (MIT)
-- Storefront campaign images: user-supplied Alicia Lux generated renders in Coffee Brown, Champagne and Noir; optimized local WebP assets. See [image provenance](docs/storefront-images.md).
-- Development product images: official Medusa sample catalog.
-
-## One-command server startup
-
-Use `make up` for initial setup with Node.js 22+, Docker Compose, Git and Make. It provisions the local database, runs migrations and starts the legacy PM2 listeners on ports 8000 and 9000.
-
-On the existing Caddy server, deploy from the server checkout on `main`:
-
-```sh
-git pull --ff-only origin main  # First time only, to get the updated targets
-make deploy
-```
-
-`make deploy` stages Medusa and Next.js in separate release directories, checks both, then switches their Caddy upstreams together. It uses the running PostgreSQL service. Database migrations run before cutover and must remain compatible with the live release. A Caddy rollback restores traffic to the previous processes and does not reverse database migrations. Reserve loopback ports 8001/8002 and 9001/9002 for the staged apps. The Caddyfile must contain one direct storefront upstream and one direct Medusa upstream for `shopalicialux.se`.
-
-Set `STORE_LEGAL_NAME`, `STORE_ORGANISATION_NUMBER`, `STORE_BUSINESS_ADDRESS`, and `STORE_SUPPORT_EMAIL` in `apps/storefront/.env.local` so the policy pages identify the seller and provide a direct contact before accepting orders.
-
-Use `make deploy-storefront` for theme-only changes. It stages Next.js against the active Medusa upstream. To repair the public admin route without a build, use `make fix-admin` and open https://shopalicialux.se/app.
-
-If database authentication fails, run `make db-check` to test the same host login that Medusa uses. For the existing local Compose database, run `make db-repair` to rotate the password and update both local environment files, then run `make deploy`. Repair requires the PostgreSQL container to be running. If it is stopped, run `docker compose start postgres` first. The repair keeps the existing database volume and skips rotation when the configured login already works.
-
-Use `make status`, `make logs` and `make stop`. Database data is preserved by `make stop`. For startup after reboot, run `./node_modules/.bin/pm2 startup` and follow its instructions; the process list is saved by `make up`.
-
-For private access from your computer, run `ssh -N -L 8000:localhost:8000 -L 9000:localhost:9000 root@YOUR_SERVER_IP`, then open http://localhost:8000/se for the storefront or http://localhost:9000/app for Admin. Public domain/HTTPS configuration is separate. Keep application and database ports closed to public traffic.
-
-### Stripe checkout
-
-Set `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET` in `apps/backend/.env` and the matching `NEXT_PUBLIC_STRIPE_KEY` in `apps/storefront/.env.local`. Create the Stripe webhook endpoint at `https://shopalicialux.se/hooks/payment/stripe_stripe` and subscribe to PaymentIntent events. Start with credentials in Stripe test mode. Keep the backend keys in server configuration.
-
-Run `make deploy` to register Stripe, enable it for Sweden, and replace the manual test payment option in that market. Verify a test guest order before switching to live-mode credentials. Stripe will capture card payments when they are confirmed.
+To regenerate the favicons from the logo, run `node scripts/generate-icons.mjs`.

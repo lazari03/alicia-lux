@@ -1,20 +1,42 @@
 {
   "name": "alicia-lux",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:backend": "npm --prefix apps/backend run dev",
-    "dev:storefront": "npm --prefix apps/storefront run dev",
-    "build:backend": "npm --prefix apps/backend run build",
-    "build:storefront": "npm --prefix apps/storefront run build",
-    "typecheck": "npm --prefix apps/storefront run typecheck",
-    "db:up": "docker compose up -d --wait",
-    "db:migrate": "npm --prefix apps/backend run db:migrate",
-    "db:seed": "npm --prefix apps/backend run seed"
-  },
-  "engines": {
-    "node": ">=22"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
-    "pm2": "^6.0.0"
+    "@stripe/react-stripe-js": "^7.1.0",
+    "@stripe/stripe-js": "^10.3.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.78.0",
+    "motion": "^14.14.0",
+    "next": "^15.5.29",
+    "react": "19.1",
+    "react-dom": "19.1",
+    "recharts": "^3.11.0",
+    "server-only": "^0.0.1",
+    "sonner": "^2.0.8",
+    "stripe": "^23.2.0",
+    "tailwind-merge": "^3.7.1",
+    "zod": "^4.6.7",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.5.29",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

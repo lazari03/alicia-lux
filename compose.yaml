@@ -1,18 +1,33 @@
+# Hetzner: docker compose up -d --build
 services:
-  postgres:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_USER: medusa
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medusa_local}
-      POSTGRES_DB: alicia_lux
+  shop:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+        NEXT_PUBLIC_SUPPORT_EMAIL: ${NEXT_PUBLIC_SUPPORT_EMAIL:-}
+    env_file: .env.production
+    restart: unless-stopped
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:3000:3000" # only Caddy on the host can reach it
+    mem_limit: 768m
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443", "443:443/udp"]
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U medusa -d alicia_lux"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      DOMAIN: ${DOMAIN:-shopalicialux.se}
+    depends_on: [shop]
+    profiles: ["caddy"] # skip if Caddy already runs on the host
+
 volumes:
-  postgres-data:
+  caddy_data:
+  caddy_config:
