@@ -63,9 +63,8 @@ if [[ "$EXISTS" == "0" ]]; then
   read -r -s -p "Admin password (min 10 characters): " ADMIN_PASSWORD; echo
   [[ ${#ADMIN_PASSWORD} -ge 10 ]] || { echo "✗ Password too short." >&2; exit 1; }
 
-  AUTH_HEADERS=(-H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Content-Type: application/json")
-  # Legacy JWT service_role keys also need a bearer header; new sb_secret_ keys do not.
-  [[ "$SUPABASE_SERVICE_ROLE_KEY" == eyJ* ]] && AUTH_HEADERS+=(-H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY")
+  # Same headers supabase-js sends: works for sb_secret_ keys and legacy service_role JWTs.
+  AUTH_HEADERS=(-H "apikey: $SUPABASE_SERVICE_ROLE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" -H "Content-Type: application/json")
 
   BODY=$(ADMIN_EMAIL="$ADMIN_EMAIL" ADMIN_PASSWORD="$ADMIN_PASSWORD" node -e \
     'process.stdout.write(JSON.stringify({ email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD, email_confirm: true }))' 2>/dev/null \
