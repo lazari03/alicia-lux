@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
-.PHONY: help deploy setup migrate stripe caddy logs status restart stop
+.PHONY: help deploy setup migrate stripe admin admins remove-admin caddy logs status restart stop
 
 help: ## Show commands
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-9s %s\n", $$1, $$2}'
@@ -18,6 +18,15 @@ migrate: ## Apply database migrations only (safe to re-run)
 
 stripe: ## Set Stripe keys + webhook (test or live), verify, redeploy
 	./scripts/set-stripe.sh
+
+admin: ## Add an admin login (or promote an existing one)
+	./scripts/admin.sh add
+
+admins: ## List admins
+	./scripts/admin.sh list
+
+remove-admin: ## Revoke admin access for an email
+	./scripts/admin.sh remove
 
 caddy: ## One-time: point the host Caddy at the shop (port 3000)
 	./deploy/caddy.sh
