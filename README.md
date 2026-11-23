@@ -45,8 +45,13 @@ On a fresh Ubuntu server with Docker installed:
 ```bash
 git clone https://github.com/lazari03/alicia-lux.git && cd alicia-lux
 cp .env.example .env.production    # fill in live values, NEXT_PUBLIC_SITE_URL=https://shopalicialux.se
-WITH_CADDY=1 ./deploy/deploy.sh    # builds the app + Caddy with automatic HTTPS
+make setup                         # one-time: Supabase schema, products, admin login
+make deploy                        # build + start the shop on 127.0.0.1:3000
+make caddy                         # one-time: point the host Caddy at it (HTTPS)
 ```
+
+Run `make` to list all commands (`deploy`, `logs`, `status`, `restart`, `stop`).
+To use the bundled Caddy container instead of a host install, run `WITH_CADDY=1 ./deploy/deploy.sh`.
 
 Point your domain's A record at the server first. If Caddy already runs on the host, leave out `WITH_CADDY=1` and proxy
 `shopalicialux.se` to `127.0.0.1:3000`. To redeploy later, run `./deploy/deploy.sh`.
