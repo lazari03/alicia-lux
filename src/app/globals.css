@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  --font-display: "Cormorant Garamond";
+  --font-body: "Jost";
+}
+
 /* Alicia Lux design tokens — ivory paper, espresso ink, champagne gold. */
 @theme {
   --color-ink: #1f1915;
