@@ -50,7 +50,8 @@ make deploy                        # build + start the shop on 127.0.0.1:3000
 make caddy                         # one-time: point the host Caddy at it (HTTPS)
 ```
 
-Run `make` to list all commands (`deploy`, `logs`, `status`, `restart`, `stop`).
+Run `make` to list all commands (`deploy`, `migrate`, `logs`, `status`, `restart`, `stop`).
+After pulling a change that adds a file in `supabase/migrations/`, run `make migrate`.
 To use the bundled Caddy container instead of a host install, run `WITH_CADDY=1 ./deploy/deploy.sh`.
 
 Point your domain's A record at the server first. If Caddy already runs on the host, leave out `WITH_CADDY=1` and proxy

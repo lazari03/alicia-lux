@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { LuxImage } from "@/components/ui/lux-image"
 import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -21,7 +22,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Image src={images[active]} alt={alt} fill priority={active === 0} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+            <LuxImage src={images[active]} alt={alt} fill priority={active === 0} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
           </motion.div>
         </AnimatePresence>
       </div>

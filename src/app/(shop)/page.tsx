@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { LuxImage } from "@/components/ui/lux-image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { HeroCopy } from "@/components/shop/hero-copy"
@@ -29,7 +29,7 @@ export default async function Home() {
       <section aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-[#24170f] text-center text-[#fffaf2]">
         <HeroCopy />
         <div className="relative pt-[clamp(150px,calc(250px-20vw),190px)] md:pt-0">
-          <Image
+          <LuxImage
             src="/images/signature-collection-hero.webp"
             alt="Three open Alicia Lux jewelry and beauty organizers in Coffee Brown, Champagne and Noir"
             width={1536}
@@ -60,7 +60,7 @@ export default async function Home() {
             <Reveal key={f.slug} index={i} as="figure" className="w-[78%] shrink-0 snap-start md:w-auto">
               <Link href={`/product/${f.slug}`} className="group block">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-[#e5d7c8]">
-                  <Image src={`/images/signature-${f.image}.webp`} alt={`Alicia Lux organizer in ${f.name}, shown open`} fill sizes="(min-width: 768px) 33vw, 80vw" className="object-cover transition-transform duration-[1.1s] ease-lux group-hover:scale-[1.04]" />
+                  <LuxImage src={`/images/signature-${f.image}.webp`} alt={`Alicia Lux organizer in ${f.name}, shown open`} fill sizes="(min-width: 768px) 33vw, 80vw" className="object-cover transition-transform duration-[1.1s] ease-lux group-hover:scale-[1.04]" />
                   <span className="absolute top-3.5 left-3.5 bg-paper/90 px-2.5 py-1 text-[10px] tracking-[0.1em]">0{i + 1}</span>
                 </div>
                 <figcaption className="mt-5">
@@ -95,7 +95,7 @@ export default async function Home() {
       {/* Ritual */}
       <section aria-labelledby="ritual-title" className="grid bg-[#ebe2d6] lg:grid-cols-2">
         <Reveal y={0} className="relative aspect-square overflow-hidden lg:aspect-auto lg:min-h-[720px]">
-          <Image src="/images/signature-champagne.webp" alt="Champagne Alicia Lux organizer with its illuminated mirror, beauty compartments and jewelry drawers" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          <LuxImage src="/images/signature-champagne.webp" alt="Champagne Alicia Lux organizer with its illuminated mirror, beauty compartments and jewelry drawers" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
         </Reveal>
         <Reveal className="self-center px-6 py-14 sm:px-10 lg:p-[clamp(48px,6vw,104px)]">
           <p className="eyebrow mb-5">Beauty, in the details</p>
@@ -121,7 +121,7 @@ export default async function Home() {
 
       {/* Brand note */}
       <Reveal as="section" className="container-lux py-[clamp(64px,9vw,128px)] text-center">
-        <Image src="/images/signature-closed.webp" alt="Closed Champagne Alicia Lux organizer with the embossed AL monogram" width={1440} height={960} sizes="(min-width: 840px) 760px, 95vw" className="mx-auto mb-[clamp(28px,5vw,56px)] h-auto w-full max-w-[760px]" />
+        <LuxImage src="/images/signature-closed.webp" alt="Closed Champagne Alicia Lux organizer with the embossed AL monogram" width={1440} height={960} sizes="(min-width: 840px) 760px, 95vw" className="mx-auto mb-[clamp(28px,5vw,56px)] h-auto w-full max-w-[760px]" />
         <h2 className="display text-[clamp(40px,4.6vw,66px)] leading-[1.05]">
           Luxury is a feeling.
           <br />

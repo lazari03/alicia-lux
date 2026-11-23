@@ -12,7 +12,11 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP only: AVIF encoding is slow on a small VPS and the sources are WebP already.
+    formats: ["image/webp"],
+    // Optimised images are cached for a year (product images get new URLs when replaced).
+    minimumCacheTTL: 31536000,
+    deviceSizes: [640, 828, 1080, 1280, 1600, 1920],
     remotePatterns: supabase
       ? [{
           protocol: supabase.protocol.replace(":", "") as "http" | "https",

@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { LuxImage } from "@/components/ui/lux-image"
 import Link from "next/link"
 import { formatPrice } from "@/lib/money"
 import type { Product } from "@/lib/types"
@@ -13,7 +13,7 @@ export function ProductCard({ product, priority }: { product: Product; priority?
       <Link href={`/product/${product.slug}`} className="block">
         <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-card">
           {main && (
-            <Image
+            <LuxImage
               src={main}
               alt={`${product.name} in ${product.subtitle ?? ""}`}
               fill
@@ -23,7 +23,7 @@ export function ProductCard({ product, priority }: { product: Product; priority?
             />
           )}
           {hover && (
-            <Image
+            <LuxImage
               src={hover}
               alt=""
               fill
