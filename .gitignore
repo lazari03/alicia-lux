@@ -9,5 +9,5 @@ next-env.d.ts
 npm-debug.log*
 .env
 .env*.local
-.env.production
+.env.production*
 !.env.example
