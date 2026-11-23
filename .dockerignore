@@ -1,7 +1,13 @@
+# Only the app source goes into the image
 node_modules
 .next
 .git
-.env*
-!.env.example
+.cache
+apps
+docs
 supabase/.temp
 supabase/.branches
+*.sql
+*.log
+.env*
+!.env.example
