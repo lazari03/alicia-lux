@@ -25,8 +25,11 @@ const StoreTemplate = ({
     >
       <div className="w-full">
         <div className="lux-collection-intro">
-          <h1 className="font-serif text-4xl small:text-6xl" data-testid="store-page-title">The collection</h1>
-          <RefinementList sortBy={sort} />
+          <p className="lux-eyebrow">Alicia Lux</p>
+          <h1 className="lux-display" data-testid="store-page-title">The collection</h1>
+        </div>
+        <div className="lux-toolbar">
+          <RefinementList sortBy={sort} data-testid="sort-by-container" />
         </div>
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts

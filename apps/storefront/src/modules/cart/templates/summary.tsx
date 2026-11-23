@@ -1,6 +1,6 @@
 import { Heading } from "@medusajs/ui"
 
-import HostedCheckout from "@modules/checkout/components/hosted-checkout"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartTotals from "@modules/common/components/cart-totals"
 import Divider from "@modules/common/components/divider"
 import DiscountCode from "@modules/checkout/components/discount-code"
@@ -21,8 +21,10 @@ const Summary = ({ cart }: SummaryProps) => {
       <DiscountCode cart={cart} />
       <Divider />
       <CartTotals totals={cart} />
-      <HostedCheckout />
-      <p className="text-sm text-ui-fg-subtle">Enter your delivery and billing details securely on Stripe. Delivery is available within Sweden.</p>
+      <LocalizedClientLink href="/checkout" className="lux-button lux-button-block" data-testid="checkout-button">
+        Checkout <span className="lux-lock" aria-hidden="true" />
+      </LocalizedClientLink>
+      <p className="lux-hint">Secure payment by Stripe — card, Apple Pay and Google Pay. Delivery within Sweden.</p>
     </div>
   )
 }

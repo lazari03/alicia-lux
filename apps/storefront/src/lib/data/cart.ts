@@ -269,12 +269,13 @@ export async function startHostedCheckout() {
     if (cart.shipping_address?.country_code !== "se") {
       cart = await updateCart({ shipping_address: { country_code: "se" } })
     }
-    const options = (await listCartShippingMethods(cart.id)) ?? []
-    const delivery = options.filter(({ price_type, amount }) => price_type === "flat" && typeof amount === "number")
-      .sort((a, b) => a.amount - b.amount || a.id.localeCompare(b.id))[0]
-    if (!delivery) return "Standard delivery within Sweden is currently unavailable."
-
-    if (cart.shipping_methods?.length !== 1 || cart.shipping_methods[0].shipping_option_id !== delivery.id) {
+    // Respect a delivery method the shopper already chose on-site; only
+    // fall back to the cheapest flat rate when none is set.
+    if (!cart.shipping_methods?.length) {
+      const options = (await listCartShippingMethods(cart.id)) ?? []
+      const delivery = options.filter(({ price_type, amount }) => price_type === "flat" && typeof amount === "number")
+        .sort((a, b) => a.amount - b.amount || a.id.localeCompare(b.id))[0]
+      if (!delivery) return "Standard delivery within Sweden is currently unavailable."
       await setShippingMethod({ cartId: cart.id, shippingMethodId: delivery.id })
       cart = await retrieveCart()
       if (!cart) return "Your cart could not be loaded. Please try again."
@@ -285,7 +286,7 @@ export async function startHostedCheckout() {
     )
     const reusable = existing?.data &&
       existing.data.direct_checkout === true &&
-      existing.data.amount_minor === Math.round(cart.total * 100) &&
+      Number(existing.data.amount_minor) === Math.round(Number(cart.total) * 100 + Number.EPSILON) &&
       Number(existing.data.expires_at) > Date.now() / 1000
     const payment = reusable ? existing : (await initiatePaymentSession(
       cart, { provider_id: hostedStripeProvider }
@@ -401,58 +402,6 @@ export async function submitPromotionForm(
   } catch (e: any) {
     return e.message
   }
-}
-
-// TODO: Pass a POJO instead of a form entity here
-export async function setAddresses(currentState: unknown, formData: FormData) {
-  try {
-    if (!formData) {
-      throw new Error("No form data found when setting addresses")
-    }
-    const cartId = await getCartId()
-    if (!cartId) {
-      throw new Error("No existing cart found when setting addresses")
-    }
-
-    const readAddress = (type: "shipping" | "billing") => {
-      const value = (field: string) => String(formData.get(`${type}_address.${field}`) ?? "").trim()
-      const address = {
-        first_name: value("first_name"),
-        last_name: value("last_name"),
-        address_1: value("address_1"),
-        address_2: "",
-        company: value("company"),
-        postal_code: value("postal_code"),
-        city: value("city"),
-        country_code: value("country_code").toLowerCase(),
-        province: value("province"),
-        phone: value("phone"),
-      }
-
-      if (!address.first_name || !address.last_name || !address.address_1 ||
-        !address.postal_code || !address.city || !address.country_code) {
-        throw new Error(`Complete the ${type} address to continue.`)
-      }
-
-      return address
-    }
-
-    const email = String(formData.get("email") ?? "").trim()
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      throw new Error("Enter a valid email address to continue.")
-    }
-
-    const shippingAddress = readAddress("shipping")
-    const billingAddress = formData.get("same_as_billing") === "on" ? shippingAddress : readAddress("billing")
-    const data = { email, shipping_address: shippingAddress, billing_address: billingAddress }
-    await updateCart(data)
-  } catch (e: any) {
-    return e.message
-  }
-
-  redirect(
-    `/${formData.get("shipping_address.country_code")}/checkout?step=delivery`
-  )
 }
 
 /**

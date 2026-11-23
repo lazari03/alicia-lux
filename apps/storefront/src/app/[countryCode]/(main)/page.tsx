@@ -30,13 +30,13 @@ export default async function Home({ params }: { params: Promise<{ countryCode: 
       <CollectionEdit />
       <section className="lux-catalog py-20 small:py-28" aria-labelledby="new-arrivals-heading">
         <div className="content-container">
-          <div className="lux-collection-intro">
+          <div className="lux-collection-intro" data-reveal>
             <h2 id="new-arrivals-heading" className="font-serif text-4xl small:text-5xl">The Signature Collection</h2>
             <LocalizedClientLink href="/store" className="lux-text-link">
               Shop the collection <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" />
             </LocalizedClientLink>
           </div>
-          {products.length ? <ul className="lux-centered-products">{products.map(product => <li key={product.id}><ProductPreview product={product} region={region} /></li>)}</ul> : <p className="text-center text-sm text-[#706e66]">Discover our signature finishes above.</p>}
+          {products.length ? <ul className="lux-centered-products">{products.map((product, i) => <li key={product.id} data-reveal style={{ "--i": i } as React.CSSProperties}><ProductPreview product={product} region={region} /></li>)}</ul> : <p className="text-center text-sm text-[#706e66]">Discover our signature finishes above.</p>}
         </div>
       </section>
       <Ritual />

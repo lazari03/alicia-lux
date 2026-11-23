@@ -72,9 +72,9 @@ export default async function PaginatedProducts({
         className="lux-centered-products"
         data-testid="products-list"
       >
-        {products.map((p) => {
+        {products.map((p, i) => {
           return (
-            <li key={p.id}>
+            <li key={p.id} data-reveal style={{ "--i": i % 3 } as React.CSSProperties}>
               <ProductPreview product={p} region={region} />
             </li>
           )

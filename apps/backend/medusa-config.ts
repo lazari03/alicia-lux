@@ -10,11 +10,14 @@ function required(name: string): string {
   return value
 }
 
-const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
-  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync(".env.stripe-hosted"))
-
 const stripeKey = process.env.STRIPE_API_KEY
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+
+// The on-site Payment Element (native Medusa Stripe provider) is the default
+// whenever its keys are set. The legacy hosted redirect is only used when
+// forced with STRIPE_HOSTED_CHECKOUT=true, or when no native keys exist.
+const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
+  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && !stripeKey && existsSync(".env.stripe-hosted"))
 
 if (!hostedCheckout && Boolean(stripeKey) !== Boolean(stripeWebhookSecret)) {
   throw new Error("Set both STRIPE_API_KEY and STRIPE_WEBHOOK_SECRET to enable Stripe.")
@@ -25,7 +28,15 @@ if (stripeKey && stripeWebhookSecret) {
   providers.push({
     resolve: "@medusajs/medusa/payment-stripe",
     id: "stripe",
-    options: { apiKey: stripeKey, webhookSecret: stripeWebhookSecret, capture: true },
+    options: {
+      apiKey: stripeKey,
+      webhookSecret: stripeWebhookSecret,
+      // Capture when Medusa authorises the payment at order placement.
+      capture: true,
+      // Cards, Apple Pay, Google Pay, Klarna… as enabled in the Stripe Dashboard.
+      automaticPaymentMethods: true,
+      paymentDescription: "Alicia Lux order",
+    },
   })
 }
 if (hostedCheckout) {

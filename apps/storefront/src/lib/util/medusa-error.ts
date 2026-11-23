@@ -1,22 +1,21 @@
+/**
+ * Normalises errors thrown by the Medusa JS SDK (FetchError) and legacy
+ * axios-shaped errors into a single readable Error. Never leaks request
+ * internals to the shopper.
+ */
 export default function medusaError(error: any): never {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    const u = new URL(error.config.url, error.config.baseURL)
-    console.error("Resource:", u.toString())
-    console.error("Response data:", error.response.data)
-    console.error("Status code:", error.response.status)
-    console.error("Headers:", error.response.headers)
+  const raw =
+    error?.response?.data?.message ??
+    (typeof error?.response?.data === "string" ? error.response.data : undefined) ??
+    error?.message ??
+    "Something went wrong. Please try again."
 
-    // Extracting the error message from the response data
-    const message = error.response.data.message || error.response.data
-
-    throw new Error(message.charAt(0).toUpperCase() + message.slice(1) + ".")
-  } else if (error.request) {
-    // The request was made but no response was received
-    throw new Error("No response received: " + error.request)
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    throw new Error("Error setting up the request: " + error.message)
+  if (error?.status || error?.response?.status) {
+    console.error("Medusa request failed:", error?.status ?? error?.response?.status, raw)
   }
+
+  const message = String(raw).trim()
+  throw new Error(
+    message.charAt(0).toUpperCase() + message.slice(1) + (/[.!?]$/.test(message) ? "" : ".")
+  )
 }

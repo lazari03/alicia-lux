@@ -95,8 +95,9 @@ export default async function configureSweden({ container }: ExecArgs) {
     })
   }
 
+  // Keep in sync with medusa-config.ts: native Stripe wins when its keys are set.
   const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
-    (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync(".env.stripe-hosted"))
+    (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && !process.env.STRIPE_API_KEY && existsSync(".env.stripe-hosted"))
   if (hostedCheckout || (process.env.STRIPE_API_KEY && process.env.STRIPE_WEBHOOK_SECRET)) {
     const { data: [market] } = await query.graph({
       entity: "region",

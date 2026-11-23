@@ -26,7 +26,7 @@ export default function CollectionTemplate({
         <div className="mb-8 font-serif text-4xl">
           <h1>{collection.title}</h1>
         </div>
-        <div className="lux-catalog-heading lux-sort-row">
+        <div className="lux-toolbar">
           <RefinementList sortBy={sort} />
         </div>
         <Suspense

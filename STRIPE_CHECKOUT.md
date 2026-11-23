@@ -1,31 +1,54 @@
-# Stripe-hosted checkout
+# Stripe checkout
 
-Save the live Stripe server key and the signing secret privately in
-`apps/backend/.env.stripe-hosted` on the deployment server. The file enables
-hosted Checkout for Sweden on the next full deployment. Use
-`STRIPE_HOSTED_CHECKOUT=false` in the backend's regular `.env` to disable it.
-The hosted flow does not require a storefront publishable key.
+The storefront uses a one-page, on-site checkout:
 
-In Stripe's live mode, create an event destination for
-`https://shopalicialux.se/hooks/payment/stripe-hosted_stripe-hosted` and select
-`checkout.session.completed`. Use the signing secret from that destination in
-`STRIPE_WEBHOOK_SECRET`. Keep an existing native Stripe destination if it
-still handles payments made through the old integration.
+1. **Details**: email, phone and delivery address (+ optional billing address)
+2. **Delivery**: shopper picks a shipping option (auto-selected when only one exists)
+3. **Payment**: Stripe Payment Element (cards, Apple Pay, Google Pay, Klarna… whatever is enabled in the Stripe Dashboard)
 
-For a restricted key, grant write access to Checkout Sessions and Payment
-Intents. Grant write access to Refunds if refunds will be issued from Medusa.
+Payment runs through Medusa's native Stripe provider (`pp_stripe_stripe`). A PaymentIntent
+is created for the *current* cart total and recreated whenever the total changes.
+Medusa authorises and captures the intent when the order is placed, so an order only exists
+when Stripe confirms the funds. Redirect-based methods return to `/se/checkout/complete`,
+where the intent is checked against the cart before the order is placed.
 
-Run `make deploy` from `/root/alicia-lux`. The full deployment installs the
-provider, updates the Swedish region, and routes the webhook through Caddy.
-Guests select Checkout with Stripe in the cart. Stripe collects their
-contact, billing and Swedish delivery details. The cart uses the lowest-cost
-available flat-rate delivery option for Sweden. Stripe shows the Medusa total in SEK, including delivery,
-taxes and discounts. Medusa verifies the authorized payment against the
-cart, reserves inventory and captures the payment when completing the order.
+## Configuration
 
-Verify the complete flow in Stripe test mode on a separate environment.
-Confirm that a guest can pay, cancel, and try again. Verify that Stripe
-delivers the webhook successfully and that retrying confirmation or
-redelivering the webhook leaves one order, one capture and one reservation.
-Use `STRIPE_CHECKOUT_RETURN_ORIGIN` in the regular backend environment for
-the test storefront URL.
+Backend `apps/backend/.env`:
+
+```
+STRIPE_API_KEY=sk_live_...        # or rk_live_... (restricted: PaymentIntents write, Refunds write)
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+
+Storefront `apps/storefront/.env.local`:
+
+```
+NEXT_PUBLIC_STRIPE_KEY=pk_live_... # same mode (test/live) as the server key
+```
+
+In Stripe, add an event destination for
+`https://shopalicialux.se/hooks/payment/stripe_stripe` (already routed by Caddy) with
+`payment_intent.succeeded`, `payment_intent.amount_capturable_updated`,
+`payment_intent.payment_failed` and `payment_intent.partially_funded`. The webhook lets Medusa
+complete the order even if the shopper closes the tab after paying.
+
+For Apple Pay, register `shopalicialux.se` under Settings → Payment method domains.
+
+Run `make deploy`. `configure-sweden.ts` makes `pp_stripe_stripe` the only payment provider of
+the Sweden region.
+
+## Legacy hosted Checkout (fallback)
+
+When `STRIPE_API_KEY` is **not** set and `apps/backend/.env.stripe-hosted` exists (or
+`STRIPE_HOSTED_CHECKOUT=true`), the old redirect-to-Stripe provider is used instead. The
+payment step then shows a "Continue to secure payment" button. Once the native provider is
+live and verified, `.env.stripe-hosted`, `src/modules/stripe-hosted`, the
+`stripe-checkout` subscriber and the `/checkout/stripe-return` page can be removed.
+
+## Test before going live
+
+Use test keys (`sk_test_` / `pk_test_`) on a separate environment and test:
+`4242 4242 4242 4242` (success), `4000 0025 0000 3155` (3-D Secure),
+`4000 0000 0000 9995` (declined). Then change the cart in another tab and check that the
+amount shown on the Pay button updates.

@@ -76,7 +76,7 @@ export default function CategoryTemplate({
             </ul>
           </div>
         )}
-        <div className="lux-catalog-heading lux-sort-row">
+        <div className="lux-toolbar">
           <RefinementList sortBy={sort} data-testid="sort-by-container" />
         </div>
         <Suspense

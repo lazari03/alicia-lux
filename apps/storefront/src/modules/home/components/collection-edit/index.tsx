@@ -10,13 +10,13 @@ const finishes = [
 export default function CollectionEdit() {
   return (
     <section id="collections" aria-labelledby="collection-heading" className="content-container lux-section">
-      <div className="lux-section-heading">
+      <div className="lux-section-heading" data-reveal>
         <div><p className="lux-eyebrow">One signature. Three expressions.</p><h2 id="collection-heading">A shade of <em>you.</em></h2></div>
-        <LocalizedClientLink href="/store" className="lux-text-link">Explore the collection <span aria-hidden="true">↗</span></LocalizedClientLink>
+        <LocalizedClientLink href="/store" className="lux-text-link">Explore the collection <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" /></LocalizedClientLink>
       </div>
       <div className="lux-finishes">
         {finishes.map((finish, index) => (
-          <figure key={finish.image} className="lux-finish">
+          <figure key={finish.image} className="lux-finish" data-reveal style={{ "--i": index } as React.CSSProperties}>
             <div className="lux-finish-image"><Image src={`/images/signature-${finish.image}.webp`} alt={`Alicia Lux jewelry and beauty organizer in ${finish.name}, shown open`} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" /><span className="lux-finish-number">0{index + 1}</span></div>
             <figcaption><div className="lux-finish-title"><h3>{finish.name}</h3><span className="lux-color" style={{ backgroundColor: finish.color }} aria-hidden="true" /></div><p>{finish.mood}</p></figcaption>
           </figure>

@@ -80,7 +80,7 @@ if [[ "$mode" == --with-backend ]]; then
   node --env-file=apps/backend/.env --env-file=apps/storefront/.env.local --input-type=module <<'NODE'
 import { existsSync } from 'node:fs'
 const hostedCheckout = process.env.STRIPE_HOSTED_CHECKOUT === "true" ||
-  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && existsSync('apps/backend/.env.stripe-hosted'))
+  (process.env.STRIPE_HOSTED_CHECKOUT !== "false" && !process.env.STRIPE_API_KEY && existsSync('apps/backend/.env.stripe-hosted'))
 const stripeKey = process.env.STRIPE_API_KEY
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 if (!hostedCheckout && (stripeKey || webhookSecret)) {
@@ -163,13 +163,13 @@ const methodsResponse = await fetch(methodsUrl, {
 }).catch(() => null)
 if (!methodsResponse?.ok) process.exit(1)
 const { payment_providers } = await methodsResponse.json()
-if (payment_providers.length !== 1 || payment_providers[0].id !== 'pp_stripe-hosted_stripe-hosted') {
-  console.error('Stripe Checkout must be the only payment provider for the Sweden region. Check apps/backend/.env.stripe-hosted and run make deploy.')
+if (payment_providers.length !== 1 || !['pp_stripe_stripe', 'pp_stripe-hosted_stripe-hosted'].includes(payment_providers[0].id)) {
+  console.error('Stripe must be the only payment provider for the Sweden region. Set STRIPE_API_KEY, STRIPE_WEBHOOK_SECRET and NEXT_PUBLIC_STRIPE_KEY (or apps/backend/.env.stripe-hosted) and run make deploy.')
   process.exit(1)
 }
 NODE
 then
-  echo 'Could not verify the Sweden/SEK market and Stripe Checkout on Medusa. Run make deploy once if the market setup is still pending.' >&2
+  echo 'Could not verify the Sweden/SEK market and Stripe payments on Medusa. Run make deploy once if the market setup is still pending.' >&2
   exit 1
 fi
 

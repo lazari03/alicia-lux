@@ -3,12 +3,12 @@
 import { Transition } from "@headlessui/react"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@medusajs/ui"
 import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "@modules/products/components/thumbnail"
+import { BagIcon } from "@modules/common/icons/lux-icons"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -77,11 +77,16 @@ const CartDropdown = ({
     >
       <div className="relative h-full">
         <LocalizedClientLink
-          className="lux-nav-action h-full"
+          className="lux-icon-button"
           href="/cart"
-          aria-label={`Shopping bag (${totalItems})`}
+          aria-label={`Shopping bag, ${totalItems} ${totalItems === 1 ? "item" : "items"}`}
           data-testid="nav-cart-link"
-        >{`Bag (${totalItems})`}</LocalizedClientLink>
+        >
+          <BagIcon />
+          {totalItems > 0 && (
+            <span key={totalItems} className="lux-bag-count" aria-hidden="true">{totalItems}</span>
+          )}
+        </LocalizedClientLink>
         <Transition
           show={cartDropdownOpen}
           as={Fragment}
@@ -93,11 +98,11 @@ const CartDropdown = ({
           leaveTo="opacity-0 translate-y-1"
         >
           <div
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
+            className="lux-cart-dropdown hidden small:block"
             data-testid="nav-cart-dropdown"
           >
             <div className="p-4 flex items-center justify-center">
-              <h3 className="text-large-semi">Cart</h3>
+              <h3 className="lux-dropdown-title">Your bag</h3>
             </div>
             {cartState && cartState.items?.length ? (
               <>
@@ -185,30 +190,21 @@ const CartDropdown = ({
                       })}
                     </span>
                   </div>
-                  <LocalizedClientLink href="/cart" passHref>
-                    <Button
-                      className="w-full"
-                      size="large"
-                      data-testid="go-to-cart-button"
-                    >
-                      Go to cart
-                    </Button>
+                  <LocalizedClientLink href="/checkout" className="lux-button lux-button-block" data-testid="go-to-checkout-button">
+                    Checkout <span className="lux-lock" aria-hidden="true" />
+                  </LocalizedClientLink>
+                  <LocalizedClientLink href="/cart" className="lux-button lux-button-ghost lux-button-block" data-testid="go-to-cart-button">
+                    View bag
                   </LocalizedClientLink>
                 </div>
               </>
             ) : (
               <div>
                 <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
-                    <span>0</span>
-                  </div>
-                  <span>Your shopping bag is empty.</span>
+                                    <span>Your shopping bag is empty.</span>
                   <div>
-                    <LocalizedClientLink href="/store">
-                      <>
-                        <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>Explore products</Button>
-                      </>
+                    <LocalizedClientLink href="/store" onClick={close} className="lux-button">
+                      Explore the collection
                     </LocalizedClientLink>
                   </div>
                 </div>

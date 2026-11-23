@@ -5,17 +5,17 @@ export default function Ritual() {
   return (
     <>
       <section id="details" className="lux-ritual" aria-labelledby="ritual-heading">
-        <div className="lux-ritual-image"><Image src="/images/signature-champagne.webp" alt="Champagne Alicia Lux organizer showing its illuminated mirror, beauty compartments and jewelry drawers" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" /></div>
-        <div className="lux-ritual-copy"><p className="lux-eyebrow">Beauty, in the details</p><h2 id="ritual-heading">A little order.<br /><em>A daily pleasure.</em></h2><p className="lux-description">The necklace you always reach for. The ring with a story. The finishing touch before you step out. Give each one a place of its own.</p>
+        <div className="lux-ritual-image" data-reveal="fade"><Image src="/images/signature-champagne.webp" alt="Champagne Alicia Lux organizer showing its illuminated mirror, beauty compartments and jewelry drawers" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" /></div>
+        <div className="lux-ritual-copy" data-reveal><p className="lux-eyebrow">Beauty, in the details</p><h2 id="ritual-heading">A little order.<br /><em>A daily pleasure.</em></h2><p className="lux-description">The necklace you always reach for. The ring with a story. The finishing touch before you step out. Give each one a place of its own.</p>
           <dl className="lux-details">
             <div><dt><span>01</span> Everything in its place</dt><dd>Considered compartments for jewelry and beauty essentials.</dd></div>
             <div><dt><span>02</span> A moment to reflect</dt><dd>An illuminated mirror at the heart of your daily ritual.</dd></div>
             <div><dt><span>03</span> Beautiful, inside and out</dt><dd>Soft textures, warm metallic accents, and a place for the smallest details.</dd></div>
           </dl>
-          <LocalizedClientLink href="/store" className="lux-text-link">Discover Alicia Lux <span aria-hidden="true">↗</span></LocalizedClientLink>
+          <LocalizedClientLink href="/store" className="lux-text-link">Discover Alicia Lux <span className="lux-arrow lux-arrow-diagonal" aria-hidden="true" /></LocalizedClientLink>
         </div>
       </section>
-      <section className="lux-brand-note content-container" aria-labelledby="brand-heading">
+      <section className="lux-brand-note content-container" aria-labelledby="brand-heading" data-reveal>
         <Image
           src="/images/signature-closed.webp"
           alt="Closed Champagne Alicia Lux organizer with the embossed AL monogram and pull tab"
