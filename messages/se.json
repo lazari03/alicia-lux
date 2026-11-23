@@ -548,5 +548,11 @@
       "refundOnlyPaid": "Endast betalda ordrar kan återbetalas.",
       "refundFailed": "Återbetalningen i Stripe misslyckades."
     }
+  },
+  "error": {
+    "title": "Något gick fel",
+    "body": "Vi kunde inte ladda sidan. Försök igen — om problemet kvarstår, kontakta oss.",
+    "retry": "Försök igen",
+    "home": "Till startsidan"
   }
 }

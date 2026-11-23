@@ -548,5 +548,11 @@
       "refundOnlyPaid": "Only paid orders can be refunded.",
       "refundFailed": "Stripe refund failed."
     }
+  },
+  "error": {
+    "title": "Something went wrong",
+    "body": "We couldn’t load this page. Please try again — if it keeps happening, contact us.",
+    "retry": "Try again",
+    "home": "Go to the home page"
   }
 }
