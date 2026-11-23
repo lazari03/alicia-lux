@@ -24,9 +24,11 @@ export async function POST(request: Request) {
     const fieldErrors: Record<string, string> = {}
     for (const issue of parsed.error.issues) {
       const key = issue.path.at(-1)
-      if (issue.path[0] === "customer" && typeof key === "string" && !fieldErrors[key]) fieldErrors[key] = issue.message
+      // Our schema messages are translation codes; anything else maps to the field name.
+      if (issue.path[0] === "customer" && typeof key === "string" && !fieldErrors[key]) fieldErrors[key] = key
     }
-    return fail(400, { error: parsed.error.issues[0]?.message ?? "Check your details", fieldErrors })
+    const bagEmpty = parsed.error.issues.some((i) => i.path[0] === "items")
+    return fail(400, { error: bagEmpty ? "emptyBag" : "invalid", fieldErrors })
   }
   const { orderId, items, customer } = parsed.data
   const db = serviceClient()
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
     db.from("products").select("*").in("id", [...wanted.keys()]).eq("active", true),
     db.from("store_settings").select("shipping_fee_ore, free_shipping_over_ore").maybeSingle(),
   ])
-  if (error) return fail(500, { error: "We couldn't load your bag. Please try again." })
+  if (error) return fail(500, { error: "loadBag" })
 
   const byId = new Map((products as Product[]).map((p) => [p.id, p]))
   const stock = [...wanted].flatMap(([id, qty]) => {
@@ -47,7 +49,7 @@ export async function POST(request: Request) {
     return qty > available ? [{ productId: id, available }] : []
   })
   if (stock.length) {
-    return fail(409, { error: "Some items are no longer available in the quantity you selected.", stock })
+    return fail(409, { error: "stock", stock })
   }
 
   const lines = [...wanted].map(([id, quantity]) => {
@@ -136,9 +138,7 @@ export async function POST(request: Request) {
     if (createdOrderId) await db.from("orders").delete().eq("id", createdOrderId).is("stripe_payment_intent_id", null)
     const stripeAuth = (e as { type?: string })?.type === "StripeAuthenticationError"
     return fail(500, {
-      error: stripeAuth
-        ? "Payments are not set up yet. Please try again later."
-        : "Payment could not be initialised. Please try again in a moment.",
+      error: stripeAuth ? "paymentsNotSetUp" : "paymentInit",
     })
   }
 }

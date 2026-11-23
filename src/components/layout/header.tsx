@@ -1,7 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { Link, usePathname } from "@/i18n/navigation"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { AnimatePresence, motion } from "motion/react"
 import { ShoppingBag } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -18,6 +19,7 @@ export function Header() {
   const last = useRef(0)
   const pathname = usePathname()
   const hydrated = useHydrated()
+  const t = useTranslations()
   const count = useCart((s) => cartCount(s.lines))
   const openCart = useCart((s) => s.setOpen)
 
@@ -47,7 +49,7 @@ export function Header() {
   return (
     <>
       <div className="bg-night px-4 py-2 text-center text-[10px] uppercase tracking-[0.14em] text-night-text sm:text-[11px]">
-        Delivery within Sweden · Secure payment with Stripe
+        {t("announcement")}
       </div>
       <header
         onFocusCapture={() => setHidden(false)}
@@ -58,7 +60,7 @@ export function Header() {
         )}
       >
         <nav
-          aria-label="Main"
+          aria-label={t("nav.shop")}
           className={cn("container-lux grid grid-cols-[1fr_auto_1fr] items-center transition-[min-height] duration-300", scrolled ? "min-h-14" : "min-h-14 sm:min-h-16")}
         >
           <div className="flex items-center gap-8">
@@ -66,23 +68,24 @@ export function Header() {
               type="button"
               onClick={() => setMenuOpen(true)}
               aria-expanded={menuOpen}
-              aria-label="Open menu"
+              aria-label={t("common.openMenu")}
               className="group -ml-1 inline-flex min-h-11 min-w-11 items-center gap-3 px-1"
             >
               <Burger open={false} />
-              <span className="hidden text-[11px] font-medium uppercase tracking-[0.2em] sm:inline">Menu</span>
+              <span className="hidden text-[11px] font-medium uppercase tracking-[0.2em] sm:inline">{t("common.menu")}</span>
             </button>
-            <Link href="/shop" className="link-underline hidden lg:inline-flex">Shop</Link>
+            <Link href="/shop" className="link-underline hidden lg:inline-flex">{t("nav.shop")}</Link>
           </div>
 
           <Logo />
 
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end gap-2 sm:gap-4">
+            <LanguageSwitcher className="hidden sm:inline-flex" />
             <button
               type="button"
               onClick={() => openCart(true)}
               className="relative grid size-11 place-items-center rounded-full transition-colors hover:bg-surface"
-              aria-label={`Open bag, ${hydrated ? count : 0} items`}
+              aria-label={t("common.openBag", { count: hydrated ? count : 0 })}
             >
               <ShoppingBag className="size-[22px]" strokeWidth={1.25} />
               <AnimatePresence>

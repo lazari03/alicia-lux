@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 import type { OrderStatus } from "@/lib/types"
 
@@ -24,16 +25,9 @@ const statusStyles: Record<OrderStatus, string> = {
   cancelled: "bg-[#f3e6e6] text-danger",
   refunded: "bg-[#ece8f3] text-[#5a4a86]",
 }
-const statusLabel: Record<OrderStatus, string> = {
-  pending: "Awaiting payment",
-  paid: "Paid · to ship",
-  fulfilled: "Shipped",
-  cancelled: "Cancelled",
-  refunded: "Refunded",
-}
-
 export function StatusBadge({ status }: { status: OrderStatus }) {
-  return <span className={cn("inline-flex rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap", statusStyles[status])}>{statusLabel[status]}</span>
+  const t = useTranslations("admin.status")
+  return <span className={cn("inline-flex rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap", statusStyles[status])}>{t(status)}</span>
 }
 
 export const dateTime = (iso: string) =>

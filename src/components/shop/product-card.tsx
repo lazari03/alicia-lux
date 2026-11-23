@@ -1,5 +1,6 @@
 import { LuxImage } from "@/components/ui/lux-image"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import { formatPrice } from "@/lib/money"
 import type { Product } from "@/lib/types"
 import { QuickAdd } from "./quick-add"
@@ -7,6 +8,7 @@ import { QuickAdd } from "./quick-add"
 export function ProductCard({ product, priority }: { product: Product; priority?: boolean }) {
   const [main, hover] = product.images
   const soldOut = product.stock <= 0
+  const t = useTranslations("product")
 
   return (
     <article className="group relative text-center">
@@ -15,7 +17,7 @@ export function ProductCard({ product, priority }: { product: Product; priority?
           {main && (
             <LuxImage
               src={main}
-              alt={`${product.name} in ${product.subtitle ?? ""}`}
+              alt={t("imageAlt", { name: product.name, finish: product.subtitle ?? "" })}
               fill
               priority={priority}
               sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw"
@@ -32,10 +34,10 @@ export function ProductCard({ product, priority }: { product: Product; priority?
             />
           )}
           {soldOut && (
-            <span className="absolute top-3 left-3 bg-paper/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]">Sold out</span>
+            <span className="absolute top-3 left-3 bg-paper/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]">{t("soldOut")}</span>
           )}
           {!soldOut && product.compare_at_ore && product.compare_at_ore > product.price_ore && (
-            <span className="absolute top-3 left-3 bg-ink px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-paper">Sale</span>
+            <span className="absolute top-3 left-3 bg-ink px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-paper">{t("sale")}</span>
           )}
         </div>
         <div className="mt-4 grid gap-1">

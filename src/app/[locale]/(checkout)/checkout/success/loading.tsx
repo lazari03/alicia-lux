@@ -1,6 +1,9 @@
+import { useTranslations } from "next-intl"
+
 export default function Loading() {
+  const t = useTranslations("success")
   return (
-    <div className="container-lux grid max-w-3xl justify-items-center gap-4 py-24" role="status" aria-label="Confirming your order">
+    <div className="container-lux grid max-w-3xl justify-items-center gap-4 py-24" role="status" aria-label={t("confirming")}>
       <div className="skeleton size-12 rounded-full" />
       <div className="skeleton h-3 w-28" />
       <div className="skeleton h-14 w-[min(90%,420px)]" />

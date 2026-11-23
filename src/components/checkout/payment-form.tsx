@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { Link, useRouter } from "@/i18n/navigation"
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe, type Appearance, type Stripe } from "@stripe/stripe-js"
 import { Lock } from "lucide-react"
@@ -33,17 +33,18 @@ const appearance: Appearance = {
   },
 }
 
-type Props = { publishableKey: string; clientSecret: string; orderId: string; total: number; customer: Customer; stale: boolean }
+type Props = { publishableKey: string; clientSecret: string; orderId: string; total: number; customer: Customer; stale: boolean; locale: string }
 
 export function PaymentForm(props: Props) {
   return (
-    <Elements stripe={getStripe(props.publishableKey)} options={{ clientSecret: props.clientSecret, appearance, loader: "never" }}>
+    <Elements stripe={getStripe(props.publishableKey)} options={{ clientSecret: props.clientSecret, appearance, loader: "never", locale: props.locale === "en" ? "en" : "sv" }}>
       <Inner {...props} />
     </Elements>
   )
 }
 
-function Inner({ orderId, total, customer, stale }: Props) {
+function Inner({ orderId, total, customer, stale, locale }: Props) {
+  const t = useTranslations("checkout")
   const stripe = useStripe()
   const elements = useElements()
   const router = useRouter()
@@ -64,12 +65,12 @@ function Inner({ orderId, total, customer, stale }: Props) {
 
     const { error: submitError } = await elements.submit()
     if (submitError) {
-      setError(submitError.message ?? "Check your payment details.")
+      setError(submitError.message ?? t("errors.checkDetails"))
       setBusy(false)
       return
     }
 
-    const returnUrl = `${window.location.origin}/checkout/success?order=${orderId}`
+    const returnUrl = `${window.location.origin}${locale === "en" ? "/en" : ""}/checkout/success?order=${orderId}`
     const { error: payError, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
@@ -90,7 +91,7 @@ function Inner({ orderId, total, customer, stale }: Props) {
       router.push(`/checkout/success?order=${orderId}&payment_intent=${paymentIntent.id}`)
       return
     }
-    setError(payError?.message ?? "Your payment could not be completed. Please try another method.")
+    setError(payError?.message ?? t("errors.paymentFailed"))
     setBusy(false)
   }
 
@@ -111,11 +112,13 @@ function Inner({ orderId, total, customer, stale }: Props) {
       </div>
       {error && <Notice>{error}</Notice>}
       <button type="submit" disabled={!stripe || !ready || busy || stale} className="btn btn-primary min-h-[58px] w-full text-[13px]" data-testid="pay-button">
-        {busy ? "Processing…" : stale ? "Updating total…" : <>Pay {formatPrice(total)} <Lock className="size-4" strokeWidth={1.5} /></>}
+        {busy ? t("processing") : stale ? t("updatingTotal") : <>{t("pay", { amount: formatPrice(total) })} <Lock className="size-4" strokeWidth={1.5} /></>}
       </button>
       <p className="text-xs leading-relaxed text-muted">
-        By placing your order you agree to our <Link href="/policies/terms" className="text-ink underline underline-offset-4">terms</Link> and{" "}
-        <Link href="/policies/privacy" className="text-ink underline underline-offset-4">privacy policy</Link>. Card details go directly to Stripe and are never stored by Alicia Lux.
+        {t.rich("legal", {
+          terms: (c) => <Link href="/policies/terms" className="text-ink underline underline-offset-4">{c}</Link>,
+          privacy: (c) => <Link href="/policies/privacy" className="text-ink underline underline-offset-4">{c}</Link>,
+        })}
       </p>
     </form>
   )

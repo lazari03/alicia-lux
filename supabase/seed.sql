@@ -5,11 +5,16 @@
 --   :shipping_ore  flat shipping fee in öre
 
 insert into public.products
-  (slug, name, subtitle, description, features, price_ore, images, swatch, stock, active, featured, sort_order)
+  (slug, name, subtitle, description, features, description_en, features_en, price_ore, images, swatch, stock, active, featured, sort_order)
 values
   ('signature-organizer-coffee-brown',
    'Signature Organizer',
    'Coffee Brown',
+   'Varm. Fyllig. Självklart tidlös. Alicia Lux Signature Organizer i Coffee Brown, med upplyst spegel, fack för skönhetsprodukter och lådor för smycken.',
+   array['Upplyst spegel i centrum av din dagliga ritual',
+         'Genomtänkta fack för skönhetsfavoriter',
+         'Lådor för ringar, halsband och armband',
+         'Mjuka texturer med varma metalldetaljer'],
    'Warm. Rich. Effortlessly timeless. The Alicia Lux Signature Organizer in Coffee Brown, with an illuminated mirror, compartments for beauty essentials and drawers for jewelry.',
    array['Illuminated mirror at the heart of your daily ritual',
          'Considered compartments for beauty essentials',
@@ -21,6 +26,11 @@ values
   ('signature-organizer-champagne',
    'Signature Organizer',
    'Champagne',
+   'Mjukt ljus, i sin vackraste form. Alicia Lux Signature Organizer i Champagne, med upplyst spegel, fack för skönhetsprodukter och lådor för smycken.',
+   array['Upplyst spegel i centrum av din dagliga ritual',
+         'Genomtänkta fack för skönhetsfavoriter',
+         'Lådor för ringar, halsband och armband',
+         'Präglat AL-monogram och dragflik'],
    'Soft light, in its most beautiful form. The Alicia Lux Signature Organizer in Champagne, with an illuminated mirror, compartments for beauty essentials and drawers for jewelry.',
    array['Illuminated mirror at the heart of your daily ritual',
          'Considered compartments for beauty essentials',
@@ -32,6 +42,11 @@ values
   ('signature-organizer-noir',
    'Signature Organizer',
    'Noir',
+   'Ett tyst statement. En bestående klassiker. Alicia Lux Signature Organizer i Noir, med upplyst spegel, fack för skönhetsprodukter och lådor för smycken.',
+   array['Upplyst spegel i centrum av din dagliga ritual',
+         'Genomtänkta fack för skönhetsfavoriter',
+         'Lådor för ringar, halsband och armband',
+         'Mjuka texturer med varma metalldetaljer'],
    'A quiet statement. An enduring classic. The Alicia Lux Signature Organizer in Noir, with an illuminated mirror, compartments for beauty essentials and drawers for jewelry.',
    array['Illuminated mirror at the heart of your daily ritual',
          'Considered compartments for beauty essentials',
@@ -43,8 +58,10 @@ values
 on conflict (slug) do update set
   name        = excluded.name,
   subtitle    = excluded.subtitle,
-  description = excluded.description,
-  features    = excluded.features,
+  description    = excluded.description,
+  features       = excluded.features,
+  description_en = excluded.description_en,
+  features_en    = excluded.features_en,
   images      = excluded.images,
   swatch      = excluded.swatch;
 

@@ -4,19 +4,24 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Boxes, ChartColumn, ExternalLink, LayoutDashboard, LogOut, Receipt, Settings } from "lucide-react"
-import { signOut } from "@/app/admin/actions"
+import { useLocale, useTranslations } from "next-intl"
+import { useTransition } from "react"
+import { setAdminLocale, signOut } from "@/app/admin/actions"
 import { cn } from "@/lib/utils"
 
 const items = [
-  { href: "/admin", label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/analytics", label: "Analytics", icon: ChartColumn },
-  { href: "/admin/orders", label: "Orders", icon: Receipt },
-  { href: "/admin/products", label: "Products", icon: Boxes },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin", label: "overview", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "analytics", icon: ChartColumn },
+  { href: "/admin/orders", label: "orders", icon: Receipt },
+  { href: "/admin/products", label: "products", icon: Boxes },
+  { href: "/admin/settings", label: "settings", icon: Settings },
 ]
 
 export function AdminNav({ email }: { email: string }) {
   const pathname = usePathname()
+  const t = useTranslations("admin.nav")
+  const locale = useLocale()
+  const [pending, start] = useTransition()
   const active = (href: string) => (href === "/admin" ? pathname === href : pathname.startsWith(href))
 
   return (
@@ -26,8 +31,21 @@ export function AdminNav({ email }: { email: string }) {
           <Image src="/images/alicia-lux-mark.png" alt="" width={32} height={32} className="brightness-0 invert-[.91] sepia-[.15]" />
           <span className="font-serif text-lg uppercase tracking-[0.18em]">Alicia Lux</span>
         </Link>
+        <div className={cn("flex gap-1 text-[11px] font-medium tracking-[0.16em] lg:mt-1", pending && "opacity-60")}>
+          {(["sv", "en"] as const).map((l) => (
+            <button
+              key={l}
+              type="button"
+              aria-pressed={l === locale}
+              onClick={() => l !== locale && start(() => setAdminLocale(l))}
+              className={cn("min-h-8 rounded px-2", l === locale ? "bg-[#2c241e] text-gold-light" : "text-night-text hover:text-gold-light")}
+            >
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
         <a href="/" target="_blank" className="inline-flex items-center gap-1.5 text-xs text-night-text hover:text-gold-light lg:mt-1">
-          View store <ExternalLink className="size-3" />
+          {t("viewStore")} <ExternalLink className="size-3" />
         </a>
       </div>
       <nav className="no-scrollbar flex gap-1 overflow-x-auto px-3 pb-3 lg:mt-4 lg:flex-col lg:px-3">
@@ -40,13 +58,13 @@ export function AdminNav({ email }: { email: string }) {
               active(href) ? "bg-[#2c241e] text-gold-light" : "text-night-text hover:bg-[#241d18] hover:text-[#f3ebe1]"
             )}
           >
-            <Icon className="size-4" strokeWidth={1.5} /> {label}
+            <Icon className="size-4" strokeWidth={1.5} /> {t(label)}
           </Link>
         ))}
       </nav>
       <form action={signOut} className="hidden border-t border-night-line px-5 py-4 lg:absolute lg:inset-x-0 lg:bottom-0 lg:block">
         <p className="mb-2 truncate text-xs text-night-text">{email}</p>
-        <button className="inline-flex items-center gap-2 text-sm hover:text-gold-light"><LogOut className="size-4" strokeWidth={1.5} /> Sign out</button>
+        <button className="inline-flex items-center gap-2 text-sm hover:text-gold-light"><LogOut className="size-4" strokeWidth={1.5} /> {t("signOut")}</button>
       </form>
     </aside>
   )

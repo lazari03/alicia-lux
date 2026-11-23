@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prebuild": "node scripts/check-i18n.mjs",
+    "i18n:check": "node scripts/check-i18n.mjs"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.3.0",
@@ -20,6 +22,7 @@
     "lucide-react": "^1.78.0",
     "motion": "^14.14.0",
     "next": "^15.5.29",
+    "next-intl": "^4.15.3",
     "react": "19.1",
     "react-dom": "19.1",
     "recharts": "^3.11.0",

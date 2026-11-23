@@ -6,14 +6,15 @@ import "@fontsource/cormorant-garamond/500.css"
 import "@fontsource/jost/300.css"
 import "@fontsource/jost/400.css"
 import "@fontsource/jost/500.css"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale } from "next-intl/server"
 import { Toaster } from "sonner"
 import { siteUrl } from "@/lib/utils"
 import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: { default: "Alicia Lux — For all that you treasure", template: "%s · Alicia Lux" },
-  description: "Jewelry and beauty organizers for the things you treasure. Discover the Alicia Lux Signature Collection in Coffee Brown, Champagne and Noir.",
+  title: { default: "Alicia Lux", template: "%s · Alicia Lux" },
   openGraph: {
     type: "website",
     siteName: "Alicia Lux",
@@ -23,11 +24,12 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#f8f5f0", viewportFit: "cover" }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale()
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth">
       <body>
-        {children}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <Toaster position="bottom-center" toastOptions={{ className: "!font-sans !rounded-[4px] !border-line" }} />
       </body>
     </html>

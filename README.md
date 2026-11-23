@@ -57,6 +57,18 @@ To use the bundled Caddy container instead of a host install, run `WITH_CADDY=1 
 Point your domain's A record at the server first. If Caddy already runs on the host, leave out `WITH_CADDY=1` and proxy
 `shopalicialux.se` to `127.0.0.1:3000`. To redeploy later, run `./deploy/deploy.sh`.
 
+## Languages (i18n)
+
+The shop is Swedish-first with English, using [next-intl](https://next-intl.dev):
+
+- Swedish has no URL prefix (`/shop`), English lives under `/en` (`/en/shop`). A switcher (SV / EN) sits in the
+  header, menu and footer; the admin dashboard follows the same choice and has its own toggle.
+- All UI text is in `messages/se.json` (Swedish) and `messages/en.json` (English). The internal locale code for
+  Swedish is `sv` (ISO 639-1); it loads `se.json`.
+- `npm run i18n:check` (also run before every build) fails if a key exists in one file but not the other.
+- Product copy is stored per language in Supabase: the main fields are Swedish, the `*_en` fields English
+  (empty → the Swedish text is shown). Edit both in Admin → Products.
+
 ## How orders work
 
 1. The cart lives in the browser. At checkout, `/api/checkout` re-reads every price and the stock from Supabase,

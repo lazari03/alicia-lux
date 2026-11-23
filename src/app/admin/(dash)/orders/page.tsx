@@ -1,24 +1,28 @@
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { Card, dateTime, PageHeader, StatusBadge } from "@/components/admin/ui"
 import { formatPrice } from "@/lib/money"
 import { serviceClient } from "@/lib/supabase/admin"
 import type { Order, OrderStatus } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
-export const metadata = { title: "Orders" }
+export async function generateMetadata() {
+  return { title: (await getTranslations("admin.orders"))("title") }
+}
 
 const filters: { key: string; label: string; statuses: OrderStatus[] }[] = [
-  { key: "all", label: "All", statuses: ["paid", "fulfilled", "cancelled", "refunded"] },
-  { key: "paid", label: "To ship", statuses: ["paid"] },
-  { key: "fulfilled", label: "Shipped", statuses: ["fulfilled"] },
-  { key: "cancelled", label: "Cancelled", statuses: ["cancelled", "refunded"] },
-  { key: "pending", label: "Abandoned", statuses: ["pending"] },
+  { key: "all", label: "all", statuses: ["paid", "fulfilled", "cancelled", "refunded"] },
+  { key: "paid", label: "paid", statuses: ["paid"] },
+  { key: "fulfilled", label: "fulfilled", statuses: ["fulfilled"] },
+  { key: "cancelled", label: "cancelled", statuses: ["cancelled", "refunded"] },
+  { key: "pending", label: "pending", statuses: ["pending"] },
 ]
 
 const PAGE = 25
 
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ status?: string; q?: string; page?: string }> }) {
   const { status = "all", q = "", page = "1" } = await searchParams
+  const t = await getTranslations("admin.orders")
   const filter = filters.find((f) => f.key === status) ?? filters[0]
   const pageNo = Math.max(1, Number(page) || 1)
 
@@ -42,19 +46,19 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
 
   return (
     <>
-      <PageHeader title="Orders" description={`${count ?? 0} ${count === 1 ? "order" : "orders"} · ${filter.label}`} />
+      <PageHeader title={t("title")} description={t("count", { count: count ?? 0, filter: t(`filters.${filter.label}`) })} />
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="no-scrollbar flex gap-1 overflow-x-auto rounded-full border border-line bg-card p-1">
           {filters.map((f) => (
             <Link key={f.key} href={`/admin/orders?status=${f.key}`} className={cn("min-h-9 shrink-0 rounded-full px-4 py-2 text-[13px]", f.key === filter.key ? "bg-ink text-paper" : "text-muted hover:text-ink")}>
-              {f.label}
+              {t(`filters.${f.label}`)}
             </Link>
           ))}
         </div>
         <form className="flex gap-2">
           <input type="hidden" name="status" value={filter.key} />
-          <input name="q" defaultValue={q} placeholder="Search # / name / email" className="h-10 w-full rounded-md border border-line bg-card px-3 text-sm sm:w-64" />
+          <input name="q" defaultValue={q} placeholder={t("search")} className="h-10 w-full rounded-md border border-line bg-card px-3 text-sm sm:w-64" />
         </form>
       </div>
 
@@ -64,11 +68,11 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             <table className="w-full min-w-[640px] text-sm">
               <thead className="border-b border-line bg-surface/50 text-left text-xs text-muted">
                 <tr>
-                  <th className="px-5 py-3 font-normal">Order</th>
-                  <th className="px-5 py-3 font-normal">Customer</th>
-                  <th className="px-5 py-3 font-normal">Date</th>
-                  <th className="px-5 py-3 font-normal">Status</th>
-                  <th className="px-5 py-3 text-right font-normal">Total</th>
+                  <th className="px-5 py-3 font-normal">{t("order")}</th>
+                  <th className="px-5 py-3 font-normal">{t("customer")}</th>
+                  <th className="px-5 py-3 font-normal">{t("date")}</th>
+                  <th className="px-5 py-3 font-normal">{t("status")}</th>
+                  <th className="px-5 py-3 text-right font-normal">{t("total")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
@@ -85,16 +89,16 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
             </table>
           </div>
         ) : (
-          <p className="px-5 py-16 text-center text-sm text-muted">No orders here yet.</p>
+          <p className="px-5 py-16 text-center text-sm text-muted">{t("none")}</p>
         )}
       </Card>
 
       {pages > 1 && (
         <div className="mt-4 flex items-center justify-between text-sm">
-          <span className="text-muted">Page {pageNo} of {pages}</span>
+          <span className="text-muted">{t("pageOf", { page: pageNo, pages })}</span>
           <div className="flex gap-2">
-            {pageNo > 1 && <Link href={href({ page: String(pageNo - 1) })} className="btn btn-ghost min-h-10 px-4">Previous</Link>}
-            {pageNo < pages && <Link href={href({ page: String(pageNo + 1) })} className="btn btn-ghost min-h-10 px-4">Next</Link>}
+            {pageNo > 1 && <Link href={href({ page: String(pageNo - 1) })} className="btn btn-ghost min-h-10 px-4">{t("previous")}</Link>}
+            {pageNo < pages && <Link href={href({ page: String(pageNo + 1) })} className="btn btn-ghost min-h-10 px-4">{t("next")}</Link>}
           </div>
         </div>
       )}

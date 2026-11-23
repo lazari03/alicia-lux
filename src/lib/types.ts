@@ -5,6 +5,10 @@ export type Product = {
   subtitle: string | null
   description: string
   features: string[]
+  name_en: string | null
+  subtitle_en: string | null
+  description_en: string | null
+  features_en: string[]
   price_ore: number
   compare_at_ore: number | null
   images: string[]

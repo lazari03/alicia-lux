@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import { ArrowLeft, ArrowRight, ImagePlus, Loader2, Trash2, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useActionState, useEffect, useRef, useState, useTransition } from "react"
 import { toast } from "sonner"
 import { deleteProduct, saveProduct, uploadProductImage, type ActionState } from "@/app/admin/actions"
@@ -19,15 +20,19 @@ export function ProductForm({ product }: { product?: Product }) {
   const [deleting, startDelete] = useTransition()
   const fileInput = useRef<HTMLInputElement>(null)
   const params = useSearchParams()
-  const err = state?.fieldErrors ?? {}
+  const t = useTranslations("admin.products")
+  const tf = useTranslations("admin.products.form")
+  const te = useTranslations("admin.errors")
+  const errText = (code: string) => (te.has(code) ? te(code) : code)
+  const err = Object.fromEntries(Object.entries(state?.fieldErrors ?? {}).map(([k, v]) => [k, errText(v)]))
 
   useEffect(() => {
-    if (params.get("created")) toast.success("Product created")
-  }, [params])
+    if (params.get("created")) toast.success(t("created"))
+  }, [params, t])
   useEffect(() => {
-    if (state?.ok) toast.success("Saved")
-    else if (state?.error) toast.error(state.error)
-  }, [state])
+    if (state?.ok) toast.success(t("saved"))
+    else if (state?.error) toast.error(te.has(state.error) ? te(state.error) : state.error)
+  }, [state, t, te])
 
   const upload = async (files: FileList | null) => {
     if (!files?.length) return
@@ -39,7 +44,7 @@ export function ProductForm({ product }: { product?: Product }) {
         fd.set("file", file)
         const res = await uploadProductImage(fd)
         if (res.url) setImages((imgs) => [...imgs, res.url!])
-        else toast.error(`${file.name}: ${res.error}`)
+        else toast.error(`${file.name}: ${errText(res.error ?? "generic")}`)
         setUploading((n) => n - 1)
       })
     )
@@ -65,34 +70,52 @@ export function ProductForm({ product }: { product?: Product }) {
 
       <div className="grid content-start gap-4">
         <Card className="grid gap-4">
+          <h2 className="text-sm font-medium">{tf("swedish")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
-            <F err={err} name="name" label="Name"><input name="name" defaultValue={product?.name} required className={cn(input, border("name"))} /></F>
-            <F err={err} name="subtitle" label="Finish / subtitle" hint="Shown under the name, e.g. “Champagne”"><input name="subtitle" defaultValue={product?.subtitle ?? ""} className={cn(input, border("subtitle"))} /></F>
+            <F err={err} name="name" label={tf("name")}><input name="name" defaultValue={product?.name} required className={cn(input, border("name"))} /></F>
+            <F err={err} name="subtitle" label={tf("subtitle")} hint={tf("subtitleHint")}><input name="subtitle" defaultValue={product?.subtitle ?? ""} className={cn(input, border("subtitle"))} /></F>
           </div>
-          <F err={err} name="description" label="Description">
+          <F err={err} name="description" label={tf("description")}>
             <textarea name="description" defaultValue={product?.description} rows={5} className={cn(input, "h-auto py-2.5", border("description"))} />
           </F>
-          <F err={err} name="features" label="Highlights" hint="One per line">
+          <F err={err} name="features" label={tf("features")} hint={tf("featuresHint")}>
             <textarea name="features" defaultValue={product?.features.join("\n")} rows={4} className={cn(input, "h-auto py-2.5", border("features"))} />
+          </F>
+        </Card>
+
+        <Card className="grid gap-4">
+          <div>
+            <h2 className="text-sm font-medium">{tf("english")}</h2>
+            <p className="mt-1 text-xs text-muted">{tf("englishHint")}</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <F err={err} name="nameEn" label={tf("name")}><input name="nameEn" defaultValue={product?.name_en ?? ""} placeholder={product?.name} className={cn(input, border("nameEn"))} /></F>
+            <F err={err} name="subtitleEn" label={tf("subtitle")}><input name="subtitleEn" defaultValue={product?.subtitle_en ?? ""} placeholder={product?.subtitle ?? ""} className={cn(input, border("subtitleEn"))} /></F>
+          </div>
+          <F err={err} name="descriptionEn" label={tf("description")}>
+            <textarea name="descriptionEn" defaultValue={product?.description_en ?? ""} rows={5} className={cn(input, "h-auto py-2.5", border("descriptionEn"))} />
+          </F>
+          <F err={err} name="featuresEn" label={tf("features")} hint={tf("featuresHint")}>
+            <textarea name="featuresEn" defaultValue={product?.features_en?.join("\n") ?? ""} rows={4} className={cn(input, "h-auto py-2.5", border("featuresEn"))} />
           </F>
         </Card>
 
         <Card>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-medium">Images</h2>
-            <span className="text-xs text-muted">First image is the main photo</span>
+            <h2 className="text-sm font-medium">{tf("images")}</h2>
+            <span className="text-xs text-muted">{tf("imagesHint")}</span>
           </div>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
             {images.map((src, i) => (
               <div key={src} className="group relative aspect-[4/5] overflow-hidden rounded-md border border-line bg-surface">
                 <Image src={src} alt="" fill sizes="160px" className="object-cover" />
-                {i === 0 && <span className="absolute top-1.5 left-1.5 rounded bg-ink/80 px-1.5 py-0.5 text-[10px] text-paper">Main</span>}
+                {i === 0 && <span className="absolute top-1.5 left-1.5 rounded bg-ink/80 px-1.5 py-0.5 text-[10px] text-paper">{tf("main")}</span>}
                 <div className="absolute inset-x-1.5 bottom-1.5 flex justify-between gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
                   <span className="flex gap-1">
-                    <IconBtn label="Move left" onClick={() => move(i, -1)} disabled={i === 0}><ArrowLeft className="size-3.5" /></IconBtn>
-                    <IconBtn label="Move right" onClick={() => move(i, 1)} disabled={i === images.length - 1}><ArrowRight className="size-3.5" /></IconBtn>
+                    <IconBtn label={tf("moveLeft")} onClick={() => move(i, -1)} disabled={i === 0}><ArrowLeft className="size-3.5" /></IconBtn>
+                    <IconBtn label={tf("moveRight")} onClick={() => move(i, 1)} disabled={i === images.length - 1}><ArrowRight className="size-3.5" /></IconBtn>
                   </span>
-                  <IconBtn label="Remove image" onClick={() => setImages((imgs) => imgs.filter((x) => x !== src))}><X className="size-3.5" /></IconBtn>
+                  <IconBtn label={tf("removeImage")} onClick={() => setImages((imgs) => imgs.filter((x) => x !== src))}><X className="size-3.5" /></IconBtn>
                 </div>
               </div>
             ))}
@@ -102,7 +125,7 @@ export function ProductForm({ product }: { product?: Product }) {
               className="grid aspect-[4/5] place-content-center justify-items-center gap-2 rounded-md border border-dashed border-line-strong text-xs text-muted transition-colors hover:border-gold hover:text-ink"
             >
               {uploading ? <Loader2 className="size-5 animate-spin" /> : <ImagePlus className="size-5" strokeWidth={1.5} />}
-              {uploading ? `Uploading ${uploading}…` : "Add images"}
+              {uploading ? tf("uploading", { count: uploading }) : tf("addImages")}
             </button>
           </div>
           <input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple hidden onChange={(e) => upload(e.target.files)} />
@@ -111,40 +134,40 @@ export function ProductForm({ product }: { product?: Product }) {
 
       <div className="grid content-start gap-4">
         <Card className="grid gap-4">
-          <F err={err} name="price" label="Price (SEK, incl. VAT)"><input name="price" inputMode="decimal" defaultValue={kr(product?.price_ore)} required className={cn(input, border("price"))} /></F>
-          <F err={err} name="compareAt" label="Compare-at price" hint="Optional — shows the product as on sale"><input name="compareAt" inputMode="decimal" defaultValue={kr(product?.compare_at_ore)} className={cn(input, border("compareAt"))} /></F>
-          <F err={err} name="stock" label="Stock"><input name="stock" type="number" min={0} step={1} defaultValue={product?.stock ?? 0} required className={cn(input, border("stock"))} /></F>
+          <F err={err} name="price" label={tf("price")}><input name="price" inputMode="decimal" defaultValue={kr(product?.price_ore)} required className={cn(input, border("price"))} /></F>
+          <F err={err} name="compareAt" label={tf("compareAt")} hint={tf("compareAtHint")}><input name="compareAt" inputMode="decimal" defaultValue={kr(product?.compare_at_ore)} className={cn(input, border("compareAt"))} /></F>
+          <F err={err} name="stock" label={tf("stock")}><input name="stock" type="number" min={0} step={1} defaultValue={product?.stock ?? 0} required className={cn(input, border("stock"))} /></F>
         </Card>
         <Card className="grid gap-4">
-          <label className="flex items-center justify-between gap-3 text-sm"><span><b className="font-medium">Visible in shop</b><small className="block text-xs text-muted">Hidden products can’t be bought</small></span><input type="checkbox" name="active" defaultChecked={product?.active ?? true} className="size-5 accent-ink" /></label>
-          <label className="flex items-center justify-between gap-3 text-sm"><span><b className="font-medium">Featured</b><small className="block text-xs text-muted">Shown on the home page</small></span><input type="checkbox" name="featured" defaultChecked={product?.featured ?? false} className="size-5 accent-ink" /></label>
+          <label className="flex items-center justify-between gap-3 text-sm"><span><b className="font-medium">{tf("visible")}</b><small className="block text-xs text-muted">{tf("visibleHint")}</small></span><input type="checkbox" name="active" defaultChecked={product?.active ?? true} className="size-5 accent-ink" /></label>
+          <label className="flex items-center justify-between gap-3 text-sm"><span><b className="font-medium">{tf("featured")}</b><small className="block text-xs text-muted">{tf("featuredHint")}</small></span><input type="checkbox" name="featured" defaultChecked={product?.featured ?? false} className="size-5 accent-ink" /></label>
         </Card>
         <Card className="grid gap-4">
-          <F err={err} name="slug" label="URL slug" hint="Leave empty to generate from the name"><input name="slug" defaultValue={product?.slug} className={cn(input, border("slug"))} /></F>
+          <F err={err} name="slug" label={tf("slug")} hint={tf("slugHint")}><input name="slug" defaultValue={product?.slug} className={cn(input, border("slug"))} /></F>
           <div className="grid grid-cols-2 gap-3">
-            <F err={err} name="swatch" label="Swatch colour"><input name="swatch" placeholder="#583b2a" defaultValue={product?.swatch ?? ""} className={cn(input, border("swatch"))} /></F>
-            <F err={err} name="sortOrder" label="Sort order"><input name="sortOrder" type="number" defaultValue={product?.sort_order ?? 0} className={cn(input, border("sortOrder"))} /></F>
+            <F err={err} name="swatch" label={tf("swatch")}><input name="swatch" placeholder="#583b2a" defaultValue={product?.swatch ?? ""} className={cn(input, border("swatch"))} /></F>
+            <F err={err} name="sortOrder" label={tf("sortOrder")}><input name="sortOrder" type="number" defaultValue={product?.sort_order ?? 0} className={cn(input, border("sortOrder"))} /></F>
           </div>
         </Card>
 
         <div className="sticky bottom-4 grid gap-2">
           <button type="submit" disabled={saving || uploading > 0} className="btn btn-primary w-full shadow-lg">
-            {saving ? "Saving…" : product ? "Save changes" : "Create product"}
+            {saving ? tf("saving") : product ? tf("save") : tf("create")}
           </button>
           {product && (
             <button
               type="button"
               disabled={deleting}
               onClick={() =>
-                confirm("Delete this product permanently? Past orders keep their history. To just hide it, untick “Visible in shop”.") &&
+                confirm(tf("confirmDelete")) &&
                 startDelete(async () => {
                   const res = await deleteProduct(product.id)
-                  if (res?.error) toast.error(res.error)
+                  if (res?.error) toast.error(errText(res.error))
                 })
               }
               className="inline-flex min-h-10 items-center justify-center gap-2 text-sm text-danger hover:underline"
             >
-              <Trash2 className="size-4" /> Delete product
+              <Trash2 className="size-4" /> {tf("delete")}
             </button>
           )}
         </div>

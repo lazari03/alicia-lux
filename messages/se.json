@@ -1,0 +1,552 @@
+{
+  "meta": {
+    "title": "Alicia Lux — För allt du håller kärt",
+    "description": "Smyckes- och skönhetsförvaring för allt du håller kärt. Upptäck Alicia Lux Signature Collection i Coffee Brown, Champagne och Noir."
+  },
+  "common": {
+    "skipToContent": "Hoppa till innehållet",
+    "menu": "Meny",
+    "openMenu": "Öppna menyn",
+    "closeMenu": "Stäng menyn",
+    "openBag": "Öppna varukorgen, {count, plural, =0 {tom} one {# vara} other {# varor}}",
+    "home": "Alicia Lux startsida",
+    "language": "Språk",
+    "loading": "Laddar",
+    "sek": "SEK"
+  },
+  "languages": {
+    "sv": "Svenska",
+    "en": "English"
+  },
+  "announcement": "Leverans inom Sverige · Säker betalning med Stripe",
+  "nav": {
+    "home": "Hem",
+    "shop": "Butik",
+    "shopAll": "Visa alla",
+    "coffee": "Coffee Brown",
+    "champagne": "Champagne",
+    "noir": "Noir"
+  },
+  "menu": {
+    "featureEyebrow": "Signature Collection",
+    "featureTitle": "Coffee Brown · Champagne · Noir",
+    "shipping": "Leverans inom Sverige",
+    "deliveryReturns": "Leverans & returer",
+    "terms": "Villkor",
+    "privacy": "Integritet"
+  },
+  "footer": {
+    "tagline": "Ett vackert hem för allt du håller kärt.",
+    "shop": "Butik",
+    "customerCare": "Kundservice",
+    "contact": "Kontakt",
+    "sellerInfo": "Om säljaren",
+    "deliveryReturns": "Leverans & returer",
+    "terms": "Köpvillkor",
+    "privacy": "Integritetspolicy",
+    "small": "Leverans inom Sverige · Priser i SEK inkl. moms",
+    "secured": "Betalningar skyddas av Stripe",
+    "backToTop": "Till toppen"
+  },
+  "home": {
+    "heroEyebrow": "Signature Collection",
+    "heroTitle": "För allt du håller <em>kärt.</em>",
+    "heroCta": "Upptäck kollektionen",
+    "heroAlt": "Tre öppna smyckes- och skönhetsorganisers från Alicia Lux i Coffee Brown, Champagne och Noir",
+    "finishesEyebrow": "En signatur. Tre uttryck.",
+    "finishesTitle": "En nyans av <em>dig.</em>",
+    "explore": "Utforska kollektionen",
+    "finishAlt": "Alicia Lux organiser i {name}, visad öppen",
+    "moods": {
+      "coffee": "Varm. Fyllig. Självklart tidlös.",
+      "champagne": "Mjukt ljus, i sin vackraste form.",
+      "noir": "Ett tyst statement. En bestående klassiker."
+    },
+    "shopEyebrow": "Butik",
+    "shopTitle": "Signature Collection",
+    "ritualEyebrow": "Skönhet i detaljerna",
+    "ritualTitle1": "Lite ordning.",
+    "ritualTitle2": "En daglig njutning.",
+    "ritualBody": "Halsbandet du alltid sträcker dig efter. Ringen med en historia. Den sista detaljen innan du går ut. Ge var och en sin egen plats.",
+    "ritualAlt": "Alicia Lux organiser i Champagne med upplyst spegel, fack för skönhetsprodukter och smyckeslådor",
+    "details": {
+      "1": {
+        "title": "Allt på sin plats",
+        "text": "Genomtänkta fack för smycken och skönhetsfavoriter."
+      },
+      "2": {
+        "title": "Ett ögonblick för dig",
+        "text": "En upplyst spegel i centrum av din dagliga ritual."
+      },
+      "3": {
+        "title": "Vacker, utanpå och inuti",
+        "text": "Mjuka texturer, varma metalldetaljer och en plats för de minsta detaljerna."
+      }
+    },
+    "discover": "Upptäck Alicia Lux",
+    "brandTitle1": "Lyx är en känsla.",
+    "brandTitle2": "Ge den plats.",
+    "brandBody": "Ett vackert hem för allt du håller kärt, ända ner till detaljerna du ser när den är stängd.",
+    "brandAlt": "Stängd Alicia Lux organiser i Champagne med präglat AL-monogram"
+  },
+  "shop": {
+    "metaTitle": "Butik",
+    "metaDescription": "Köp Alicia Lux Signature Organizer i Coffee Brown, Champagne och Noir.",
+    "eyebrow": "Alicia Lux",
+    "title": "Kollektionen",
+    "intro": "En signaturorganiser, tre utföranden. Upplyst spegel, fack för skönhetsprodukter och smyckeslådor.",
+    "count": "{count, plural, one {# produkt} other {# produkter}}",
+    "empty": "Nya produkter är på väg. Välkommen tillbaka snart.",
+    "sort": {
+      "label": "Sortera",
+      "featured": "Utvalda",
+      "newest": "Nyast",
+      "newestLong": "Nyheter först",
+      "priceAsc": "Pris ↑",
+      "priceAscLong": "Pris, lägst först",
+      "priceDesc": "Pris ↓",
+      "priceDescLong": "Pris, högst först"
+    }
+  },
+  "product": {
+    "breadcrumb": "Butik",
+    "brand": "Alicia Lux",
+    "inclVat": "inkl. moms",
+    "finish": "Utförande",
+    "sale": "Rea",
+    "soldOut": "Slutsåld",
+    "soldOutText": "Det här utförandet är slutsålt just nu. Titta in igen snart.",
+    "onlyLeft": "Endast {count} kvar",
+    "addToBag": "Lägg i varukorgen",
+    "added": "Tillagd",
+    "quickAdd": "Lägg {name} i varukorgen",
+    "imageAlt": "{name} i {finish}",
+    "galleryAlt": "{name} från Alicia Lux",
+    "showImage": "Visa bild {n}",
+    "deliveryFree": "Fri leverans inom Sverige",
+    "deliveryFee": "Leverans inom Sverige {price}",
+    "freeOver": " · fri leverans över {price}",
+    "withdrawal": "14 dagars ångerrätt —",
+    "returnsLink": "returer",
+    "securePayment": "Säker betalning med Stripe",
+    "alsoLove": "Du kanske också gillar",
+    "breadcrumbLabel": "Brödsmulor"
+  },
+  "quantity": {
+    "label": "Antal för {name}",
+    "decrease": "Minska antal",
+    "increase": "Öka antal"
+  },
+  "cart": {
+    "title": "Din varukorg",
+    "label": "Varukorg",
+    "close": "Stäng varukorgen",
+    "empty": "Din varukorg är tom",
+    "emptyText": "Upptäck Signature Collection i Coffee Brown, Champagne och Noir.",
+    "shopCollection": "Upptäck kollektionen",
+    "subtotal": "Delsumma",
+    "note": "Inklusive moms. Frakt beräknas i kassan.",
+    "checkout": "Till kassan",
+    "continue": "Fortsätt handla",
+    "remove": "Ta bort"
+  },
+  "checkout": {
+    "metaTitle": "Kassa",
+    "title": "Kassa",
+    "continueShopping": "Fortsätt handla",
+    "secure": "Säker kassa",
+    "progress": "Steg i kassan",
+    "stepDetails": "Uppgifter",
+    "stepPayment": "Betalning",
+    "contactDelivery": "Kontakt & leverans",
+    "edit": "Ändra",
+    "contact": "Kontakt",
+    "deliveryAddress": "Leveransadress",
+    "fields": {
+      "email": "E-post",
+      "phone": "Telefon (för leveransavisering)",
+      "firstName": "Förnamn",
+      "lastName": "Efternamn",
+      "address1": "Gatuadress",
+      "address2": "Lägenhet, c/o (valfritt)",
+      "postalCode": "Postnummer",
+      "city": "Ort"
+    },
+    "country": "Land",
+    "sweden": "Sverige",
+    "continueToPayment": "Fortsätt till betalning",
+    "preparing": "Förbereder säker betalning…",
+    "payment": "Betalning",
+    "yourOrder": "Din beställning",
+    "orderSummary": "Ordersammanfattning",
+    "showSummary": "Visa ordersammanfattning",
+    "hideSummary": "Dölj ordersammanfattning",
+    "subtotal": "Delsumma",
+    "delivery": "Frakt",
+    "free": "Gratis",
+    "total": "Totalt",
+    "inclVat": "Varav moms {amount}",
+    "securePayment": "Säker betalning via Stripe",
+    "emptyBag": "Din varukorg är tom",
+    "shopCollection": "Upptäck kollektionen",
+    "pay": "Betala {amount}",
+    "processing": "Behandlar…",
+    "updatingTotal": "Uppdaterar summan…",
+    "legal": "Genom att lägga din beställning godkänner du våra <terms>köpvillkor</terms> och vår <privacy>integritetspolicy</privacy>. Kortuppgifter skickas direkt till Stripe och sparas aldrig av Alicia Lux.",
+    "stripeMissing": "Stripe är inte konfigurerat. Ange NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
+    "errors": {
+      "email": "Ange en giltig e-postadress",
+      "firstName": "Ange ditt förnamn",
+      "lastName": "Ange ditt efternamn",
+      "address1": "Ange din gatuadress",
+      "postalCode": "Ange ett svenskt postnummer med 5 siffror",
+      "city": "Ange din ort",
+      "invalid": "Kontrollera dina uppgifter",
+      "emptyBag": "Din varukorg är tom",
+      "loadBag": "Vi kunde inte ladda din varukorg. Försök igen.",
+      "stock": "Vissa varor finns inte längre i önskat antal. Vi har uppdaterat din varukorg.",
+      "paymentInit": "Betalningen kunde inte startas. Försök igen om en liten stund.",
+      "paymentsNotSetUp": "Betalningar är inte aktiverade ännu. Försök igen senare.",
+      "connection": "Vi kunde inte nå servern. Kontrollera din anslutning och försök igen.",
+      "unavailable": "Kassan är tillfälligt otillgänglig (fel {status}). Försök igen om en liten stund.",
+      "checkDetails": "Kontrollera dina betalningsuppgifter.",
+      "paymentFailed": "Betalningen kunde inte genomföras. Prova ett annat betalsätt."
+    }
+  },
+  "success": {
+    "metaTitle": "Tack",
+    "notFound": "Vi hittade inte beställningen",
+    "failedTitle": "Betalningen gick inte igenom",
+    "failedBody": "Du har inte debiterats. Försök igen eller välj ett annat betalsätt.",
+    "retry": "Tillbaka till kassan",
+    "goShop": "Till butiken",
+    "order": "Order #{number}",
+    "thanks": "Tack, <em>{name}.</em>",
+    "processingTitle": "Betalningen behandlas",
+    "confirmed": "Din beställning är bekräftad. Ett kvitto är på väg till {email}. Vi meddelar dig när den skickas.",
+    "processing": "Din bank bekräftar fortfarande betalningen. Du får ett mejl så snart den är klar — du behöver inte betala igen.",
+    "qty": "Antal {count}",
+    "deliveringTo": "Levereras till",
+    "continueShopping": "Fortsätt handla",
+    "confirming": "Bekräftar din beställning"
+  },
+  "notFound": {
+    "title": "Sidan finns inte längre",
+    "body": "Sidan du letade efter finns inte, men kollektionen gör det.",
+    "cta": "Upptäck kollektionen"
+  },
+  "loading": {
+    "products": "Laddar produkter",
+    "product": "Laddar produkt"
+  },
+  "policies": {
+    "eyebrow": "Kundservice",
+    "titles": {
+      "terms": "Köpvillkor",
+      "privacy": "Integritetspolicy",
+      "returns": "Returer & återbetalning"
+    },
+    "contactTitle": "Kontakta Alicia Lux",
+    "orgNumber": "Organisationsnummer {number}",
+    "emailHelp": "Mejla <mail>{email}</mail> för hjälp med beställningar, returer eller frågor om personuppgifter.",
+    "noEmail": "Behöver du hjälp med en beställning? Svara på din orderbekräftelse.",
+    "terms": [
+      {
+        "title": "Beställning, priser och leverans",
+        "paragraphs": [
+          "Alicia Lux levererar inom Sverige. Priserna anges i svenska kronor inklusive moms. Kontrollera utförande, leveransadress och fraktkostnad i ordersammanfattningen innan du betalar. Du kan handla som gäst — inget konto behövs.",
+          "Spara din orderbekräftelse och ditt ordernummer. Om du behöver ändra en beställning eller leveransadress, kontakta oss så snart som möjligt så ser vi om det fortfarande går."
+        ]
+      },
+      {
+        "title": "Betalning",
+        "paragraphs": [
+          "Betalningar hanteras säkert av Stripe. Dina kortuppgifter skickas direkt till Stripe och sparas aldrig av Alicia Lux. Din beställning är bekräftad när betalningen har godkänts."
+        ]
+      },
+      {
+        "title": "Returer och reklamationer",
+        "paragraphs": [
+          "Vår <link href=\"/policies/returns\">policy för returer och återbetalning</link> beskriver ångerrätt, skadade varor och beställningar som levererats i fel utförande. Dessa villkor begränsar inte dina rättigheter enligt konsumentlagstiftningen.",
+          "Om vi inte kan lösa en tvist tillsammans kan du vända dig till Allmänna reklamationsnämnden (<link href=\"https://www.arn.se/\">ARN</link>)."
+        ]
+      }
+    ],
+    "privacy": [
+      {
+        "title": "Vad vi samlar in och varför",
+        "paragraphs": [
+          "Vi använder de kontakt-, adress- och orderuppgifter du lämnar för att hantera och leverera din beställning samt för returer och kundservice. Behandlingen är nödvändig för att fullgöra vårt avtal med dig eller för att vidta åtgärder som du begär innan du handlar.",
+          "Vi sparar transaktions- och bokföringsuppgifter enligt lag. Vi kan behandla tekniska loggar och kundserviceärenden när det behövs för vårt berättigade intresse av att driva och skydda butiken eller lösa tvister."
+        ]
+      },
+      {
+        "title": "Cookies, lagring och delning",
+        "paragraphs": [
+          "Din varukorg sparas i webbläsarens lokala lagring så att den finns kvar när du kommer tillbaka. Stripe kan sätta cookies under betalningen för att förhindra bedrägerier. En cookie kommer ihåg ditt språkval. Du kan när som helst rensa denna data i din webbläsare.",
+          "Vi samlar in anonym besöksstatistik (visade sidor, land, typ av enhet och webbläsare samt varifrån besöket kom) för att förbättra butiken. Vi använder inga cookies för detta, sparar inte din IP-adress och kan inte identifiera dig eller följa dig mellan dagar.",
+          "Vi delar de uppgifter som behövs med våra leverantörer för hosting, databas, betalning och leverans. Vi sparar personuppgifter så länge det behövs för ändamålen ovan och längre om lagen kräver det eller för att hantera en tvist."
+        ]
+      },
+      {
+        "title": "Dina rättigheter",
+        "paragraphs": [
+          "Beroende på omständigheterna kan du begära tillgång till, rättelse, radering eller begränsning av dina personuppgifter, få en kopia av dem eller invända mot viss behandling. Du kan också lämna klagomål till Integritetsskyddsmyndigheten (<link href=\"https://www.imy.se/\">IMY</link>)."
+        ]
+      }
+    ],
+    "returns": [
+      {
+        "title": "Skadade eller felaktiga varor",
+        "paragraphs": [
+          "Om din organiser kommer skadad eller får ett fel, kontakta oss med ditt ordernummer och en beskrivning av problemet. Bifoga gärna bilder på varan och förpackningen. Beroende på felet och dina rättigheter kan åtgärden vara reparation, ny vara, prisavdrag eller återbetalning. Vi står för rimliga returkostnader vid en befogad reklamation.",
+          "I Sverige kan du normalt reklamera ett fel i upp till tre år. Meddela oss inom skälig tid efter att du upptäckt felet. En reklamation inom två månader räknas alltid som i rätt tid."
+        ]
+      },
+      {
+        "title": "Fel utförande levererat",
+        "paragraphs": [
+          "Om du fått ett annat utförande än du beställde, låt gärna förpackningen vara obruten och kontakta oss med ditt ordernummer och en bild på etiketten. Vi ordnar returen på vår bekostnad och skickar rätt utförande."
+        ]
+      },
+      {
+        "title": "Ångrat dig?",
+        "paragraphs": [
+          "Vid köp på nätet har du 14 dagars ångerrätt från att du tagit emot varan. Kontakta oss med ett tydligt meddelande och ditt ordernummer och skicka sedan tillbaka varan inom 14 dagar från att du meddelat oss. Spara gärna förpackningen och hantera varan bara så mycket som behövs för att undersöka den.",
+          "Vi återbetalar varans pris och kostnaden för det billigaste standardfraktsättet, till ditt ursprungliga betalsätt, inom 14 dagar från ditt meddelande. Vi kan vänta med återbetalningen tills vi fått tillbaka varan eller du visat att den skickats. Du betalar returfrakten endast om vi informerat om det före köpet."
+        ]
+      }
+    ]
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Översikt",
+      "analytics": "Statistik",
+      "orders": "Ordrar",
+      "products": "Produkter",
+      "settings": "Inställningar",
+      "viewStore": "Visa butiken",
+      "signOut": "Logga ut"
+    },
+    "login": {
+      "title": "Alicia Lux Admin",
+      "subtitle": "Logga in för att hantera ordrar och produkter.",
+      "email": "E-post",
+      "password": "Lösenord",
+      "signIn": "Logga in",
+      "signingIn": "Loggar in…",
+      "wrong": "Fel e-post eller lösenord.",
+      "notAdmin": "Det här kontot har inte adminbehörighet."
+    },
+    "status": {
+      "pending": "Väntar på betalning",
+      "paid": "Betald · att skicka",
+      "fulfilled": "Skickad",
+      "cancelled": "Avbruten",
+      "refunded": "Återbetald"
+    },
+    "overview": {
+      "title": "Översikt",
+      "description": "Försäljning de senaste 30 dagarna.",
+      "revenue": "Intäkter · 30 dagar",
+      "orders": "Ordrar · 30 dagar",
+      "aov": "Snittorder",
+      "toShip": "Att skicka",
+      "view": "Visa",
+      "chart": "Intäkter per dag",
+      "chartRevenue": "Intäkter",
+      "chartOrders": "{count, plural, one {# order} other {# ordrar}}",
+      "recent": "Senaste ordrar",
+      "all": "Alla ordrar",
+      "noOrders": "Inga ordrar ännu. De dyker upp här så snart en betalning går igenom.",
+      "lowStock": "Lågt lager",
+      "wellStocked": "Alla produkter har bra lagersaldo.",
+      "soldOut": "Slutsåld",
+      "left": "{count} kvar"
+    },
+    "orders": {
+      "title": "Ordrar",
+      "count": "{count, plural, one {# order} other {# ordrar}} · {filter}",
+      "filters": {
+        "all": "Alla",
+        "paid": "Att skicka",
+        "fulfilled": "Skickade",
+        "cancelled": "Avbrutna",
+        "pending": "Övergivna"
+      },
+      "search": "Sök # / namn / e-post",
+      "order": "Order",
+      "customer": "Kund",
+      "date": "Datum",
+      "status": "Status",
+      "total": "Totalt",
+      "none": "Inga ordrar här ännu.",
+      "pageOf": "Sida {page} av {pages}",
+      "previous": "Föregående",
+      "next": "Nästa",
+      "back": "Ordrar",
+      "orderTitle": "Order #{number}",
+      "items": "Varor",
+      "subtotal": "Delsumma",
+      "delivery": "Frakt",
+      "vat": "Moms (ingår)",
+      "deliveryAddress": "Leveransadress",
+      "tracking": "Spårning:",
+      "payment": "Betalning",
+      "paidAt": "Betald {date}",
+      "notPaid": "Ej betald",
+      "openStripe": "Öppna i Stripe",
+      "fulfilment": "Leverans",
+      "trackingPlaceholder": "Spårningsnummer (valfritt)",
+      "markShipped": "Markera som skickad",
+      "undoShipped": "Ångra skickad",
+      "pendingNote": "Kunden påbörjade kassan men har inte betalat. Inget att skicka.",
+      "closedNote": "Ordern är {status}.",
+      "refund": "Återbetala allt",
+      "cancel": "Avbryt order",
+      "confirmRefund": "Återbetala hela beloppet till {email} via Stripe?",
+      "confirmCancelPaid": "Avbryta den här betalda ordern? Kunden återbetalas inte — använd Återbetala för det.",
+      "confirmCancelUnpaid": "Avbryta den här obetalda ordern?",
+      "note": "Intern anteckning",
+      "saveNote": "Spara anteckning",
+      "toastShipped": "Markerad som skickad",
+      "toastUnshipped": "Flyttad tillbaka till ”att skicka”",
+      "toastRefunded": "Återbetalning genomförd",
+      "toastCancelled": "Ordern avbröts",
+      "toastNote": "Anteckning sparad"
+    },
+    "products": {
+      "title": "Produkter",
+      "description": "{count, plural, one {# produkt} other {# produkter}} · {visible} synliga i butiken",
+      "add": "Lägg till produkt",
+      "visible": "Synlig",
+      "hidden": "Dold",
+      "soldOut": "Slutsåld",
+      "inStock": "{count} i lager",
+      "featured": "Utvald",
+      "none": "Inga produkter ännu. Lägg till din första.",
+      "newTitle": "Ny produkt",
+      "back": "Produkter",
+      "viewInShop": "Visa i butiken",
+      "created": "Produkten skapades",
+      "saved": "Sparat",
+      "form": {
+        "swedish": "Svenska (huvudspråk)",
+        "english": "Engelska",
+        "englishHint": "Lämna tomt för att visa den svenska texten på den engelska sidan.",
+        "name": "Namn",
+        "subtitle": "Utförande / undertitel",
+        "subtitleHint": "Visas under namnet, t.ex. ”Champagne”",
+        "description": "Beskrivning",
+        "features": "Höjdpunkter",
+        "featuresHint": "En per rad",
+        "images": "Bilder",
+        "imagesHint": "Första bilden är huvudbilden",
+        "main": "Huvud",
+        "moveLeft": "Flytta vänster",
+        "moveRight": "Flytta höger",
+        "removeImage": "Ta bort bild",
+        "addImages": "Lägg till bilder",
+        "uploading": "Laddar upp {count}…",
+        "price": "Pris (SEK, inkl. moms)",
+        "compareAt": "Jämförpris",
+        "compareAtHint": "Valfritt — visar produkten som rea",
+        "stock": "Lager",
+        "visible": "Synlig i butiken",
+        "visibleHint": "Dolda produkter kan inte köpas",
+        "featured": "Utvald",
+        "featuredHint": "Visas på startsidan",
+        "slug": "URL-adress (slug)",
+        "slugHint": "Lämna tomt för att skapa från namnet",
+        "swatch": "Färgprov",
+        "sortOrder": "Sorteringsordning",
+        "save": "Spara ändringar",
+        "create": "Skapa produkt",
+        "saving": "Sparar…",
+        "delete": "Radera produkt",
+        "confirmDelete": "Radera produkten permanent? Tidigare ordrar behåller sin historik. Vill du bara dölja den, avmarkera ”Synlig i butiken”."
+      }
+    },
+    "settings": {
+      "title": "Inställningar",
+      "description": "Fraktpriser för beställningar inom Sverige.",
+      "shipping": "Fraktavgift (SEK)",
+      "shippingHint": "Fast pris per order. 0 = fri frakt.",
+      "freeOver": "Fri frakt från (SEK)",
+      "freeOverHint": "Valfritt. Ordrar med denna delsumma eller mer får fri frakt.",
+      "save": "Spara inställningar",
+      "saving": "Sparar…",
+      "saved": "Inställningar sparade"
+    },
+    "analytics": {
+      "title": "Statistik",
+      "description": "Endast riktiga besökare — botar och automatiserade webbläsare filtreras bort. Inga cookies, inga IP-adresser sparas.",
+      "notReady": "Statistiken är inte aktiverad i databasen ännu. Kör <code>make migrate</code> på servern och ladda om sidan.",
+      "ranges": {
+        "7": "7 dagar",
+        "30": "30 dagar",
+        "90": "90 dagar",
+        "365": "12 månader"
+      },
+      "visitors": "Besökare",
+      "pageviews": "Sidvisningar",
+      "orders": "Ordrar",
+      "conversion": "Konvertering",
+      "revenue": "Intäkter",
+      "perDay": "Besökare per dag",
+      "funnel": "Köpflöde",
+      "funnelVisited": "Besökte",
+      "funnelProduct": "Tittade på en produkt",
+      "funnelCart": "La i varukorgen",
+      "funnelCheckout": "Påbörjade kassan",
+      "funnelPurchase": "Handlade",
+      "countries": "Länder",
+      "cities": "Städer",
+      "citiesEmpty": "Aktivera Cloudflares platsrubriker för besökare för att se städer.",
+      "sources": "Trafikkällor",
+      "pages": "Populära sidor",
+      "devices": "Enheter",
+      "browsers": "Webbläsare",
+      "os": "Operativsystem",
+      "languages": "Språk",
+      "campaigns": "Kampanjer (utm_campaign)",
+      "campaignsEmpty": "Lägg till ?utm_campaign=… i länkar du delar för att följa kampanjer.",
+      "noData": "Ingen data ännu.",
+      "unknown": "Okänt",
+      "direct": "Direkt",
+      "customers": "Kunder",
+      "customersTotal": "Kunder",
+      "returning": "Återkommande kunder",
+      "repeatRate": "Andel återköp",
+      "aov": "Snittorder",
+      "byCity": "Ordrar per ort",
+      "topCustomers": "Toppkunder",
+      "noOrders": "Inga ordrar under perioden.",
+      "device": {
+        "mobile": "Mobil",
+        "tablet": "Surfplatta",
+        "desktop": "Dator"
+      }
+    },
+    "errors": {
+      "generic": "Något gick fel. Försök igen.",
+      "fixFields": "Rätta de markerade fälten.",
+      "required": "Obligatoriskt",
+      "amount": "Ange ett belopp som 2466,75",
+      "positive": "Priset måste vara högre än 0",
+      "wholeNumber": "Endast heltal",
+      "negative": "Kan inte vara negativt",
+      "hex": "Ange en hexfärg som #583b2a",
+      "slug": "Kunde inte skapa en URL-adress från namnet.",
+      "slugTaken": "En annan produkt använder redan den här URL-adressen.",
+      "compareAt": "Jämförpriset måste vara högre än priset.",
+      "noFile": "Ingen fil mottogs.",
+      "fileType": "Använd JPG, PNG, WebP eller AVIF.",
+      "fileSize": "Bilder måste vara mindre än 10 MB.",
+      "transition": "Den statusändringen är inte tillåten.",
+      "refundOnlyPaid": "Endast betalda ordrar kan återbetalas.",
+      "refundFailed": "Återbetalningen i Stripe misslyckades."
+    }
+  }
+}

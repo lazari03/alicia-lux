@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 import { OrderActions } from "@/components/admin/order-actions"
@@ -14,13 +15,14 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
   const { data } = await serviceClient().from("orders").select("*, order_items(*)").eq("id", id).maybeSingle()
   if (!data) notFound()
   const order = data as Order & { order_items: OrderItem[] }
+  const t = await getTranslations("admin.orders")
   const stripeMode = process.env.STRIPE_SECRET_KEY?.startsWith("sk_test") || process.env.STRIPE_SECRET_KEY?.startsWith("rk_test") ? "test/" : ""
 
   return (
     <>
-      <Link href="/admin/orders" className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink"><ArrowLeft className="size-4" /> Orders</Link>
+      <Link href="/admin/orders" className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink"><ArrowLeft className="size-4" /> {t("back")}</Link>
       <div className="mb-8 flex flex-wrap items-center gap-3">
-        <h1 className="font-serif text-4xl leading-none">Order #{order.order_number}</h1>
+        <h1 className="font-serif text-4xl leading-none">{t("orderTitle", { number: order.order_number })}</h1>
         <StatusBadge status={order.status} />
         <span className="text-sm text-muted">{dateTime(order.created_at)}</span>
       </div>
@@ -28,7 +30,7 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
       <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
         <div className="grid content-start gap-4">
           <Card>
-            <h2 className="mb-4 text-sm font-medium">Items</h2>
+            <h2 className="mb-4 text-sm font-medium">{t("items")}</h2>
             <ul className="divide-y divide-line">
               {order.order_items.map((item) => (
                 <li key={item.id} className="grid grid-cols-[56px_1fr_auto] items-center gap-4 py-3">
@@ -44,10 +46,10 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
               ))}
             </ul>
             <dl className="mt-4 grid gap-1.5 border-t border-line pt-4 text-sm">
-              <div className="flex justify-between"><dt className="text-muted">Subtotal</dt><dd>{formatPrice(order.subtotal_ore)}</dd></div>
-              <div className="flex justify-between"><dt className="text-muted">Delivery</dt><dd>{formatPrice(order.shipping_ore)}</dd></div>
-              <div className="flex justify-between"><dt className="text-muted">VAT (included)</dt><dd>{formatPrice(order.vat_ore)}</dd></div>
-              <div className="flex justify-between border-t border-line pt-2 text-base font-medium"><dt>Total</dt><dd>{formatPrice(order.total_ore)}</dd></div>
+              <div className="flex justify-between"><dt className="text-muted">{t("subtotal")}</dt><dd>{formatPrice(order.subtotal_ore)}</dd></div>
+              <div className="flex justify-between"><dt className="text-muted">{t("delivery")}</dt><dd>{formatPrice(order.shipping_ore)}</dd></div>
+              <div className="flex justify-between"><dt className="text-muted">{t("vat")}</dt><dd>{formatPrice(order.vat_ore)}</dd></div>
+              <div className="flex justify-between border-t border-line pt-2 text-base font-medium"><dt>{t("total")}</dt><dd>{formatPrice(order.total_ore)}</dd></div>
             </dl>
           </Card>
           <OrderActions order={order} />
@@ -55,28 +57,28 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
 
         <div className="grid content-start gap-4">
           <Card>
-            <h2 className="mb-3 text-sm font-medium">Customer</h2>
+            <h2 className="mb-3 text-sm font-medium">{t("customer")}</h2>
             <p className="text-sm">{order.first_name} {order.last_name}</p>
             <a href={`mailto:${order.email}`} className="text-sm text-gold-deep hover:underline">{order.email}</a>
             {order.phone && <p className="text-sm text-muted">{order.phone}</p>}
           </Card>
           <Card>
-            <h2 className="mb-3 text-sm font-medium">Delivery address</h2>
+            <h2 className="mb-3 text-sm font-medium">{t("deliveryAddress")}</h2>
             <address className="text-sm not-italic leading-relaxed">
               {order.first_name} {order.last_name}<br />
               {order.address_line1}<br />
               {order.address_line2 && <>{order.address_line2}<br /></>}
               {order.postal_code} {order.city}<br />
-              Sweden
+              {(await getTranslations("checkout"))("sweden")}
             </address>
-            {order.tracking_number && <p className="mt-3 text-sm">Tracking: <b className="font-medium">{order.tracking_number}</b></p>}
+            {order.tracking_number && <p className="mt-3 text-sm">{t("tracking")} <b className="font-medium">{order.tracking_number}</b></p>}
           </Card>
           <Card>
-            <h2 className="mb-3 text-sm font-medium">Payment</h2>
-            <p className="text-sm text-muted">{order.paid_at ? `Paid ${dateTime(order.paid_at)}` : "Not paid"}</p>
+            <h2 className="mb-3 text-sm font-medium">{t("payment")}</h2>
+            <p className="text-sm text-muted">{order.paid_at ? t("paidAt", { date: dateTime(order.paid_at) }) : t("notPaid")}</p>
             {order.stripe_payment_intent_id && (
               <a href={`https://dashboard.stripe.com/${stripeMode}payments/${order.stripe_payment_intent_id}`} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-sm text-gold-deep hover:underline">
-                Open in Stripe <ExternalLink className="size-3.5" />
+                {t("openStripe")} <ExternalLink className="size-3.5" />
               </a>
             )}
           </Card>

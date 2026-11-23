@@ -3,11 +3,13 @@
 import Image from "next/image"
 import { LuxImage } from "@/components/ui/lux-image"
 import { AnimatePresence, motion } from "motion/react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
 export function ProductGallery({ images, alt }: { images: string[]; alt: string }) {
   const [active, setActive] = useState(0)
+  const t = useTranslations("product")
   if (!images.length) return <div className="aspect-[4/5] rounded-[2px] bg-surface" />
 
   return (
@@ -33,7 +35,7 @@ export function ProductGallery({ images, alt }: { images: string[]; alt: string 
               key={src + i}
               type="button"
               onClick={() => setActive(i)}
-              aria-label={`Show image ${i + 1}`}
+              aria-label={t("showImage", { n: i + 1 })}
               aria-pressed={i === active}
               className={cn(
                 "relative aspect-[4/5] w-[72px] shrink-0 overflow-hidden rounded-[2px] border transition-[border-color,opacity] lg:w-full",

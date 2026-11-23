@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 import { ProductForm } from "@/components/admin/product-form"
@@ -12,13 +13,14 @@ export default async function EditProduct({ params }: { params: Promise<{ id: st
   const { data } = await serviceClient().from("products").select("*").eq("id", id).maybeSingle()
   if (!data) notFound()
   const product = data as Product
+  const t = await getTranslations("admin.products")
 
   return (
     <>
-      <Link href="/admin/products" className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink"><ArrowLeft className="size-4" /> Products</Link>
+      <Link href="/admin/products" className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted hover:text-ink"><ArrowLeft className="size-4" /> {t("back")}</Link>
       <PageHeader
         title={product.subtitle ? `${product.name} — ${product.subtitle}` : product.name}
-        action={product.active ? <a href={`/product/${product.slug}`} target="_blank" className="inline-flex items-center gap-1.5 text-sm text-gold-deep hover:underline">View in shop <ExternalLink className="size-3.5" /></a> : undefined}
+        action={product.active ? <a href={`/product/${product.slug}`} target="_blank" className="inline-flex items-center gap-1.5 text-sm text-gold-deep hover:underline">{t("viewInShop")} <ExternalLink className="size-3.5" /></a> : undefined}
       />
       <ProductForm product={product} />
     </>

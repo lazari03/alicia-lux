@@ -1,10 +1,12 @@
 import Image from "next/image"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import { cn } from "@/lib/utils"
 
 export function Logo({ className, light }: { className?: string; light?: boolean }) {
+  const t = useTranslations("common")
   return (
-    <Link href="/" className={cn("inline-flex items-center gap-2.5 sm:gap-3.5", className)} aria-label="Alicia Lux home">
+    <Link href="/" className={cn("inline-flex items-center gap-2.5 sm:gap-3.5", className)} aria-label={t("home")}>
       <Image
         src="/images/alicia-lux-mark.png"
         alt=""

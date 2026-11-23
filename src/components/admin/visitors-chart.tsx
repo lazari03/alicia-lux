@@ -1,9 +1,12 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 export function VisitorsChart({ data }: { data: { day: string; visitors: number; pageviews: number }[] }) {
-  const rows = data.map((d) => ({ ...d, label: new Date(d.day).toLocaleDateString("sv-SE", { day: "numeric", month: "short" }) }))
+  const t = useTranslations("admin.analytics")
+  const locale = useLocale()
+  const rows = data.map((d) => ({ ...d, label: new Date(d.day).toLocaleDateString(locale === "en" ? "en-GB" : "sv-SE", { day: "numeric", month: "short" }) }))
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer>
@@ -18,8 +21,8 @@ export function VisitorsChart({ data }: { data: { day: string; visitors: number;
           <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "#6f6258" }} minTickGap={24} />
           <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 11, fill: "#6f6258" }} />
           <Tooltip contentStyle={{ borderRadius: 6, border: "1px solid #e2d9ce", background: "#fffdf9", fontSize: 13 }} />
-          <Area type="monotone" dataKey="pageviews" name="Pageviews" stroke="#cbbdac" strokeWidth={1.25} fill="transparent" />
-          <Area type="monotone" dataKey="visitors" name="Visitors" stroke="#7d6440" strokeWidth={1.75} fill="url(#vis)" />
+          <Area type="monotone" dataKey="pageviews" name={t("pageviews")} stroke="#cbbdac" strokeWidth={1.25} fill="transparent" />
+          <Area type="monotone" dataKey="visitors" name={t("visitors")} stroke="#7d6440" strokeWidth={1.75} fill="url(#vis)" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

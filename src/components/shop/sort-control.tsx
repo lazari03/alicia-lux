@@ -1,21 +1,24 @@
 "use client"
 
 import { motion } from "motion/react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useSearchParams } from "next/navigation"
+import { usePathname, useRouter } from "@/i18n/navigation"
 import { useOptimistic, useTransition } from "react"
 import type { SortKey } from "@/lib/catalog"
 import { cn } from "@/lib/utils"
 
 const options: { key: SortKey; label: string; long: string }[] = [
-  { key: "featured", label: "Featured", long: "Featured" },
-  { key: "newest", label: "Newest", long: "Newest arrivals" },
-  { key: "price-asc", label: "Price ↑", long: "Price, low to high" },
-  { key: "price-desc", label: "Price ↓", long: "Price, high to low" },
+  { key: "featured", label: "featured", long: "featured" },
+  { key: "newest", label: "newest", long: "newestLong" },
+  { key: "price-asc", label: "priceAsc", long: "priceAscLong" },
+  { key: "price-desc", label: "priceDesc", long: "priceDescLong" },
 ]
 
 /** One-tap segmented sort with a sliding pill; arrow keys move between options. */
 export function SortControl({ value }: { value: SortKey }) {
   const router = useRouter()
+  const t = useTranslations("shop.sort")
   const pathname = usePathname()
   const params = useSearchParams()
   const [pending, start] = useTransition()
@@ -42,7 +45,7 @@ export function SortControl({ value }: { value: SortKey }) {
 
   return (
     <div className="flex w-full items-center gap-4 sm:w-auto">
-      <span id="sort-label" className="hidden text-[11px] font-medium uppercase tracking-[0.2em] text-muted sm:inline">Sort</span>
+      <span id="sort-label" className="hidden text-[11px] font-medium uppercase tracking-[0.2em] text-muted sm:inline">{t("label")}</span>
       <div
         role="radiogroup"
         aria-labelledby="sort-label"
@@ -58,7 +61,7 @@ export function SortControl({ value }: { value: SortKey }) {
               type="button"
               role="radio"
               aria-checked={active}
-              aria-label={o.long}
+              aria-label={t(o.long)}
               tabIndex={active ? 0 : -1}
               data-key={o.key}
               onClick={() => !active && choose(o.key)}
@@ -67,7 +70,7 @@ export function SortControl({ value }: { value: SortKey }) {
               {active && (
                 <motion.span layoutId="sort-pill" className="absolute inset-0 rounded-full bg-ink" transition={{ type: "spring", stiffness: 420, damping: 36 }} />
               )}
-              <span className="relative">{o.label}</span>
+              <span className="relative">{t(o.label)}</span>
             </button>
           )
         })}

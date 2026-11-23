@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { Link, usePathname } from "@/i18n/navigation"
+import { LanguageSwitcher } from "@/components/ui/language-switcher"
 import { motion } from "motion/react"
 import { ArrowUpRight } from "lucide-react"
 import { Drawer } from "@/components/ui/drawer"
@@ -10,37 +11,38 @@ import { cn } from "@/lib/utils"
 import { Burger } from "./header"
 
 const primary = [
-  { label: "Home", href: "/" },
-  { label: "Shop all", href: "/shop" },
-  { label: "Coffee Brown", href: "/product/signature-organizer-coffee-brown" },
-  { label: "Champagne", href: "/product/signature-organizer-champagne" },
-  { label: "Noir", href: "/product/signature-organizer-noir" },
+  { label: "nav.home", href: "/" },
+  { label: "nav.shopAll", href: "/shop" },
+  { label: "nav.coffee", href: "/product/signature-organizer-coffee-brown" },
+  { label: "nav.champagne", href: "/product/signature-organizer-champagne" },
+  { label: "nav.noir", href: "/product/signature-organizer-noir" },
 ]
 
 const secondary = [
-  { label: "Delivery & returns", href: "/policies/returns" },
-  { label: "Terms", href: "/policies/terms" },
-  { label: "Privacy", href: "/policies/privacy" },
+  { label: "menu.deliveryReturns", href: "/policies/returns" },
+  { label: "menu.terms", href: "/policies/terms" },
+  { label: "menu.privacy", href: "/policies/privacy" },
 ]
 
 export function MenuDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname()
+  const t = useTranslations()
 
   return (
     <Drawer
       open={open}
       onClose={onClose}
-      label="Menu"
+      label={t("common.menu")}
       className="bg-night px-6 pt-[max(12px,env(safe-area-inset-top))] pb-[max(20px,env(safe-area-inset-bottom))] text-[#f6eee3]"
     >
       <div className="flex min-h-14 items-center justify-between border-b border-night-line">
         <span className="font-serif text-xl font-medium uppercase tracking-[0.2em]">Alicia Lux</span>
-        <button type="button" onClick={onClose} data-autofocus aria-label="Close menu" className="group grid size-11 place-items-center">
+        <button type="button" onClick={onClose} data-autofocus aria-label={t("common.closeMenu")} className="group grid size-11 place-items-center">
           <Burger open />
         </button>
       </div>
 
-      <nav aria-label="Menu" className="mt-[clamp(20px,5vh,48px)] mb-6">
+      <nav aria-label={t("common.menu")} className="mt-[clamp(20px,5vh,48px)] mb-6">
         <ul>
           {primary.map((item, i) => {
             const current = pathname === item.href
@@ -64,7 +66,7 @@ export function MenuDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                       current && "italic text-gold-light"
                     )}
                   >
-                    {item.label}
+                    {t(item.label)}
                   </span>
                   <ArrowUpRight className="size-5 text-gold opacity-70 transition-opacity group-hover:opacity-100" strokeWidth={1.25} />
                 </Link>
@@ -85,8 +87,8 @@ export function MenuDrawer({ open, onClose }: { open: boolean; onClose: () => vo
           />
           <span className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />
           <span className="absolute inset-x-4 bottom-3.5 font-serif text-[19px]">
-            <small className="mb-0.5 block font-sans text-[10px] uppercase tracking-[0.2em] text-gold-light">The Signature Collection</small>
-            Coffee Brown · Champagne · Noir
+            <small className="mb-0.5 block font-sans text-[10px] uppercase tracking-[0.2em] text-gold-light">{t("menu.featureEyebrow")}</small>
+            {t("menu.featureTitle")}
           </span>
         </Link>
       </motion.div>
@@ -96,14 +98,15 @@ export function MenuDrawer({ open, onClose }: { open: boolean; onClose: () => vo
           {secondary.map((item) => (
             <li key={item.href}>
               <Link href={item.href} onClick={onClose} className="inline-flex min-h-10 items-center hover:text-gold-light">
-                {item.label}
+                {t(item.label)}
               </Link>
             </li>
           ))}
         </ul>
         <p className="flex justify-between border-t border-night-line pt-4 text-[13px] text-night-text">
-          Shipping within Sweden <span>SEK</span>
+          {t("menu.shipping")} <span>SEK</span>
         </p>
+        <LanguageSwitcher tone="dark" />
       </div>
     </Drawer>
   )

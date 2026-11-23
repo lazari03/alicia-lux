@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import Link from "next/link"
+import { getTranslations, setRequestLocale } from "next-intl/server"
+import { Link } from "@/i18n/navigation"
 import { notFound } from "next/navigation"
 import { RotateCcw, ShieldCheck, Truck } from "lucide-react"
 import { AddToCart } from "@/components/shop/add-to-cart"
@@ -13,21 +14,28 @@ import { productTitle } from "@/lib/types"
 import { cn, siteUrl } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
-type Props = { params: Promise<{ slug: string }> }
+type Props = { params: Promise<{ slug: string; locale: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await getProduct((await params).slug)
+  const { slug, locale } = await params
+  const product = await getProduct(slug, locale)
   if (!product) return {}
   return {
     title: productTitle(product),
     description: product.description.slice(0, 160),
     openGraph: { images: product.images.slice(0, 1) },
+    alternates: {
+      canonical: `${locale === "en" ? "/en" : ""}/product/${slug}`,
+      languages: { sv: `/product/${slug}`, en: `/en/product/${slug}`, "x-default": `/product/${slug}` },
+    },
   }
 }
 
 export default async function ProductPage({ params }: Props) {
-  const { slug } = await params
-  const [product, all, settings] = await Promise.all([getProduct(slug), listProducts(), getSettings()])
+  const { slug, locale } = await params
+  setRequestLocale(locale)
+  const t = await getTranslations("product")
+  const [product, all, settings] = await Promise.all([getProduct(slug, locale), listProducts("featured", locale), getSettings()])
   if (!product) notFound()
 
   const siblings = all.filter((p) => p.name === product.name)
@@ -46,7 +54,7 @@ export default async function ProductPage({ params }: Props) {
       price: (product.price_ore / 100).toFixed(2),
       priceCurrency: "SEK",
       availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-      url: `${siteUrl()}/product/${product.slug}`,
+      url: `${siteUrl()}${locale === "en" ? "/en" : ""}/product/${product.slug}`,
     },
   }
 
@@ -55,28 +63,28 @@ export default async function ProductPage({ params }: Props) {
       <TrackOnMount event="product_view" productId={product.id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="container-lux py-6 sm:py-10">
-        <nav aria-label="Breadcrumb" className="mb-6 text-[13px] text-muted">
-          <Link href="/shop" className="hover:text-ink">Shop</Link> <span aria-hidden>/</span> <span className="text-ink">{productTitle(product)}</span>
+        <nav aria-label={t("breadcrumbLabel")} className="mb-6 text-[13px] text-muted">
+          <Link href="/shop" className="hover:text-ink">{t("breadcrumb")}</Link> <span aria-hidden>/</span> <span className="text-ink">{productTitle(product)}</span>
         </nav>
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
-          <ProductGallery images={product.images} alt={`${productTitle(product)} by Alicia Lux`} />
+          <ProductGallery images={product.images} alt={t("galleryAlt", { name: productTitle(product) })} />
 
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <p className="eyebrow mb-3">Alicia Lux</p>
+            <p className="eyebrow mb-3">{t("brand")}</p>
             <h1 className="display text-[clamp(36px,4.4vw,60px)] leading-[1.02]">{product.name}</h1>
             {product.subtitle && <p className="mt-2 font-serif text-2xl italic text-gold-deep">{product.subtitle}</p>}
 
             <p className="mt-5 text-xl">
               {onSale && <s className="mr-3 text-muted">{formatPrice(product.compare_at_ore!)}</s>}
               {formatPrice(product.price_ore)}
-              <span className="ml-2 text-xs text-muted">incl. VAT</span>
+              <span className="ml-2 text-xs text-muted">{t("inclVat")}</span>
             </p>
 
             {siblings.length > 1 && (
               <div className="mt-7">
                 <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted">
-                  Finish — <span className="text-ink">{product.subtitle}</span>
+                  {t("finish")} — <span className="text-ink">{product.subtitle}</span>
                 </p>
                 <div className="flex gap-3">
                   {siblings.map((s) => (
@@ -110,11 +118,11 @@ export default async function ProductPage({ params }: Props) {
 
             <ul className="mt-8 grid gap-3 rounded-[4px] bg-surface p-5 text-[13px]">
               <li className="flex items-center gap-3"><Truck className="size-4 text-gold-deep" strokeWidth={1.5} />
-                {settings.shipping_fee_ore === 0 ? "Free delivery within Sweden" : `Delivery within Sweden ${formatPrice(settings.shipping_fee_ore)}`}
-                {settings.free_shipping_over_ore != null && settings.shipping_fee_ore > 0 && ` · free over ${formatPrice(settings.free_shipping_over_ore)}`}
+                {settings.shipping_fee_ore === 0 ? t("deliveryFree") : t("deliveryFee", { price: formatPrice(settings.shipping_fee_ore) })}
+                {settings.free_shipping_over_ore != null && settings.shipping_fee_ore > 0 && t("freeOver", { price: formatPrice(settings.free_shipping_over_ore) })}
               </li>
-              <li className="flex items-center gap-3"><RotateCcw className="size-4 text-gold-deep" strokeWidth={1.5} />14-day right of withdrawal — <Link href="/policies/returns" className="underline underline-offset-4">returns</Link></li>
-              <li className="flex items-center gap-3"><ShieldCheck className="size-4 text-gold-deep" strokeWidth={1.5} />Secure payment with Stripe</li>
+              <li className="flex items-center gap-3"><RotateCcw className="size-4 text-gold-deep" strokeWidth={1.5} />{t("withdrawal")}&nbsp;<Link href="/policies/returns" className="underline underline-offset-4">{t("returnsLink")}</Link></li>
+              <li className="flex items-center gap-3"><ShieldCheck className="size-4 text-gold-deep" strokeWidth={1.5} />{t("securePayment")}</li>
             </ul>
           </div>
         </div>
@@ -124,7 +132,7 @@ export default async function ProductPage({ params }: Props) {
         <section className="border-t border-line bg-surface py-[clamp(56px,8vw,104px)]">
           <div className="container-lux">
             <Reveal className="mb-10 text-center">
-              <h2 className="display text-[clamp(34px,4vw,52px)]">You may also love</h2>
+              <h2 className="display text-[clamp(34px,4vw,52px)]">{t("alsoLove")}</h2>
             </Reveal>
             <ul className="grid grid-cols-2 gap-x-[clamp(14px,2.4vw,32px)] gap-y-12 md:grid-cols-3">
               {others.map((p, i) => (

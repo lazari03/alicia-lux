@@ -1,10 +1,13 @@
 "use client"
 
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { useLocale, useTranslations } from "next-intl"
 import { formatPrice } from "@/lib/money"
 
 export function RevenueChart({ data }: { data: { day: string; revenue_ore: number; orders: number }[] }) {
-  const rows = data.map((d) => ({ ...d, label: new Date(d.day).toLocaleDateString("sv-SE", { day: "numeric", month: "short" }) }))
+  const t = useTranslations("admin.overview")
+  const locale = useLocale()
+  const rows = data.map((d) => ({ ...d, label: new Date(d.day).toLocaleDateString(locale === "en" ? "en-GB" : "sv-SE", { day: "numeric", month: "short" }) }))
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer>
@@ -27,10 +30,10 @@ export function RevenueChart({ data }: { data: { day: string; revenue_ore: numbe
           <Tooltip
             cursor={{ stroke: "#cbbdac" }}
             contentStyle={{ borderRadius: 6, border: "1px solid #e2d9ce", background: "#fffdf9", fontSize: 13 }}
-            formatter={(value) => [formatPrice(Number(value)), "Revenue"]}
+            formatter={(value) => [formatPrice(Number(value)), t("chartRevenue")]}
             labelFormatter={(_, payload) => {
               const p = payload?.[0]?.payload as { label: string; orders: number } | undefined
-              return p ? `${p.label} · ${p.orders} ${p.orders === 1 ? "order" : "orders"}` : ""
+              return p ? `${p.label} · ${t("chartOrders", { count: p.orders })}` : ""
             }}
           />
           <Area type="monotone" dataKey="revenue_ore" stroke="#7d6440" strokeWidth={1.75} fill="url(#rev)" />

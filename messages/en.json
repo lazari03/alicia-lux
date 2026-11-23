@@ -1,0 +1,552 @@
+{
+  "meta": {
+    "title": "Alicia Lux — For all that you treasure",
+    "description": "Jewelry and beauty organizers for the things you treasure. Discover the Alicia Lux Signature Collection in Coffee Brown, Champagne and Noir."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "openBag": "Open bag, {count, plural, =0 {empty} one {# item} other {# items}}",
+    "home": "Alicia Lux home",
+    "language": "Language",
+    "loading": "Loading",
+    "sek": "SEK"
+  },
+  "languages": {
+    "sv": "Svenska",
+    "en": "English"
+  },
+  "announcement": "Delivery within Sweden · Secure payment with Stripe",
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "shopAll": "Shop all",
+    "coffee": "Coffee Brown",
+    "champagne": "Champagne",
+    "noir": "Noir"
+  },
+  "menu": {
+    "featureEyebrow": "The Signature Collection",
+    "featureTitle": "Coffee Brown · Champagne · Noir",
+    "shipping": "Shipping within Sweden",
+    "deliveryReturns": "Delivery & returns",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  },
+  "footer": {
+    "tagline": "A beautiful home for the things you treasure.",
+    "shop": "Shop",
+    "customerCare": "Customer care",
+    "contact": "Contact",
+    "sellerInfo": "Seller information",
+    "deliveryReturns": "Delivery & returns",
+    "terms": "Terms & conditions",
+    "privacy": "Privacy policy",
+    "small": "Delivery within Sweden · Prices in SEK incl. VAT",
+    "secured": "Payments secured by Stripe",
+    "backToTop": "Back to top"
+  },
+  "home": {
+    "heroEyebrow": "The Signature Collection",
+    "heroTitle": "For all that you <em>treasure.</em>",
+    "heroCta": "Shop the collection",
+    "heroAlt": "Three open Alicia Lux jewelry and beauty organizers in Coffee Brown, Champagne and Noir",
+    "finishesEyebrow": "One signature. Three expressions.",
+    "finishesTitle": "A shade of <em>you.</em>",
+    "explore": "Explore the collection",
+    "finishAlt": "Alicia Lux organizer in {name}, shown open",
+    "moods": {
+      "coffee": "Warm. Rich. Effortlessly timeless.",
+      "champagne": "Soft light, in its most beautiful form.",
+      "noir": "A quiet statement. An enduring classic."
+    },
+    "shopEyebrow": "Shop",
+    "shopTitle": "The Signature Collection",
+    "ritualEyebrow": "Beauty, in the details",
+    "ritualTitle1": "A little order.",
+    "ritualTitle2": "A daily pleasure.",
+    "ritualBody": "The necklace you always reach for. The ring with a story. The finishing touch before you step out. Give each one a place of its own.",
+    "ritualAlt": "Champagne Alicia Lux organizer with its illuminated mirror, beauty compartments and jewelry drawers",
+    "details": {
+      "1": {
+        "title": "Everything in its place",
+        "text": "Considered compartments for jewelry and beauty essentials."
+      },
+      "2": {
+        "title": "A moment to reflect",
+        "text": "An illuminated mirror at the heart of your daily ritual."
+      },
+      "3": {
+        "title": "Beautiful, inside and out",
+        "text": "Soft textures, warm metallic accents, and a place for the smallest details."
+      }
+    },
+    "discover": "Discover Alicia Lux",
+    "brandTitle1": "Luxury is a feeling.",
+    "brandTitle2": "Make room for it.",
+    "brandBody": "A beautiful home for the things you treasure, down to the details you see when it’s closed.",
+    "brandAlt": "Closed Champagne Alicia Lux organizer with the embossed AL monogram"
+  },
+  "shop": {
+    "metaTitle": "Shop",
+    "metaDescription": "Shop the Alicia Lux Signature Organizer in Coffee Brown, Champagne and Noir.",
+    "eyebrow": "Alicia Lux",
+    "title": "The collection",
+    "intro": "One signature organizer, three finishes. An illuminated mirror, beauty compartments and jewelry drawers.",
+    "count": "{count, plural, one {# product} other {# products}}",
+    "empty": "New pieces are on their way. Please check back soon.",
+    "sort": {
+      "label": "Sort",
+      "featured": "Featured",
+      "newest": "Newest",
+      "newestLong": "Newest arrivals",
+      "priceAsc": "Price ↑",
+      "priceAscLong": "Price, low to high",
+      "priceDesc": "Price ↓",
+      "priceDescLong": "Price, high to low"
+    }
+  },
+  "product": {
+    "breadcrumb": "Shop",
+    "brand": "Alicia Lux",
+    "inclVat": "incl. VAT",
+    "finish": "Finish",
+    "sale": "Sale",
+    "soldOut": "Sold out",
+    "soldOutText": "This finish is currently sold out. Check back soon.",
+    "onlyLeft": "Only {count} left",
+    "addToBag": "Add to bag",
+    "added": "Added",
+    "quickAdd": "Add {name} to bag",
+    "imageAlt": "{name} in {finish}",
+    "galleryAlt": "{name} by Alicia Lux",
+    "showImage": "Show image {n}",
+    "deliveryFree": "Free delivery within Sweden",
+    "deliveryFee": "Delivery within Sweden {price}",
+    "freeOver": " · free over {price}",
+    "withdrawal": "14-day right of withdrawal —",
+    "returnsLink": "returns",
+    "securePayment": "Secure payment with Stripe",
+    "alsoLove": "You may also love",
+    "breadcrumbLabel": "Breadcrumb"
+  },
+  "quantity": {
+    "label": "Quantity for {name}",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity"
+  },
+  "cart": {
+    "title": "Your bag",
+    "label": "Shopping bag",
+    "close": "Close bag",
+    "empty": "Your bag is empty",
+    "emptyText": "Discover the Signature Collection in Coffee Brown, Champagne and Noir.",
+    "shopCollection": "Shop the collection",
+    "subtotal": "Subtotal",
+    "note": "Including VAT. Delivery is calculated at checkout.",
+    "checkout": "Checkout",
+    "continue": "Continue shopping",
+    "remove": "Remove"
+  },
+  "checkout": {
+    "metaTitle": "Checkout",
+    "title": "Checkout",
+    "continueShopping": "Continue shopping",
+    "secure": "Secure checkout",
+    "progress": "Checkout progress",
+    "stepDetails": "Details",
+    "stepPayment": "Payment",
+    "contactDelivery": "Contact & delivery",
+    "edit": "Edit",
+    "contact": "Contact",
+    "deliveryAddress": "Delivery address",
+    "fields": {
+      "email": "Email",
+      "phone": "Phone (for delivery updates)",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "address1": "Street address",
+      "address2": "Apartment, c/o (optional)",
+      "postalCode": "Postal code",
+      "city": "City"
+    },
+    "country": "Country",
+    "sweden": "Sweden",
+    "continueToPayment": "Continue to payment",
+    "preparing": "Preparing secure payment…",
+    "payment": "Payment",
+    "yourOrder": "Your order",
+    "orderSummary": "Order summary",
+    "showSummary": "Show order summary",
+    "hideSummary": "Hide order summary",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "free": "Free",
+    "total": "Total",
+    "inclVat": "Including {amount} VAT",
+    "securePayment": "Secure payment processed by Stripe",
+    "emptyBag": "Your bag is empty",
+    "shopCollection": "Shop the collection",
+    "pay": "Pay {amount}",
+    "processing": "Processing…",
+    "updatingTotal": "Updating total…",
+    "legal": "By placing your order you agree to our <terms>terms</terms> and <privacy>privacy policy</privacy>. Card details go directly to Stripe and are never stored by Alicia Lux.",
+    "stripeMissing": "Stripe is not configured. Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.",
+    "errors": {
+      "email": "Enter a valid email address",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name",
+      "address1": "Enter your street address",
+      "postalCode": "Enter a 5-digit Swedish postal code",
+      "city": "Enter your city",
+      "invalid": "Please check your details",
+      "emptyBag": "Your bag is empty",
+      "loadBag": "We couldn't load your bag. Please try again.",
+      "stock": "Some items are no longer available in the quantity you selected. We've updated your bag.",
+      "paymentInit": "Payment could not be initialised. Please try again in a moment.",
+      "paymentsNotSetUp": "Payments are not set up yet. Please try again later.",
+      "connection": "We couldn't reach the server. Check your connection and try again.",
+      "unavailable": "Checkout is temporarily unavailable (error {status}). Please try again in a moment.",
+      "checkDetails": "Check your payment details.",
+      "paymentFailed": "Your payment could not be completed. Please try another method."
+    }
+  },
+  "success": {
+    "metaTitle": "Thank you",
+    "notFound": "We couldn’t find that order",
+    "failedTitle": "Your payment didn’t go through",
+    "failedBody": "You have not been charged. Please try again or use another payment method.",
+    "retry": "Return to checkout",
+    "goShop": "Go to the shop",
+    "order": "Order #{number}",
+    "thanks": "Thank you, <em>{name}.</em>",
+    "processingTitle": "Payment processing",
+    "confirmed": "Your order is confirmed. A receipt is on its way to {email}. We’ll let you know when it ships.",
+    "processing": "Your bank is still confirming the payment. You’ll receive an email as soon as it’s complete — there’s no need to pay again.",
+    "qty": "Qty {count}",
+    "deliveringTo": "Delivering to",
+    "continueShopping": "Continue shopping",
+    "confirming": "Confirming your order"
+  },
+  "notFound": {
+    "title": "This page has moved on",
+    "body": "The page you were looking for doesn’t exist, but the collection does.",
+    "cta": "Shop the collection"
+  },
+  "loading": {
+    "products": "Loading products",
+    "product": "Loading product"
+  },
+  "policies": {
+    "eyebrow": "Customer care",
+    "titles": {
+      "terms": "Terms & conditions",
+      "privacy": "Privacy policy",
+      "returns": "Returns & refunds"
+    },
+    "contactTitle": "Contact Alicia Lux",
+    "orgNumber": "Organisation number {number}",
+    "emailHelp": "Email <mail>{email}</mail> for order help, return instructions or privacy requests.",
+    "noEmail": "For help with an order, reply to your order confirmation email.",
+    "terms": [
+      {
+        "title": "Orders, prices and delivery",
+        "paragraphs": [
+          "Alicia Lux ships within Sweden. Prices are shown in Swedish kronor and include VAT. Review the finish, delivery address and delivery cost in your order summary before paying. You can check out as a guest — no account is needed.",
+          "Keep your order confirmation and order number. If you need to correct an order or delivery address, contact us as soon as possible so we can check whether it can still be changed."
+        ]
+      },
+      {
+        "title": "Payment",
+        "paragraphs": [
+          "Payments are processed securely by Stripe. Your card details are sent directly to Stripe and are never stored by Alicia Lux. Your order is confirmed once the payment has been approved."
+        ]
+      },
+      {
+        "title": "Returns and complaints",
+        "paragraphs": [
+          "Our <link href=\"/policies/returns\">returns and refunds policy</link> explains withdrawal, damaged items and orders delivered in the wrong finish. These terms do not limit your mandatory consumer rights.",
+          "If we cannot resolve a consumer dispute together, you may be able to refer it to Sweden’s National Board for Consumer Disputes (<link href=\"https://www.arn.se/\">ARN</link>)."
+        ]
+      }
+    ],
+    "privacy": [
+      {
+        "title": "What we collect and why",
+        "paragraphs": [
+          "We use the contact, address and order details you provide to process and deliver your order and to handle returns and support. This processing is necessary to perform our contract with you or to take steps you request before placing an order.",
+          "We keep transaction and accounting records as required by law. We may process technical logs and support messages where necessary for our legitimate interests in operating and securing the store or resolving disputes."
+        ]
+      },
+      {
+        "title": "Cookies, storage and sharing",
+        "paragraphs": [
+          "Your shopping bag is saved in your browser’s local storage so it is still there when you return. Stripe may set cookies during payment to prevent fraud. A cookie remembers your language choice. You can clear this data in your browser at any time.",
+          "We collect anonymous visit statistics (pages viewed, country, device and browser type, and where the visit came from) to improve the store. We do not use cookies for this, do not store your IP address, and cannot identify you or follow you across days.",
+          "We share the information needed for the service with our hosting, database, payment and delivery providers. We keep personal data for as long as needed for the purposes above and for any longer period required by law or to handle a dispute."
+        ]
+      },
+      {
+        "title": "Your privacy rights",
+        "paragraphs": [
+          "Depending on the circumstances, you can ask to access, correct, erase, restrict or receive a copy of your personal data, or object to certain processing. You may also lodge a complaint with the Swedish Authority for Privacy Protection (<link href=\"https://www.imy.se/en/\">IMY</link>)."
+        ]
+      }
+    ],
+    "returns": [
+      {
+        "title": "Damaged or faulty products",
+        "paragraphs": [
+          "If your organizer arrives damaged or develops a fault, contact us with your order number and a description of the problem. Include photos of the item and packaging if you can. Depending on the issue and your rights, the remedy may be a repair, replacement, price reduction or refund. We cover reasonable return costs for a valid complaint.",
+          "In Sweden, you can generally complain about a fault for up to three years. Tell us within a reasonable time after discovering it. A complaint made within two months of discovery is considered timely."
+        ]
+      },
+      {
+        "title": "Wrong finish received",
+        "paragraphs": [
+          "If you received a different finish than you ordered, leave the packaging sealed if you can and contact us with your order number and a photo of the label. We’ll arrange the return at our expense and send the correct finish."
+        ]
+      },
+      {
+        "title": "Changed your mind?",
+        "paragraphs": [
+          "For online purchases, you have 14 days after receiving the product to tell us you wish to withdraw. Contact us with a clear statement and your order number, then send the product back within 14 days of notifying us. Keep the packaging if possible and handle the product only as needed to inspect it.",
+          "We refund the price and the cost of the least expensive standard delivery offered, using your original payment method, within 14 days of your notice. We may wait until we receive the item or you provide proof it was sent. You only pay direct return shipping if we informed you before purchase that it applies."
+        ]
+      }
+    ]
+  },
+  "admin": {
+    "title": "Admin",
+    "nav": {
+      "overview": "Overview",
+      "analytics": "Analytics",
+      "orders": "Orders",
+      "products": "Products",
+      "settings": "Settings",
+      "viewStore": "View store",
+      "signOut": "Sign out"
+    },
+    "login": {
+      "title": "Alicia Lux Admin",
+      "subtitle": "Sign in to manage orders and products.",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign in",
+      "signingIn": "Signing in…",
+      "wrong": "Wrong email or password.",
+      "notAdmin": "This account does not have admin access."
+    },
+    "status": {
+      "pending": "Awaiting payment",
+      "paid": "Paid · to ship",
+      "fulfilled": "Shipped",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "Sales over the last 30 days.",
+      "revenue": "Revenue · 30 days",
+      "orders": "Orders · 30 days",
+      "aov": "Average order",
+      "toShip": "Waiting to ship",
+      "view": "View",
+      "chart": "Revenue per day",
+      "chartRevenue": "Revenue",
+      "chartOrders": "{count, plural, one {# order} other {# orders}}",
+      "recent": "Recent orders",
+      "all": "All orders",
+      "noOrders": "No orders yet. They’ll appear here as soon as a payment succeeds.",
+      "lowStock": "Low stock",
+      "wellStocked": "All products are well stocked.",
+      "soldOut": "Sold out",
+      "left": "{count} left"
+    },
+    "orders": {
+      "title": "Orders",
+      "count": "{count, plural, one {# order} other {# orders}} · {filter}",
+      "filters": {
+        "all": "All",
+        "paid": "To ship",
+        "fulfilled": "Shipped",
+        "cancelled": "Cancelled",
+        "pending": "Abandoned"
+      },
+      "search": "Search # / name / email",
+      "order": "Order",
+      "customer": "Customer",
+      "date": "Date",
+      "status": "Status",
+      "total": "Total",
+      "none": "No orders here yet.",
+      "pageOf": "Page {page} of {pages}",
+      "previous": "Previous",
+      "next": "Next",
+      "back": "Orders",
+      "orderTitle": "Order #{number}",
+      "items": "Items",
+      "subtotal": "Subtotal",
+      "delivery": "Delivery",
+      "vat": "VAT (included)",
+      "deliveryAddress": "Delivery address",
+      "tracking": "Tracking:",
+      "payment": "Payment",
+      "paidAt": "Paid {date}",
+      "notPaid": "Not paid",
+      "openStripe": "Open in Stripe",
+      "fulfilment": "Fulfilment",
+      "trackingPlaceholder": "Tracking number (optional)",
+      "markShipped": "Mark as shipped",
+      "undoShipped": "Undo shipped",
+      "pendingNote": "The customer started checkout but hasn’t paid. Nothing to ship.",
+      "closedNote": "This order is {status}.",
+      "refund": "Refund in full",
+      "cancel": "Cancel order",
+      "confirmRefund": "Refund {email} in full via Stripe?",
+      "confirmCancelPaid": "Cancel this paid order? This does not refund the customer — use Refund for that.",
+      "confirmCancelUnpaid": "Cancel this unpaid order?",
+      "note": "Internal note",
+      "saveNote": "Save note",
+      "toastShipped": "Marked as shipped",
+      "toastUnshipped": "Moved back to “to ship”",
+      "toastRefunded": "Refund issued",
+      "toastCancelled": "Order cancelled",
+      "toastNote": "Note saved"
+    },
+    "products": {
+      "title": "Products",
+      "description": "{count, plural, one {# product} other {# products}} · {visible} visible in the shop",
+      "add": "Add product",
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "soldOut": "Sold out",
+      "inStock": "{count} in stock",
+      "featured": "Featured",
+      "none": "No products yet. Add your first one.",
+      "newTitle": "New product",
+      "back": "Products",
+      "viewInShop": "View in shop",
+      "created": "Product created",
+      "saved": "Saved",
+      "form": {
+        "swedish": "Swedish (main)",
+        "english": "English",
+        "englishHint": "Leave empty to show the Swedish text on the English site.",
+        "name": "Name",
+        "subtitle": "Finish / subtitle",
+        "subtitleHint": "Shown under the name, e.g. “Champagne”",
+        "description": "Description",
+        "features": "Highlights",
+        "featuresHint": "One per line",
+        "images": "Images",
+        "imagesHint": "First image is the main photo",
+        "main": "Main",
+        "moveLeft": "Move left",
+        "moveRight": "Move right",
+        "removeImage": "Remove image",
+        "addImages": "Add images",
+        "uploading": "Uploading {count}…",
+        "price": "Price (SEK, incl. VAT)",
+        "compareAt": "Compare-at price",
+        "compareAtHint": "Optional — shows the product as on sale",
+        "stock": "Stock",
+        "visible": "Visible in shop",
+        "visibleHint": "Hidden products can’t be bought",
+        "featured": "Featured",
+        "featuredHint": "Shown on the home page",
+        "slug": "URL slug",
+        "slugHint": "Leave empty to generate from the name",
+        "swatch": "Swatch colour",
+        "sortOrder": "Sort order",
+        "save": "Save changes",
+        "create": "Create product",
+        "saving": "Saving…",
+        "delete": "Delete product",
+        "confirmDelete": "Delete this product permanently? Past orders keep their history. To just hide it, untick “Visible in shop”."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Delivery pricing for orders within Sweden.",
+      "shipping": "Delivery fee (SEK)",
+      "shippingHint": "Flat rate per order. 0 = free delivery.",
+      "freeOver": "Free delivery from (SEK)",
+      "freeOverHint": "Optional. Orders at or above this subtotal ship free.",
+      "save": "Save settings",
+      "saving": "Saving…",
+      "saved": "Settings saved"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Real visitors only — bots and automated browsers are filtered out. No cookies, no IP addresses stored.",
+      "notReady": "Analytics isn’t set up on the database yet. Run <code>make migrate</code> on the server, then reload.",
+      "ranges": {
+        "7": "7 days",
+        "30": "30 days",
+        "90": "90 days",
+        "365": "12 months"
+      },
+      "visitors": "Visitors",
+      "pageviews": "Pageviews",
+      "orders": "Orders",
+      "conversion": "Conversion rate",
+      "revenue": "Revenue",
+      "perDay": "Visitors per day",
+      "funnel": "Shopping funnel",
+      "funnelVisited": "Visited",
+      "funnelProduct": "Viewed a product",
+      "funnelCart": "Added to bag",
+      "funnelCheckout": "Started checkout",
+      "funnelPurchase": "Purchased",
+      "countries": "Countries",
+      "cities": "Cities",
+      "citiesEmpty": "Turn on Cloudflare’s visitor location headers to see cities.",
+      "sources": "Traffic sources",
+      "pages": "Top pages",
+      "devices": "Devices",
+      "browsers": "Browsers",
+      "os": "Operating systems",
+      "languages": "Languages",
+      "campaigns": "Campaigns (utm_campaign)",
+      "campaignsEmpty": "Add ?utm_campaign=… to links you share to track campaigns.",
+      "noData": "No data yet.",
+      "unknown": "Unknown",
+      "direct": "Direct",
+      "customers": "Customers",
+      "customersTotal": "Customers",
+      "returning": "Returning customers",
+      "repeatRate": "Repeat rate",
+      "aov": "Average order",
+      "byCity": "Orders by city",
+      "topCustomers": "Top customers",
+      "noOrders": "No orders in this period.",
+      "device": {
+        "mobile": "Mobile",
+        "tablet": "Tablet",
+        "desktop": "Desktop"
+      }
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "fixFields": "Please fix the highlighted fields.",
+      "required": "Required",
+      "amount": "Enter an amount like 2466.75",
+      "positive": "Price must be above 0",
+      "wholeNumber": "Whole numbers only",
+      "negative": "Can’t be negative",
+      "hex": "Use a hex colour like #583b2a",
+      "slug": "Could not create a URL slug from the name.",
+      "slugTaken": "Another product already uses this URL slug.",
+      "compareAt": "Compare-at price must be higher than the price.",
+      "noFile": "No file received.",
+      "fileType": "Use JPG, PNG, WebP or AVIF.",
+      "fileSize": "Images must be under 10 MB.",
+      "transition": "That status change isn’t allowed.",
+      "refundOnlyPaid": "Only paid orders can be refunded.",
+      "refundFailed": "Stripe refund failed."
+    }
+  }
+}

@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
+import { useLocale, useTranslations } from "next-intl"
+import { Link } from "@/i18n/navigation"
 import { AnimatePresence, motion } from "motion/react"
 import { ChevronDown, Lock, Pencil } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -33,6 +34,10 @@ const read = <T,>(key: string, fallback: T): T => {
 
 export function CheckoutClient({ settings, publishableKey }: { settings: StoreSettings; publishableKey: string }) {
   const hydrated = useHydrated()
+  const t = useTranslations("checkout")
+  const locale = useLocale()
+  // Error codes from the API → localized text (unknown codes are shown as-is).
+  const errorText = useCallback((code: string) => (t.has(`errors.${code}`) ? t(`errors.${code}`) : code), [t])
   const lines = useCart((s) => s.lines)
   const setQuantity = useCart((s) => s.setQuantity)
   const remove = useCart((s) => s.remove)
@@ -72,11 +77,11 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
       // A proxy (e.g. Cloudflare) can replace error bodies with HTML.
       const data = (await res.json().catch(() => ({
         ok: false,
-        error: `Checkout is temporarily unavailable (error ${res.status}). Please try again in a moment.`,
+        error: t("errors.unavailable", { status: res.status }),
       }))) as CheckoutResponse
       if (!data.ok) {
-        setErrors(data.fieldErrors ?? {})
-        setFormError(data.error)
+        setErrors(Object.fromEntries(Object.entries(data.fieldErrors ?? {}).map(([k, v]) => [k, errorText(v)])))
+        setFormError(errorText(data.error))
         data.stock?.forEach(({ productId, available }) => (available > 0 ? setQuantity(productId, available) : remove(productId)))
         setStep("details")
         return false
@@ -86,12 +91,12 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
       setPrepared({ orderId: data.orderId, clientSecret: data.clientSecret, totals: data.totals, signature })
       return true
     } catch {
-      setFormError("We couldn't reach the server. Check your connection and try again.")
+      setFormError(t("errors.connection"))
       return false
     } finally {
       setLoading(false)
     }
-  }, [customer, lines, signature, setQuantity, remove])
+  }, [customer, lines, signature, setQuantity, remove, errorText, t])
 
   // Bag changed while the payment form is open → refresh the amount.
   useEffect(() => {
@@ -113,8 +118,8 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
   if (!lines.length) {
     return (
       <div className="container-lux grid min-h-[60vh] place-content-center justify-items-center gap-5 py-20 text-center">
-        <h1 className="display text-5xl">Your bag is empty</h1>
-        <Link href="/shop" className="btn btn-primary">Shop the collection</Link>
+        <h1 className="display text-5xl">{t("emptyBag")}</h1>
+        <Link href="/shop" className="btn btn-primary">{t("shopCollection")}</Link>
       </div>
     )
   }
@@ -141,19 +146,19 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
       <MobileSummary lines={lines} total={total} shipping={shipping} subtotal={subtotal} />
 
       <div className="px-4 pt-6 pb-16 sm:px-6 lg:px-0 lg:pt-0">
-        <h1 className="display mb-8 text-[clamp(36px,5vw,56px)] leading-none">Checkout</h1>
+        <h1 className="display mb-8 text-[clamp(36px,5vw,56px)] leading-none">{t("title")}</h1>
 
-        <Steps step={step} />
+        <Steps step={step} labels={[t("stepDetails"), t("stepPayment")]} label={t("progress")} />
 
         {/* Step 1 — details */}
         <section className="rounded-md border border-line bg-card p-5 sm:p-7">
           <header className="flex items-center justify-between">
             <h2 className="flex items-center gap-3 font-serif text-[26px]">
-              <StepDot n={1} done={step === "payment"} /> Contact & delivery
+              <StepDot n={1} done={step === "payment"} /> {t("contactDelivery")}
             </h2>
             {step === "payment" && (
               <button type="button" onClick={() => setStep("details")} className="inline-flex min-h-10 items-center gap-1.5 text-[13px] text-muted underline underline-offset-4 hover:text-ink">
-                <Pencil className="size-3.5" /> Edit
+                <Pencil className="size-3.5" /> {t("edit")}
               </button>
             )}
           </header>
@@ -171,25 +176,25 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
                 noValidate
               >
                 <fieldset className="mt-6 grid gap-2.5">
-                  <legend className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted">Contact</legend>
-                  {field("email", "Email", { type: "email", autoComplete: "email", inputMode: "email", required: true })}
-                  {field("phone", "Phone (for delivery updates)", { type: "tel", autoComplete: "tel", inputMode: "tel" })}
+                  <legend className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted">{t("contact")}</legend>
+                  {field("email", t("fields.email"), { type: "email", autoComplete: "email", inputMode: "email", required: true })}
+                  {field("phone", t("fields.phone"), { type: "tel", autoComplete: "tel", inputMode: "tel" })}
                 </fieldset>
                 <fieldset className="mt-7 grid grid-cols-2 gap-2.5">
-                  <legend className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted">Delivery address</legend>
-                  {field("firstName", "First name", { autoComplete: "shipping given-name", required: true })}
-                  {field("lastName", "Last name", { autoComplete: "shipping family-name", required: true })}
-                  {field("address1", "Street address", { autoComplete: "shipping address-line1", required: true, className: "col-span-2" })}
-                  {field("address2", "Apartment, c/o (optional)", { autoComplete: "shipping address-line2", className: "col-span-2" })}
-                  {field("postalCode", "Postal code", { autoComplete: "shipping postal-code", inputMode: "numeric", required: true })}
-                  {field("city", "City", { autoComplete: "shipping address-level2", required: true })}
+                  <legend className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-muted">{t("deliveryAddress")}</legend>
+                  {field("firstName", t("fields.firstName"), { autoComplete: "shipping given-name", required: true })}
+                  {field("lastName", t("fields.lastName"), { autoComplete: "shipping family-name", required: true })}
+                  {field("address1", t("fields.address1"), { autoComplete: "shipping address-line1", required: true, className: "col-span-2" })}
+                  {field("address2", t("fields.address2"), { autoComplete: "shipping address-line2", className: "col-span-2" })}
+                  {field("postalCode", t("fields.postalCode"), { autoComplete: "shipping postal-code", inputMode: "numeric", required: true })}
+                  {field("city", t("fields.city"), { autoComplete: "shipping address-level2", required: true })}
                   <p className="col-span-2 flex min-h-12 items-center justify-between rounded-[4px] border border-dashed border-line px-3.5 text-[15px]">
-                    <span className="text-[13px] text-muted">Country</span> Sweden
+                    <span className="text-[13px] text-muted">{t("country")}</span> {t("sweden")}
                   </p>
                 </fieldset>
                 {formError && <Notice>{formError}</Notice>}
                 <button type="submit" disabled={loading} className="btn btn-primary mt-7 w-full">
-                  {loading ? "Preparing secure payment…" : "Continue to payment"}
+                  {loading ? t("preparing") : t("continueToPayment")}
                 </button>
               </motion.form>
             ) : (
@@ -203,11 +208,12 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
 
         {/* Step 2 — payment */}
         <section ref={paymentRef} className={cn("mt-3 scroll-mt-24 rounded-md border border-line bg-card p-5 transition-opacity sm:p-7", step !== "payment" && "opacity-55")}>
-          <h2 className="flex items-center gap-3 font-serif text-[26px]"><StepDot n={2} active={step === "payment"} /> Payment</h2>
+          <h2 className="flex items-center gap-3 font-serif text-[26px]"><StepDot n={2} active={step === "payment"} /> {t("payment")}</h2>
           {step === "payment" && prepared && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="mt-6">
               {publishableKey ? (
                 <PaymentForm
+                  locale={locale}
                   key={prepared.clientSecret}
                   publishableKey={publishableKey}
                   clientSecret={prepared.clientSecret}
@@ -217,16 +223,16 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
                   stale={prepared.signature !== signature || loading}
                 />
               ) : (
-                <Notice>Stripe is not configured. Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.</Notice>
+                <Notice>{t("stripeMissing")}</Notice>
               )}
             </motion.div>
           )}
         </section>
       </div>
 
-      <aside className="hidden lg:block" aria-label="Order summary">
+      <aside className="hidden lg:block" aria-label={t("orderSummary")}>
         <div className="sticky top-24 rounded-md bg-surface p-8">
-          <h2 className="mb-6 font-serif text-[28px]">Your order</h2>
+          <h2 className="mb-6 font-serif text-[28px]">{t("yourOrder")}</h2>
           <SummaryBody lines={lines} subtotal={subtotal} shipping={shipping} total={total} />
         </div>
       </aside>
@@ -234,10 +240,10 @@ export function CheckoutClient({ settings, publishableKey }: { settings: StoreSe
   )
 }
 
-function Steps({ step }: { step: "details" | "payment" }) {
+function Steps({ step, labels, label: groupLabel }: { step: "details" | "payment"; labels: [string, string]; label: string }) {
   return (
-    <ol className="mb-6 flex gap-1.5" aria-label="Checkout progress">
-      {["Details", "Payment"].map((label, i) => {
+    <ol className="mb-6 flex gap-1.5" aria-label={groupLabel}>
+      {labels.map((label, i) => {
         const state = i === 0 ? (step === "details" ? "current" : "done") : step === "payment" ? "current" : "todo"
         return (
           <li key={label} className={cn("flex-1 border-t-2 pt-2.5 text-[11px] uppercase tracking-[0.14em] transition-colors", state === "current" ? "border-ink font-medium text-ink" : state === "done" ? "border-gold text-ink" : "border-line text-muted")}>
@@ -258,6 +264,7 @@ function StepDot({ n, done, active = !done }: { n: number; done?: boolean; activ
 }
 
 function SummaryBody({ lines, subtotal, shipping, total }: { lines: CartLine[]; subtotal: number; shipping: number; total: number }) {
+  const t = useTranslations("checkout")
   return (
     <div className="grid gap-5">
       <ul className="grid gap-4">
@@ -276,26 +283,27 @@ function SummaryBody({ lines, subtotal, shipping, total }: { lines: CartLine[]; 
         ))}
       </ul>
       <dl className="grid gap-2.5 border-t border-line-strong pt-5 text-sm">
-        <div className="flex justify-between"><dt className="text-muted">Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div>
-        <div className="flex justify-between"><dt className="text-muted">Delivery</dt><dd>{shipping ? formatPrice(shipping) : "Free"}</dd></div>
+        <div className="flex justify-between"><dt className="text-muted">{t("subtotal")}</dt><dd>{formatPrice(subtotal)}</dd></div>
+        <div className="flex justify-between"><dt className="text-muted">{t("delivery")}</dt><dd>{shipping ? formatPrice(shipping) : t("free")}</dd></div>
         <div className="mt-1.5 flex items-baseline justify-between border-t border-line-strong pt-3.5">
-          <dt className="text-base">Total</dt>
+          <dt className="text-base">{t("total")}</dt>
           <dd className="font-serif text-[28px]"><small className="mr-1 font-sans text-[11px] tracking-[0.1em] text-muted">SEK</small>{formatPrice(total)}</dd>
         </div>
-        <p className="text-right text-xs text-muted">Including {formatPrice(vatPortion(total))} VAT</p>
+        <p className="text-right text-xs text-muted">{t("inclVat", { amount: formatPrice(vatPortion(total)) })}</p>
       </dl>
-      <p className="flex items-center gap-2 border-t border-line-strong pt-4 text-[13px] text-muted"><Lock className="size-3.5" /> Secure payment processed by Stripe</p>
+      <p className="flex items-center gap-2 border-t border-line-strong pt-4 text-[13px] text-muted"><Lock className="size-3.5" /> {t("securePayment")}</p>
     </div>
   )
 }
 
 function MobileSummary(props: { lines: CartLine[]; subtotal: number; shipping: number; total: number }) {
   const [open, setOpen] = useState(false)
+  const t = useTranslations("checkout")
   return (
     <div className="sticky top-0 z-20 border-b border-line bg-surface lg:hidden">
       <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="flex min-h-14 w-full items-center justify-between px-4 sm:px-6">
         <span className="inline-flex items-center gap-2 text-sm text-gold-deep">
-          {open ? "Hide" : "Show"} order summary <ChevronDown className={cn("size-4 transition-transform duration-300", open && "rotate-180")} />
+          {open ? t("hideSummary") : t("showSummary")} <ChevronDown className={cn("size-4 transition-transform duration-300", open && "rotate-180")} />
         </span>
         <strong className="font-serif text-[22px] font-normal">{formatPrice(props.total)}</strong>
       </button>

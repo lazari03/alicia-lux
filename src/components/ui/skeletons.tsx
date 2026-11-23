@@ -22,9 +22,9 @@ export function ProductGridSkeleton({ count = 3 }: { count?: number }) {
   )
 }
 
-export function ShopSkeleton() {
+export function ShopSkeleton({ label = "Loading" }: { label?: string }) {
   return (
-    <div className="container-lux py-[clamp(36px,6vw,88px)]" role="status" aria-label="Loading products">
+    <div className="container-lux py-[clamp(36px,6vw,88px)]" role="status" aria-label={label}>
       <div className="mb-8 grid justify-items-center gap-4">
         <Bar className="h-3 w-24" />
         <Bar className="h-[clamp(44px,6vw,80px)] w-[min(80%,460px)]" />
@@ -39,9 +39,9 @@ export function ShopSkeleton() {
   )
 }
 
-export function ProductSkeleton() {
+export function ProductSkeleton({ label = "Loading" }: { label?: string }) {
   return (
-    <div className="container-lux py-6 sm:py-10" role="status" aria-label="Loading product">
+    <div className="container-lux py-6 sm:py-10" role="status" aria-label={label}>
       <Bar className="mb-6 h-4 w-48" />
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
         <div className="grid gap-3 lg:grid-cols-[84px_1fr] lg:gap-4">
@@ -65,9 +65,9 @@ export function ProductSkeleton() {
   )
 }
 
-export function AdminSkeleton() {
+export function AdminSkeleton({ label = "Loading" }: { label?: string }) {
   return (
-    <div role="status" aria-label="Loading">
+    <div role="status" aria-label={label}>
       <Bar className="mb-8 h-10 w-56" />
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {Array.from({ length: 4 }, (_, i) => <Bar key={i} className="h-28 rounded-lg" />)}

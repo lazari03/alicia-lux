@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react"
 import { Check, ShoppingBag } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { toCartLine } from "@/lib/cart-line"
 import type { Product } from "@/lib/types"
@@ -11,6 +12,7 @@ import { QuantityStepper } from "./cart-drawer"
 export function AddToCart({ product }: { product: Product }) {
   const add = useCart((s) => s.add)
   const [quantity, setQuantity] = useState(1)
+  const t = useTranslations("product")
   const [added, setAdded] = useState(false)
   const soldOut = product.stock <= 0
 
@@ -23,8 +25,8 @@ export function AddToCart({ product }: { product: Product }) {
   if (soldOut) {
     return (
       <div className="grid gap-3">
-        <button type="button" disabled className="btn btn-primary w-full">Sold out</button>
-        <p className="text-sm text-muted">This finish is currently sold out. Check back soon.</p>
+        <button type="button" disabled className="btn btn-primary w-full">{t("soldOut")}</button>
+        <p className="text-sm text-muted">{t("soldOutText")}</p>
       </div>
     )
   }
@@ -43,12 +45,12 @@ export function AddToCart({ product }: { product: Product }) {
               transition={{ duration: 0.2 }}
               className="inline-flex items-center gap-3"
             >
-              {added ? <>Added <Check className="size-4" /></> : <>Add to bag <ShoppingBag className="size-4" strokeWidth={1.5} /></>}
+              {added ? <>{t("added")} <Check className="size-4" /></> : <>{t("addToBag")} <ShoppingBag className="size-4" strokeWidth={1.5} /></>}
             </motion.span>
           </AnimatePresence>
         </button>
       </div>
-      {product.stock <= 5 && <p className="text-[13px] text-gold-deep">Only {product.stock} left</p>}
+      {product.stock <= 5 && <p className="text-[13px] text-gold-deep">{t("onlyLeft", { count: product.stock })}</p>}
     </div>
   )
 }
